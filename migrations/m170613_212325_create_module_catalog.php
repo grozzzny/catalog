@@ -24,7 +24,6 @@ class m170613_212325_create_module_catalog extends \grozzzny\call_back\migration
             'item_id' => $this->integer(),
         ], $this->tableOptions);
 
-
         $this->createTable('gr_catalog_items', [
             'id' => $this->primaryKey(),
             'slug' => $this->string(),
