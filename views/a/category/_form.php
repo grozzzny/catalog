@@ -13,14 +13,10 @@ $module = $this->context->module->id;
 ]); ?>
 
 
-<?= $form->field($current_model, 'name') ?>
-<?= $form->field($current_model, 'email') ?>
-<?= $form->field($current_model, 'phone') ?>
-<?= $form->field($current_model, 'ip') ?>
+<?= $form->field($current_model, 'title') ?>
+<?= $form->field($current_model, 'slug') ?>
 
 <?= $form->field($current_model, 'description')->textarea() ?>
-
-<?= $form->field($current_model, 'datetime')->widget(DateTimePicker::className()); ?>
 
 <?=SwitchCheckbox::widget([
     'model' => $current_model,

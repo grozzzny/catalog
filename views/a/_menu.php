@@ -7,9 +7,9 @@ $module = $this->context->module->id;
 $items = [];
 foreach ($current_model->models as $model){
     $items[] = [
-        'label' => $model::TITLE,
-        'url' => ['a/', 'alias' => $model::ALIAS],
-        'active' => $model::ALIAS == $current_model::ALIAS,
+        'label' => Yii::t('gr', $model::TITLE),
+        'url' => ['a/', 'slug' => $model::SLUG],
+        'active' => $model::SLUG == $current_model::SLUG,
     ];
 }
 
@@ -25,7 +25,7 @@ foreach ($current_model->models as $model){
 <ul class="nav nav-pills">
 
     <li <?= ($action === 'index') ? 'class="active"' : '' ?>>
-        <a href="<?= Url::to(['/admin/'.$module, 'alias' => $current_model::ALIAS]) ?>">
+        <a href="<?= Url::to(['/admin/'.$module, 'slug' => $current_model::SLUG]) ?>">
             <?php if($action != 'index') : ?>
                 <i class="glyphicon glyphicon-chevron-left font-12"></i>
             <?php endif; ?>
@@ -35,7 +35,7 @@ foreach ($current_model->models as $model){
     <li <?= ($action === 'create') ? 'class="active"' : '' ?>>
         <a href="<?= Url::to([
         '/admin/'.$module.'/a/create',
-        'alias' => $current_model::ALIAS
+        'slug' => $current_model::SLUG
         ]) ?>">
             <?= Yii::t('easyii', 'Create') ?>
         </a>
@@ -43,7 +43,7 @@ foreach ($current_model->models as $model){
 
     <? if($action === 'index'):?>
 
-        <?= $this->render($current_model::ALIAS.'/_filter', [
+        <?= $this->render($current_model::SLUG.'/_filter', [
             'current_model' => $current_model
         ]) ?>
 

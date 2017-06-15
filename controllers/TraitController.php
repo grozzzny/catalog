@@ -21,14 +21,14 @@ trait TraitController
             if($current_model->hasValidator('image', $attribute)) {
                 $current_model->$attribute = UploadedFile::getInstance($current_model, $attribute);
                 if($current_model->$attribute && $current_model->validate([$attribute])){
-                    $current_model->$attribute = Image::upload($current_model->$attribute, $current_model::ALIAS);
+                    $current_model->$attribute = Image::upload($current_model->$attribute, $current_model::SLUG);
                 }
                 else{
                     $current_model->$attribute = $current_model->isNewRecord ? '' : $current_model->oldAttributes[$attribute];
                 }
             }elseif ($current_model->hasValidator('file', $attribute)){
                 if($fileInstanse = UploadedFile::getInstance($current_model, $attribute)) {
-                    $current_model->$attribute = Upload::file($fileInstanse, $current_model::ALIAS);
+                    $current_model->$attribute = Upload::file($fileInstanse, $current_model::SLUG);
                 }else{
                     $current_model->$attribute = $current_model->isNewRecord ? '' : $current_model->oldAttributes[$attribute];
                 }

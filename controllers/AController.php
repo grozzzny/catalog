@@ -20,19 +20,19 @@ class AController extends Controller
         return [
             [
                 'class' => SortableController::className(),
-                'model' => Base::getModel(Yii::$app->request->get('alias'))
+                'model' => Base::getModel(Yii::$app->request->get('slug'))
             ],
         ];
     }
 
 
     /**
-     * @param null $alias
+     * @param null $slug
      * @return string
      */
-    public function actionIndex($alias = null)
+    public function actionIndex($slug = null)
     {
-        $current_model = Base::getModel($alias);
+        $current_model = Base::getModel($slug);
 
         $query = $current_model->find();
 
@@ -51,12 +51,12 @@ class AController extends Controller
 
     /**
      * Создать
-     * @param $alias
+     * @param $slug
      * @return array|string|\yii\web\Response
      */
-    public function actionCreate($alias)
+    public function actionCreate($slug)
     {
-        $current_model = Base::getModel($alias);
+        $current_model = Base::getModel($slug);
 
         if ($current_model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -69,11 +69,11 @@ class AController extends Controller
                 }
 
                 if($current_model->save()){
-                    $this->flash('success', 'Запись создана');
+                    $this->flash('success', Yii::t('gr', 'Post created'));
                     return $this->redirect(['/admin/'.$this->module->id]);
                 }
                 else{
-                    $this->flash('error', 'Ошибка');
+                    $this->flash('error', Yii::t('gr', 'Error'));
                     return $this->refresh();
                 }
             }
@@ -91,9 +91,9 @@ class AController extends Controller
      * @param $id
      * @return array|string|\yii\web\Response
      */
-    public function actionEdit($alias, $id)
+    public function actionEdit($slug, $id)
     {
-        $current_model = Base::getModel($alias);
+        $current_model = Base::getModel($slug);
 
         $current_model = $current_model::findOne($id);
 
@@ -112,7 +112,7 @@ class AController extends Controller
                 }
 
                 if($current_model->save()){
-                    $this->flash('success', 'Запись отредактирована');
+                    $this->flash('success', Yii::t('gr', 'Post updated'));
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $current_model->formatErrors()));
@@ -128,9 +128,9 @@ class AController extends Controller
     }
 
 
-    public function actionPhotos($alias, $id)
+    public function actionPhotos($slug, $id)
     {
-        $current_model = Base::getModel($alias);
+        $current_model = Base::getModel($slug);
 
         $current_model = $current_model::findOne($id);
 
@@ -143,9 +143,9 @@ class AController extends Controller
         ]);
     }
 
-    public function actionFiles($alias, $id)
+    public function actionFiles($slug, $id)
     {
-        $current_model = Base::getModel($alias);
+        $current_model = Base::getModel($slug);
 
         $current_model = $current_model::findOne($id);
 
@@ -203,33 +203,33 @@ class AController extends Controller
 
     /**
      * Удалить
-     * @param $alias
+     * @param $slug
      * @param $id
      * @return mixed
      */
-    public function actionDelete($alias, $id)
+    public function actionDelete($slug, $id)
     {
-        $current_model = Base::getModel($alias);
+        $current_model = Base::getModel($slug);
 
         if(($current_model = $current_model::findOne($id))){
             $current_model->delete();
         } else {
             $this->error =  Yii::t('easyii', 'Not found');
         }
-        return $this->formatResponse('Запись удалена');
+        return $this->formatResponse(Yii::t('gr', 'Post deleted'));
     }
 
 
     /**
      * Удалить изображение
      * @param $attribute
-     * @param $alias
+     * @param $slug
      * @param $id
      * @return \yii\web\Response
      */
-    public function actionClearFile($attribute, $alias, $id)
+    public function actionClearFile($attribute, $slug, $id)
     {
-        $current_model = Base::getModel($alias);
+        $current_model = Base::getModel($slug);
 
         $current_model = $current_model::findOne($id);
 
@@ -251,37 +251,37 @@ class AController extends Controller
 
     /**
      * Активировать
-     * @param $alias
+     * @param $slug
      * @param $id
      * @return mixed
      */
-    public function actionOn($alias, $id)
+    public function actionOn($slug, $id)
     {
-        return $this->changeStatus($alias, $id, Base::STATUS_ON);
+        return $this->changeStatus($slug, $id, Base::STATUS_ON);
     }
 
 
     /**
      * Деактивировать
-     * @param $alias
+     * @param $slug
      * @param $id
      * @return mixed
      */
-    public function actionOff($alias, $id)
+    public function actionOff($slug, $id)
     {
-        return $this->changeStatus($alias, $id, Base::STATUS_OFF);
+        return $this->changeStatus($slug, $id, Base::STATUS_OFF);
     }
 
     /**
      * Изменить статус
-     * @param $alias
+     * @param $slug
      * @param $id
      * @param $status
      * @return mixed
      */
-    public function changeStatus($alias, $id, $status)
+    public function changeStatus($slug, $id, $status)
     {
-        $current_model = Base::getModel($alias);
+        $current_model = Base::getModel($slug);
 
         if($current_model = $current_model::findOne($id)){
             $current_model->status = $status;

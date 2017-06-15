@@ -10,49 +10,96 @@ class m170613_212325_create_module_catalog extends \grozzzny\call_back\migration
             'slug' => $this->string(),
             'title' => $this->string(),
             'parent_id' => $this->integer(),
-            'properties' => $this->text(),
-            'image' => $this->string(),
+            'image_file' => $this->string(),
             'views' => $this->integer(),
             'short' => $this->string(),
             'description' => $this->text(),
+            'created_by' => $this->integer(),
+            'updated_by' => $this->integer(),
             'status' => $this->boolean()->defaultValue(1),
-            'order_num' => $this->integer()->defaultValue(100),
+            'order_num' => $this->integer()->notNull(),
         ], $this->tableOptions);
 
-        $this->createTable('gr_catalog_rel', [
-            'category_id' => $this->integer(),
-            'item_id' => $this->integer(),
+
+        $this->createTable('gr_catalog_properties', [
+            'id' => $this->primaryKey(),
+            'slug' => $this->string(),
+            'title' => $this->string(),
+            'type' => $this->string(),
+            'multiple' => $this->boolean()->defaultValue(false),
+            'filter_range' => $this->boolean()->defaultValue(false),
+            'filter_hidden' => $this->boolean()->defaultValue(false),
+            'validation_rule' => $this->text(),
+            'options' => $this->text(),
+            'order_num' => $this->integer()->notNull(),
         ], $this->tableOptions);
+
 
         $this->createTable('gr_catalog_items', [
             'id' => $this->primaryKey(),
             'slug' => $this->string(),
-            'category_id' => $this->integer(),
-            'image' => $this->string(),
+            'image_file' => $this->string(),
             'title' => $this->string(),
             'short' => $this->string(),
             'description' => $this->text(),
             'price' => $this->integer(),
             'discount' => $this->integer(),
             'views' => $this->integer(),
-            'time_create' => $this->integer(),
-            'time_update' => $this->integer(),
-            'create_at' => $this->integer(),
+            'created_by' => $this->integer(),
+            'updated_by' => $this->integer(),
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
+            'user_id' => $this->integer(),
             'status' => $this->boolean()->defaultValue(false),
+            'order_num' => $this->integer()->notNull(),
         ], $this->tableOptions);
 
 
         $this->createTable('gr_catalog_data', [
             'id' => $this->primaryKey(),
             'item_id' => $this->integer(),
-            'property_name' => $this->string(),
+            'property_slug' => $this->string(),
+            'key' => $this->string(),
             'value' => 'varchar(1024)',
-            'value_slug' => $this->string(),
         ], $this->tableOptions);
 
 
+        $this->createTable('gr_catalog_relations_categories_items', [
+            'category_id' => $this->integer(),
+            'item_id' => $this->integer(),
+        ], $this->tableOptions);
+
+
+        $this->createTable('gr_catalog_relations_categories_properties', [
+            'category_id' => $this->integer(),
+            'property_id' => $this->integer(),
+        ], $this->tableOptions);
+
+
+        $this->createIndex('unique_catalog_relations_categories_items', 'gr_catalog_relations_categories_items', ['category_id','item_id'], true);
+        $this->addForeignKey('fk_catalog_relations_categories_items_category_id', '{{%gr_catalog_relations_categories_items}}', 'category_id', '{{%gr_catalog_categories}}', 'id', 'CASCADE');
+        $this->addForeignKey('fk_catalog_relations_categories_items_item_id', '{{%gr_catalog_relations_categories_items}}', 'item_id', '{{%gr_catalog_items}}', 'id', 'CASCADE');
+
+
+        $this->createIndex('unique_gr_catalog_categories_slug', 'gr_catalog_categories', ['slug'], true);
+        $this->createIndex('unique_gr_catalog_items_slug', 'gr_catalog_items', ['slug'], true);
+
+
+        $this->createIndex('unique_catalog_relations_categories_properties', 'gr_catalog_relations_categories_properties', ['category_id','property_id'], true);
+        $this->addForeignKey('fk_catalog_relations_categories_properties_category_id', '{{%gr_catalog_relations_categories_properties}}', 'category_id', '{{%gr_catalog_categories}}', 'id', 'CASCADE');
+        $this->addForeignKey('fk_catalog_relations_categories_properties_property_id', '{{%gr_catalog_relations_categories_properties}}', 'property_id', '{{%gr_catalog_properties}}', 'id', 'CASCADE');
+
+        $this->createIndex('unique_catalog_properties_slug', 'gr_catalog_properties', ['slug'], true);
+        $this->createIndex('index_catalog_data_property_slug', 'gr_catalog_data', ['property_slug'], false);
+        $this->createIndex('index_catalog_data_item_id', 'gr_catalog_data', ['item_id'], false);
+
+        //Принцип ключа. Устанавливаем поведение на текущую колонку (Удаление или set null) на момент события указанного ИНДЕКСА в другой таблице
+        $this->addForeignKey('fk_catalog_data_property_slug', '{{%gr_catalog_data}}', 'property_slug', '{{%gr_catalog_properties}}', 'slug', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk_catalog_data_id', '{{%gr_catalog_data}}', 'item_id', '{{%gr_catalog_items}}', 'id', 'CASCADE');
+
+
         $this->insert('easyii_modules', [
-            'name' => 'Catalog',
+            'name' => 'newcatalog',
             'class' => 'grozzzny\catalog\CatalogModule',
             'title' => 'New catalog',
             'icon' => 'font',
@@ -65,8 +112,24 @@ class m170613_212325_create_module_catalog extends \grozzzny\call_back\migration
 
     public function safeDown()
     {
-        $this->dropTable('gr_call_back');
-        $this->delete('easyii_modules',['name' => 'callback']);
+
+        $this->dropForeignKey('fk_catalog_relations_categories_items_category_id','gr_catalog_relations_categories_items');
+        $this->dropForeignKey('fk_catalog_relations_categories_items_item_id','gr_catalog_relations_categories_items');
+
+        $this->dropForeignKey('fk_catalog_relations_categories_properties_category_id','gr_catalog_relations_categories_properties');
+        $this->dropForeignKey('fk_catalog_relations_categories_properties_property_id','gr_catalog_relations_categories_properties');
+
+        $this->dropForeignKey('fk_catalog_data_property_slug','gr_catalog_data');
+        $this->dropForeignKey('fk_catalog_data_id','gr_catalog_data');
+
+        $this->dropTable('gr_catalog_categories');
+        $this->dropTable('gr_catalog_properties');
+        $this->dropTable('gr_catalog_items');
+        $this->dropTable('gr_catalog_relations_categories_items');
+        $this->dropTable('gr_catalog_relations_categories_properties');
+        $this->dropTable('gr_catalog_data');
+
+        $this->delete('easyii_modules',['name' => 'newcatalog']);
 
         echo "m170613_212325_create_module_catalog cannot be reverted.\n";
 

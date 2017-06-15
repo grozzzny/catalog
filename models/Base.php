@@ -37,16 +37,16 @@ class Base extends \yii\easyii\components\ActiveRecord
 
             if(!$class::PRIMARY_MODEL) continue;
 
-            $models[$class::ALIAS] = $class;
+            $models[$class::SLUG] = $class;
         }
 
         return $models;
     }
 
-    public static function getModel($alias)
+    public static function getModel($slug)
     {
         $models = self::getModels();
-        return empty($alias) ? current($models) : $models[$alias];
+        return empty($slug) ? current($models) : $models[$slug];
     }
 
     public static function queryFilter(&$query, $get)
