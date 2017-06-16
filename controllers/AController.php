@@ -70,7 +70,7 @@ class AController extends Controller
 
                 if($current_model->save()){
                     $this->flash('success', Yii::t('gr', 'Post created'));
-                    return $this->redirect(['/admin/'.$this->module->id]);
+                    return $this->redirect(['/admin/'.$this->module->id.'/a', 'slug' => $current_model::SLUG]);
                 }
                 else{
                     $this->flash('error', Yii::t('gr', 'Error'));

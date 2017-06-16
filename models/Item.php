@@ -49,8 +49,6 @@ class Item extends Base
             [[
                 'price',
                 'views',
-                'created_at',
-                'updated_at',
                 'discount',
                 'user_id',
             ], 'integer'],

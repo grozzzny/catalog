@@ -2,6 +2,7 @@
 namespace grozzzny\catalog\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class Category extends Base
 {
@@ -59,6 +60,11 @@ class Category extends Base
         ];
     }
 
+    /**
+     * Фильтр
+     * @param $query
+     * @param $get
+     */
     public static function queryFilter(&$query, $get)
     {
 //        if(!empty($get['text'])){
@@ -73,6 +79,10 @@ class Category extends Base
 //        }
     }
 
+    /**
+     * Сортировка
+     * @param $provider
+     */
     public static function querySort(&$provider)
     {
         $sort = [];
@@ -93,6 +103,22 @@ class Category extends Base
         $sort = $sort + ['attributes' => $attributes];
 
         $provider->setSort($sort);
+    }
+
+
+    /**
+     * Возвращает список всех категорий в алфавитном порядке
+     * @return array
+     */
+    public static function listCategories()
+    {
+        $categories = self::find()
+            ->where(['status' => self::STATUS_ON])
+            ->orderBy('title')
+            ->asArray()
+            ->all();
+
+        return ArrayHelper::map($categories, 'id', 'title');
     }
 
 }

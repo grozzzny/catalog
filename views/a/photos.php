@@ -1,7 +1,7 @@
 <?php
 use yii\easyii\widgets\Photos;
 
-$this->title = 'Добавить фотографии';
+$this->title = Yii::t('gr', 'Add photos');
 ?>
 
 <?= $this->render('_menu', ['current_model' => $current_model]) ?>

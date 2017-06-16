@@ -106,6 +106,7 @@ class m170613_212325_create_module_catalog extends \grozzzny\call_back\migration
             'notice' => 0,
             'order_num' => 120
         ]);
+
     }
 
     public function safeDown()
