@@ -26,9 +26,7 @@ class m170613_212325_create_module_catalog extends \grozzzny\call_back\migration
             'slug' => $this->string(),
             'title' => $this->string(),
             'type' => $this->string(),
-            'multiple' => $this->boolean()->defaultValue(false),
-            'filter_range' => $this->boolean()->defaultValue(false),
-            'filter_hidden' => $this->boolean()->defaultValue(false),
+            'settings' => $this->text(), // multiple | filter_range | filter_hidden
             'validation_rule' => $this->text(),
             'options' => $this->text(),
             'order_num' => $this->integer()->notNull(),
