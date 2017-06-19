@@ -1,3 +1,12 @@
+<?
+use yii\bootstrap\BootstrapPluginAsset;
+use grozzzny\catalog\assets\ModuleAsset;
+
+BootstrapPluginAsset::register($this);
+ModuleAsset::register($this);
+
+?>
+
 <? $this->title = 'Создать';?>
 
 <?= $this->render('_menu', ['current_model' => $current_model]) ?>

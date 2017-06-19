@@ -9,6 +9,10 @@ use yii\easyii\widgets\Redactor;
 use yii\helpers\Url;
 
 $module = $this->context->module->id;
+
+if(!empty(Yii::$app->request->get('category'))) $current_model->parent_id = Yii::$app->request->get('category');
+
+
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -19,7 +23,11 @@ $module = $this->context->module->id;
 <?= $this->render('../_image_file', ['model' => $current_model, 'attribute' => 'image_file'])?>
 <?= $form->field($current_model, 'image_file')->fileInput() ?>
 
-<?= $form->field($current_model, 'title') ?>
+
+<?= $form->field($current_model, 'title')->input('text', [
+    'onkeyup' => "$('#category-slug').val(translit(this.value))",
+    'onblur' => "$('#category-slug').val(translit(this.value))",
+]) ?>
 <?= $form->field($current_model, 'slug') ?>
 
 <?= $form->field($current_model, 'parent_id')->widget(Select2::className(),[
@@ -30,7 +38,7 @@ $module = $this->context->module->id;
     ],
 ]); ?>
 
-<?= $form->field($current_model, 'views') ?>
+<?= $form->field($current_model, 'views')->input('text',['disabled' => true]) ?>
 
 <?= $form->field($current_model, 'short')->textarea() ?>
 

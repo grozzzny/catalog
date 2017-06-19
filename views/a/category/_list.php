@@ -10,22 +10,24 @@ $sort = $data->getSort();
 <table class="table table-hover">
     <thead>
     <tr>
-        <th width="50">
+        <th width="40">
             <?=$sort->link('id');?>
         </th>
 
-        <th width="50">
+        <th>
             <?=$sort->link('title');?>
         </th>
 
-        <th width="50">
+        <th>
             <?=$sort->link('slug');?>
         </th>
 
-        <th width="100"><?=$sort->link('status');?></th>
+        <th width="100">
+            <?=$sort->link('status');?>
+        </th>
 
 
-        <th width="40"></th>
+        <th width="190"></th>
 
 
     </tr>
@@ -33,16 +35,18 @@ $sort = $data->getSort();
     <tbody>
     <? foreach($data->models as $item) : ?>
     <tr>
-        <td><?= $item->primaryKey ?></td>
         <td>
-            <a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->id, 'slug' => $item::SLUG]) ?>">
+            <?= $item->primaryKey ?>
+        </td>
+
+        <td>
+            <a href="<?= $item->linkAdmin ?>">
                 <?= $item->title ?>
             </a>
         </td>
+
         <td>
-            <a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->id, 'slug' => $item::SLUG]) ?>">
-                <?= $item->slug ?>
-            </a>
+            <?= $item->slug ?>
         </td>
 
         <td class="status vtop">
@@ -53,15 +57,29 @@ $sort = $data->getSort();
                 'data-link' => Url::to(['/admin/'.$module.'/a/']),
             ]) ?>
         </td>
+
         <td>
             <div class="btn-group btn-group-sm" role="group">
 
-                <? if($item::ORDER_NUM):?>
-                    <a href="<?= Url::to(['/admin/'.$module.'/a/up', 'id' => $item->primaryKey, 'slug' => $item::SLUG]) ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
-                    <a href="<?= Url::to(['/admin/'.$module.'/a/down', 'id' => $item->primaryKey, 'slug' => $item::SLUG]) ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
-                <? endif;?>
+                <a href="<?= $item->linkCreateElement ?>" class="btn btn-default" title="<?= Yii::t('gr', 'Create element') ?>">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
 
-                <a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey, 'slug' => $item::SLUG]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
+                <a href="<?= $item->linkList ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'List') ?>">
+                    <span class="glyphicon glyphicon-list"></span>
+                </a>
+
+                <a href="<?= $item->linkEdit ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'Edit') ?>">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+
+                <a href="<?= $item->linkProperties ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'Properties') ?>">
+                    <span class="glyphicon glyphicon-inbox"></span>
+                </a>
+
+                <a href="<?= $item->linkDelete ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
 
             </div>
         </td>

@@ -32,9 +32,7 @@ $sort = $data->getSort();
             </a>
         </td>
         <td>
-            <a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->id, 'slug' => $item::SLUG]) ?>">
-                <?= $item->slug ?>
-            </a>
+            <?= $item->slug ?>
         </td>
 
         <td class="status vtop">

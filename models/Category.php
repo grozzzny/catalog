@@ -3,6 +3,7 @@ namespace grozzzny\catalog\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 class Category extends Base
 {
@@ -34,9 +35,9 @@ class Category extends Base
             ], 'string'],
             [[
                 'parent_id',
-                'views',
             ], 'integer'],
             ['image_file', 'image'],
+            ['parent_id','default', 'value' => 0],
             [['description'], 'safe'],
             ['status', 'default', 'value' => self::STATUS_ON],
             [['order_num'], 'integer'],
@@ -60,6 +61,11 @@ class Category extends Base
         ];
     }
 
+    public function getParentCategory()
+    {
+        return $this->hasOne(self::className(), ['id' => 'parent_id']);
+    }
+
     /**
      * Фильтр
      * @param $query
@@ -67,17 +73,34 @@ class Category extends Base
      */
     public static function queryFilter(&$query, $get)
     {
-//        if(!empty($get['text'])){
-//            $query->andFilterWhere([
-//                'OR',
-//                ['LIKE', 'name', $get['text']],
-//                ['LIKE', 'email', $get['text']],
-//                ['LIKE', 'phone', $get['text']],
-//                ['LIKE', 'description', $get['text']],
-//            ]
-//            );
-//        }
+        if(!empty($get['text'])){
+            $query->andFilterWhere(['LIKE', 'title', $get['text']]);
+        }else{
+            if(!empty($get['category'])){
+                $query->andFilterWhere(['parent_id' => $get['category']]);
+            }else {
+                $query->andFilterWhere(['parent_id' => 0]);
+            }
+        }
     }
+
+
+    public function getBreadcrumbs()
+    {
+        $breadcrumbs = ['label' => $this->title];
+        $parent = $this->parentCategory;
+
+        while ($parent){
+            array_push($breadcrumbs, [
+                'url' => $parent->linkAdmin,
+                'label' => $parent->title
+            ]);
+            $parent = $parent->parentCategory;
+        };
+
+        return array_reverse($breadcrumbs, true);
+    }
+
 
     /**
      * Сортировка
@@ -105,6 +128,33 @@ class Category extends Base
         $provider->setSort($sort);
     }
 
+    public function getFullTitle()
+    {
+        $arr_name = [$this->title];
+        $parent = $this->parentCategory;
+
+        while ($parent){
+            array_push($arr_name, $parent->title);
+            $parent = $parent->parentCategory;
+        };
+
+        $arr_name = array_reverse($arr_name, true);
+
+        return join('→', $arr_name);
+    }
+
+    public function getAllParentId()
+    {
+        $arr_id = [$this->id];
+        $parent = $this->parentCategory;
+
+        while ($parent){
+            $arr_id[] = $parent->id;
+            $parent = $parent->parentCategory;
+        };
+
+        return $arr_id;
+    }
 
     /**
      * Возвращает список всех категорий в алфавитном порядке
@@ -112,13 +162,47 @@ class Category extends Base
      */
     public static function listCategories()
     {
+        $categories_arr = [];
         $categories = self::find()
-            ->where(['status' => self::STATUS_ON])
+          //  ->where(['status' => self::STATUS_ON])
             ->orderBy('title')
-            ->asArray()
             ->all();
 
-        return ArrayHelper::map($categories, 'id', 'title');
+        foreach ($categories as $category){
+            $categories_arr[$category->id] = $category->fullTitle;
+        }
+
+        return $categories_arr;
+    }
+
+    public function getLinkCreateElement()
+    {
+        return Url::to(['/admin/'.Yii::$app->controller->module->id . '/a/create', 'slug' => Item::SLUG, 'category' => $this->id]);
+    }
+
+    public function getLinkList()
+    {
+        return Url::to(['/admin/'.Yii::$app->controller->module->id, 'slug' => Item::SLUG, 'category' => $this->id]);
+    }
+
+    public function getLinkAdmin()
+    {
+        return Url::to(['/admin/'.Yii::$app->controller->module->id, 'slug' => self::SLUG, 'category' => $this->id]);
+    }
+
+    public function getLinkEdit()
+    {
+        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/a/edit', 'id' => $this->id, 'slug' => self::SLUG]);
+    }
+
+    public function getLinkProperties()
+    {
+        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/properties', 'id' => $this->id, 'slug' => self::SLUG]);
+    }
+
+    public function getLinkDelete()
+    {
+        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/a/delete', 'id' => $this->primaryKey, 'slug' => self::SLUG]);
     }
 
 }

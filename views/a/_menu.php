@@ -36,7 +36,7 @@ foreach ($current_model->models as $model){
         <a href="<?= Url::to([
         '/admin/'.$module.'/a/create',
         'slug' => $current_model::SLUG
-        ]) ?>">
+        ] + ['category' => Yii::$app->request->get('category')]) ?>">
             <?= Yii::t('easyii', 'Create') ?>
         </a>
     </li>

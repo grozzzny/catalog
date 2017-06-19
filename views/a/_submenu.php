@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use grozzzny\catalog\models\Category;
 
 $action = $this->context->action->id;
 $module = $this->context->module->id;
@@ -26,6 +27,14 @@ $module = $this->context->module->id;
         <li <?= ($action === 'files') ? 'class="active"' : '' ?>>
             <a href="<?= Url::to(['/admin/'.$module.'/a/files', 'id' => $current_model->primaryKey, 'slug' => $current_model::SLUG]) ?>">
                 Аудиозаписи
+            </a>
+        </li>
+    <? endif;?>
+
+    <? if(Yii::$app->controller->actionParams['slug'] == Category::SLUG): ?>
+        <li <?= (Yii::$app->controller->route === 'admin/newcatalog/properties/fields') ? 'class="active"' : '' ?>>
+            <a href="<?= Url::to(['/admin/'.$module.'/properties', 'id' => $current_model->primaryKey, 'slug' => $current_model::SLUG]) ?>">
+                Свойства
             </a>
         </li>
     <? endif;?>

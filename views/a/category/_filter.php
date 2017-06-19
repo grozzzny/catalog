@@ -7,7 +7,7 @@ use yii\helpers\Url;
 
     <li style="float:right; margin-left: 20px;">
         <?=Html::input('string', 'text', Yii::$app->request->get('text'),[
-            'placeholder'=> 'Поиск...',
+            'placeholder'=> Yii::t('gr', 'Search..'),
             'class'=> 'form-control',
         ])?>
     </li>

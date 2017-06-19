@@ -15,7 +15,8 @@
     "require": {
         "php": ">=5.4.0",
         "grozzzny/widgets": "dev-master",
-        "yiisoft/yii2": "*"
+        "yiisoft/yii2": "*",
+        "kartik-v/yii2-widget-select2": "@dev"
     },
     "autoload": {
         "psr-4": {

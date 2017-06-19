@@ -3,6 +3,7 @@
 
 namespace grozzzny\catalog\models;
 
+use Yii;
 
 trait TraitModel
 {
@@ -25,6 +26,26 @@ trait TraitModel
         }
 
         return false;
+    }
+
+
+    public function saveDataRelationsTable($viaTable, $condition, $data)
+    {
+        Yii::$app->db->createCommand()
+            ->delete($viaTable, $condition)
+            ->execute();
+
+        foreach ($data as $key => $val){
+            if (!empty($val)) {
+                foreach ($val as $v) {
+                    Yii::$app->db->createCommand()
+                        ->insert($viaTable, [
+                                $key => $v
+                            ] + $condition)
+                        ->execute();
+                }
+            }
+        }
     }
 
 }
