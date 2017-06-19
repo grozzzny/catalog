@@ -6,7 +6,7 @@ use Yii;
 
 class Properties extends Base
 {
-    const PRIMARY_MODEL = true;
+    const PRIMARY_MODEL = false;
 
     const CACHE_KEY = 'gr_catalog_properties';
 
