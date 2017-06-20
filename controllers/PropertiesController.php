@@ -2,6 +2,8 @@
 namespace grozzzny\catalog\controllers;
 
 use grozzzny\catalog\models\Base;
+use kartik\select2\Select2;
+use kartik\select2\Select2Asset;
 use Yii;
 use yii\base\DynamicModel;
 use yii\data\ActiveDataProvider;
@@ -35,7 +37,8 @@ class PropertiesController extends Controller
     public function actionFields($slug, $id)
     {
 
-
+        //Select2::widget();
+/*
         // объявляем экземпляр класса
         $model = new DynamicModel(['name','price_1','price_2', 'phone']);
         $model->name = ' Kisa';
@@ -64,12 +67,7 @@ class PropertiesController extends Controller
         }
 
         exit();
-
-
-
-
-
-
+*/
 
         $current_model = Base::getModel($slug);
 

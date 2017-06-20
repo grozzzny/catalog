@@ -362,6 +362,316 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                 return property.data('validations');
             },
 
+            building:function (ob) {
+                var data = properties.validations.data(ob);
+                var modal = properties.find(ob, '.modal.validations .modal-body');
+                var type = properties.getType(ob);
+
+                var table = $('<table class="table table-hover"></table>');
+                var thead = $('<thead></thead>').append($('<th>Name</th>')).append($('<th>Params</th>')).append($('<th width="40"></th>'));
+                var tbody = $('<tbody></tbody>');
+
+                modal.append(table.append(thead).append(tbody));
+
+//                $.each(data_options, function (key, value) {
+//                    tbody.append(properties.options.item(key, value));
+//                });
+
+                modal.append(table.append(thead).append(tbody));
+
+                var select = $('<select class="form-control list-validators"></select>').on('change', function () {
+                    properties.validations.library[$(this).val()].building(this);
+                    $(this).find(":selected").prop('disabled',true);
+                    $(this).find(":first-child").prop('selected',true);
+                });
+
+                select.append($('<option value="" selected disabled>Add validation rule</option>'));
+
+                $.each(properties.validations.library, function (key, obj) {
+                    var option = $('<option value="'+key+'">'+obj.title+'</option>');
+                    select.append(option);
+                });
+
+                modal.append(select);
+
+            },
+
+            removeValidator:function (ob) {
+                var item = $(ob).parents('tr.item');
+                item.parents('.modal.validations').find('.list-validators option[value="'+item.data('validator')+'"]').prop('disabled', false);
+                $(ob).parents('tr.item').remove();
+            },
+
+            btnGroup:function () {
+                var btnGroup = $('<div class="btn-group btn-group-sm"></div>');
+                var btnRemove = $('<a onclick="properties.validations.removeValidator(this);" class="btn btn-default" style="color: #a94442;" title="Remove rule"><span class="glyphicon glyphicon-remove"></span></a>');
+                return $('<td></td>').append(btnGroup.append(btnRemove));
+            },
+
+            /**
+             * Библиотека правил валидации
+             */
+            library:{
+                integer:{
+                    validator:'integer',
+                    title:'Integer number',
+                    params:['min','max'],
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','integer')
+                            .append($('<td></td>').text('Integer number'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','number')
+                                            .attr('placeholder','Minimum value')
+                                            .data('parametr','min')
+                                    )
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','number')
+                                            .attr('placeholder','Maximum value')
+                                            .data('parametr','max')
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                },
+                double:{
+                    validator:'double',
+                    title:'Floating point number',
+                    params:null,
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','double')
+                            .append($('<td></td>').text('Floating point number'))
+                            .append($('<td></td>'))
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                },
+                boolean:{
+                    validator:'boolean',
+                    title:'Boolean (true or false)',
+                    params:null,
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','double')
+                            .append($('<td></td>').text('Boolean (true or false)'))
+                            .append($('<td></td>'))
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                },
+                number:{
+                    validator:'number',
+                    title:'Number',
+                    params:['min','max'],
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','number')
+                            .append($('<td></td>').text('Number'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','number')
+                                            .attr('placeholder','Minimum value')
+                                            .data('parametr','min')
+                                    )
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','number')
+                                            .attr('placeholder','Maximum value')
+                                            .data('parametr','max')
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                },
+                string:{
+                    validator:'string',
+                    title:'String',
+                    params:['min','max'],
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','string')
+                            .append($('<td></td>').text('String'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','number')
+                                            .attr('placeholder','Minimum value')
+                                            .data('parametr','min')
+                                    )
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','number')
+                                            .attr('placeholder','Maximum value')
+                                            .data('parametr','max')
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                },
+                date:{
+                    validator:'date',
+                    title:'Date',
+                    params:['format'],
+                    building:function (ob) {
+
+                    }
+                },
+                required:{
+                    validator:'required',
+                    title:'Required',
+                    params:null,
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','required')
+                            .append($('<td></td>').text('Required'))
+                            .append($('<td></td>'))
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                },
+                email:{
+                    validator:'email',
+                    title:'Email',
+                    params:null,
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','email')
+                            .append($('<td></td>').text('Email'))
+                            .append($('<td></td>'))
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                },
+                url:{
+                    validator:'url',
+                    title:'Url',
+                    params:null,
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','url')
+                            .append($('<td></td>').text('Url'))
+                            .append($('<td></td>'))
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                },
+                image:{
+                    validator:'image',
+                    title:'Image',
+                    params:['extensions'],
+                    building:function (ob) {
+
+                    }
+                },
+                file:{
+                    validator:'file',
+                    title:'File',
+                    params:['extensions'],
+                    building:function (ob) {
+
+                    }
+                },
+                unique:{
+                    validator:'unique',
+                    title:'Unique',
+                    params:null,
+                    building:function (ob) {
+
+                    }
+                },
+                filter:{
+                    validator:'filter',
+                    title:'Filter',
+                    params:['filter'],
+                    building:function (ob) {
+
+                    }
+                },
+                compareValue:{
+                    validator:'compare',
+                    title:'Comparison Validator for value',
+                    params:['compareValue','operator'],
+                    building:function (ob) {
+
+                    }
+                },
+                compareAttribute:{
+                    validator:'compare',
+                    title:'Comparison Validator for attribute',
+                    params:['compareAttribute','operator'],
+                    building:function (ob) {
+
+                    }
+                },
+                match:{
+                    validator:'match',
+                    title:'Regular Expression Validator',
+                    params:['pattern'],
+                    building:function (ob) {
+
+                    }
+                },
+                default:{
+                    validator:'default',
+                    title:'Validator assigning a default value',
+                    params:['value'],
+                    building:function (ob) {
+
+                    }
+                },
+                safe:{
+                    validator:'safe',
+                    title:'Validator safe',
+                    params:null,
+                    building:function (ob) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
+
+                        var tr = $('<tr class="item"></tr>')
+                            .data('validator','safe')
+                            .append($('<td></td>').text('Validator safe'))
+                            .append($('<td></td>'))
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
+                    }
+                }
+            },
+
             save:function (ob) {
 
             }
@@ -406,7 +716,8 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     var modal = properties.find(ob, '.modal.validations');
                     modal.modal('show');
                     modal.find('.modal-body').empty();
-                    modal.find('.modal-body').html('Validations to this type do not apply');
+
+                    properties.validations.building(ob);
                 }
             }
         },

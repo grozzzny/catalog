@@ -7,6 +7,8 @@ use grozzzny\catalog\assets\ModuleAsset;
 BootstrapPluginAsset::register($this);
 ModuleAsset::register($this);
 
+
+
 $this->title = Yii::t('gr', 'Properties');
 ?>
 
