@@ -37,4 +37,10 @@ return [
     'File' => 'Файл',
     'Checkbox' => 'Чекбокс',
     'Params' => 'Параметры',
+    'Options' => 'Опции',
+    'Settings' => 'Настройки',
+    'Validation rule' => 'Правила валидации',
+    'Close' => 'Закрыть',
+    'Save' => 'Сохранить',
+    'Integer' => 'Число',
 ];

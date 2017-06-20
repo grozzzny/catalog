@@ -37,7 +37,7 @@ $this->title = Yii::t('gr', 'Properties');
 
 <?=Html::endTag('table')?>
 
-<?= Html::submitButton('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('easyii', 'Save fields'), ['class' => 'btn btn-primary', 'id' => 'saveCategoryBtn']) ?>
+<?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('easyii', 'Save fields'), ['class' => 'btn btn-primary', 'id' => 'saveCategoryBtn']) ?>
 
 
 <?=Html::endForm() ?>

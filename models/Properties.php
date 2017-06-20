@@ -19,6 +19,7 @@ class Properties extends Base
 
 
     const TYPE_STRING = 'string';
+    const TYPE_INTEGER = 'integer';
     const TYPE_SELECT = 'select';
     const TYPE_CHECKBOX = 'checkbox';
     const TYPE_HTML = 'html';
@@ -67,6 +68,7 @@ class Properties extends Base
     {
         return [
             self::TYPE_STRING => Yii::t('gr','String'),
+            self::TYPE_INTEGER => Yii::t('gr','Integer'),
             self::TYPE_SELECT => Yii::t('gr','Select'),
             self::TYPE_CHECKBOX => Yii::t('gr','Checkbox'),
             self::TYPE_HTML => Yii::t('gr','HTML'),
