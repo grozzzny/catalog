@@ -3,9 +3,11 @@ use yii\helpers\Html;
 
 use yii\bootstrap\BootstrapPluginAsset;
 use grozzzny\catalog\assets\ModuleAsset;
+use grozzzny\widgets\switch_checkbox\assets\SwitchCheckboxAsset;
 
 BootstrapPluginAsset::register($this);
 ModuleAsset::register($this);
+SwitchCheckboxAsset::register($this);
 
 
 

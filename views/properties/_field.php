@@ -15,7 +15,7 @@ $json_options = json_encode($options, JSON_UNESCAPED_UNICODE);
 $validations = [
     [
         'string', //double, boolean, number, string, date, required
-        'max' => 10 //'string','max'=>1000
+        ['min' => 2,'max' => 10] //'string','max'=>1000
     ],
     [
         'required',
@@ -32,7 +32,7 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
 ?>
 
 
-<tr class='property' data-id='' data-category='' data-options='<?=$json_options?>' data-settings='<?=$json_settings?>' data-validations='<?=$json_validations?>'>
+<tr class='property' data-id='' data-category='' data-options='<?=$json_options?>' data-settings='<?=$json_settings?>' data-validations='<?=$json_validations?>' data-old-type="<?=Properties::TYPE_STRING?>" data-old-validations='<?=$json_validations?>' >
     <td>
         <?=Html::input('text', 'title','',[
             'class' => 'form-control',
@@ -46,7 +46,7 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
     </td>
 
     <td>
-        <?=Html::dropDownList('type',Properties::TYPE_STRING, Properties::getListType(),['class' => 'form-control']) ?>
+        <?=Html::dropDownList('type',Properties::TYPE_STRING, Properties::getListType(),['class' => 'form-control', 'onchange' => 'properties.selectType(this);']) ?>
     </td>
 
     <td>
@@ -92,54 +92,6 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
 </tr>
 
 
-<style>
-    .material-switch > input[type="checkbox"] {
-        display: none;
-    }
-
-    .material-switch > label {
-        cursor: pointer;
-        height: 0px;
-        position: relative;
-        width: 40px;
-    }
-
-    .material-switch > label::before {
-        background: rgb(0, 0, 0);
-        box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
-        border-radius: 8px;
-        content: '';
-        height: 16px;
-        margin-top: -8px;
-        position:absolute;
-        opacity: 0.3;
-        transition: all 0.4s ease-in-out;
-        width: 40px;
-    }
-    .material-switch > label::after {
-        background: rgb(255, 255, 255);
-        border-radius: 16px;
-        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-        content: '';
-        height: 24px;
-        left: -4px;
-        margin-top: -8px;
-        position: absolute;
-        top: -4px;
-        transition: all 0.3s ease-in-out;
-        width: 24px;
-    }
-    .material-switch > input[type="checkbox"]:checked + label::before {
-        background: inherit;
-        opacity: 0.5;
-    }
-    .material-switch > input[type="checkbox"]:checked + label::after {
-        background: inherit;
-        left: 20px;
-    }
-
-</style>
-
 <script>
     var properties = {
         /**
@@ -166,6 +118,20 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
             return property.find('[name="type"]').val();
         },
 
+        /**
+         * При выборе типа данных, устанавливается дефолтная валидация
+         * @param ob
+         */
+        selectType:function (ob) {
+            var property = $(ob).parents('.property');
+            var type = $(ob).val();
+            var old_type = property.attr('data-old-type');
+
+            //Если пользователь вернул прежний тип данных
+            var new_data = (type == old_type) ? property.attr('data-old-validations') : JSON.stringify(properties.validations.defaultValidations[type]);
+
+            property.attr('data-validations', new_data);
+        },
 
         /**
          * Опции
@@ -359,13 +325,14 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
             data:function (ob) {
                 var property = $(ob);
                 if(!property.hasClass('property')) property = property.parents('.property');
-                return property.data('validations');
+                return JSON.parse(property.attr('data-validations'));
             },
 
             building:function (ob) {
                 var data = properties.validations.data(ob);
+
                 var modal = properties.find(ob, '.modal.validations .modal-body');
-                var type = properties.getType(ob);
+                //var type = properties.getType(ob);
 
                 var table = $('<table class="table table-hover"></table>');
                 var thead = $('<thead></thead>').append($('<th>Name</th>')).append($('<th>Params</th>')).append($('<th width="40"></th>'));
@@ -373,14 +340,9 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
 
                 modal.append(table.append(thead).append(tbody));
 
-//                $.each(data_options, function (key, value) {
-//                    tbody.append(properties.options.item(key, value));
-//                });
-
-                modal.append(table.append(thead).append(tbody));
-
+                //Создание правил при клике на список
                 var select = $('<select class="form-control list-validators"></select>').on('change', function () {
-                    properties.validations.library[$(this).val()].building(this);
+                    properties.validations.library[$(this).val()].building(this, {});
                     $(this).find(":selected").prop('disabled',true);
                     $(this).find(":first-child").prop('selected',true);
                 });
@@ -393,6 +355,15 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                 });
 
                 modal.append(select);
+
+                //Создание правил из ранее сохраненных
+                $.each(data, function (i, item) {
+                    var validator = item[0];
+                    var params = (item[1]) ? item[1] : {};
+
+                    properties.validations.library[validator].building(ob, params);
+                    properties.find(ob, '.modal.validations [value="'+validator+'"]').prop('disabled',true);
+                });
 
             },
 
@@ -408,6 +379,18 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                 return $('<td></td>').append(btnGroup.append(btnRemove));
             },
 
+            defaultValidations:{
+                string:[['string']],
+                integer:[['integer']],
+                select:[['safe']],
+                checkbox:[['boolean']],
+                html:[['safe']],
+                category:[['safe']],
+                datetime:[['integer']],
+                image:[['image']],
+                file:[['file']]
+            },
+
             /**
              * Библиотека правил валидации
              */
@@ -416,11 +399,11 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'integer',
                     title:'Integer number',
                     params:['min','max'],
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
-                            .data('validator','integer')
+                            .attr('data-validator','integer')
                             .append($('<td></td>').text('Integer number'))
                             .append(
                                 $('<td></td>')
@@ -428,13 +411,15 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                                         $('<input name="parametr" class="form-control">')
                                             .attr('type','number')
                                             .attr('placeholder','Minimum value')
-                                            .data('parametr','min')
+                                            .attr('data-parametr','min')
+                                            .val(params.max ? params.max : null)
                                     )
                                     .append(
                                         $('<input name="parametr" class="form-control">')
                                             .attr('type','number')
                                             .attr('placeholder','Maximum value')
-                                            .data('parametr','max')
+                                            .attr('data-parametr','max')
+                                            .val(params.max ? params.max : null)
                                     )
                             )
                             .append(properties.validations.btnGroup());
@@ -446,7 +431,7 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'double',
                     title:'Floating point number',
                     params:null,
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
@@ -462,7 +447,7 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'boolean',
                     title:'Boolean (true or false)',
                     params:null,
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
@@ -478,11 +463,11 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'number',
                     title:'Number',
                     params:['min','max'],
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
-                            .data('validator','number')
+                            .attr('data-validator','number')
                             .append($('<td></td>').text('Number'))
                             .append(
                                 $('<td></td>')
@@ -490,13 +475,15 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                                         $('<input name="parametr" class="form-control">')
                                             .attr('type','number')
                                             .attr('placeholder','Minimum value')
-                                            .data('parametr','min')
+                                            .attr('data-parametr','min')
+                                            .val(params.min ? params.min : null)
                                     )
                                     .append(
                                         $('<input name="parametr" class="form-control">')
                                             .attr('type','number')
                                             .attr('placeholder','Maximum value')
-                                            .data('parametr','max')
+                                            .attr('data-parametr','max')
+                                            .val(params.max ? params.max : null)
                                     )
                             )
                             .append(properties.validations.btnGroup());
@@ -508,11 +495,11 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'string',
                     title:'String',
                     params:['min','max'],
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
-                            .data('validator','string')
+                            .attr('data-validator','string')
                             .append($('<td></td>').text('String'))
                             .append(
                                 $('<td></td>')
@@ -520,13 +507,15 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                                         $('<input name="parametr" class="form-control">')
                                             .attr('type','number')
                                             .attr('placeholder','Minimum value')
-                                            .data('parametr','min')
+                                            .attr('data-parametr','min')
+                                            .val(params.min ? params.min : null)
                                     )
                                     .append(
                                         $('<input name="parametr" class="form-control">')
                                             .attr('type','number')
                                             .attr('placeholder','Maximum value')
-                                            .data('parametr','max')
+                                            .attr('data-parametr','max')
+                                            .val(params.max ? params.max : null)
                                     )
                             )
                             .append(properties.validations.btnGroup());
@@ -538,19 +527,36 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'date',
                     title:'Date',
                     params:['format'],
-                    building:function (ob) {
+                    building:function (ob, params) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
+                        var tr = $('<tr class="item"></tr>')
+                            .attr('data-validator','date')
+                            .append($('<td></td>').text('Date'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','string')
+                                            .attr('placeholder','Format. Example: dd-mm-yy')
+                                            .attr('data-parametr','format')
+                                            .val(params.format ? params.format : null)
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
                     }
                 },
                 required:{
                     validator:'required',
                     title:'Required',
                     params:null,
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
-                            .data('validator','required')
+                            .attr('data-validator','required')
                             .append($('<td></td>').text('Required'))
                             .append($('<td></td>'))
                             .append(properties.validations.btnGroup());
@@ -562,11 +568,11 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'email',
                     title:'Email',
                     params:null,
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
-                            .data('validator','email')
+                            .attr('data-validator','email')
                             .append($('<td></td>').text('Email'))
                             .append($('<td></td>'))
                             .append(properties.validations.btnGroup());
@@ -578,11 +584,11 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'url',
                     title:'Url',
                     params:null,
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
-                            .data('validator','url')
+                            .attr('data-validator','url')
                             .append($('<td></td>').text('Url'))
                             .append($('<td></td>'))
                             .append(properties.validations.btnGroup());
@@ -594,75 +600,203 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
                     validator:'image',
                     title:'Image',
                     params:['extensions'],
-                    building:function (ob) {
+                    building:function (ob, params) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
+                        var tr = $('<tr class="item"></tr>')
+                            .attr('data-validator','image')
+                            .append($('<td></td>').text('Image'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','string')
+                                            .attr('placeholder','Extensions. Example: png, jpg, gif')
+                                            .attr('data-parametr','extensions')
+                                            .val(params.extensions ? params.extensions : null)
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
                     }
                 },
                 file:{
                     validator:'file',
                     title:'File',
                     params:['extensions'],
-                    building:function (ob) {
+                    building:function (ob, params) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
+                        var tr = $('<tr class="item"></tr>')
+                            .attr('data-validator','file')
+                            .append($('<td></td>').text('File'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','string')
+                                            .attr('placeholder','Extensions. Example: pdf, doc')
+                                            .attr('data-parametr','extensions')
+                                            .val(params.extensions ? params.extensions : null)
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
                     }
                 },
                 unique:{
                     validator:'unique',
                     title:'Unique',
                     params:null,
-                    building:function (ob) {
+                    building:function (ob, params) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
+                        var tr = $('<tr class="item"></tr>')
+                            .attr('data-validator','unique')
+                            .append($('<td></td>').text('Unique'))
+                            .append($('<td></td>'))
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
                     }
                 },
                 filter:{
                     validator:'filter',
                     title:'Filter',
                     params:['filter'],
-                    building:function (ob) {
+                    building:function (ob, params) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
+                        var tr = $('<tr class="item"></tr>')
+                            .attr('data-validator','filter')
+                            .append($('<td></td>').text('Filter'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<select name="parametr" class="form-control">')
+                                            .attr('data-parametr','filter')
+                                            .append(
+                                                $('<option></option>')
+                                                    .val('trim')
+                                                    .text('Trim the lines on both sides')
+                                            )
+                                            .append(
+                                                $('<option></option>')
+                                                    .val('strtolower')
+                                                    .text('Transform the register')
+                                            )
+                                            .val(params.filter ? params.filter : 'trim')
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
                     }
                 },
-                compareValue:{
+                compare:{
                     validator:'compare',
-                    title:'Comparison Validator for value',
+                    title:'Comparison Validator for value OR atribute',
                     params:['compareValue','operator'],
-                    building:function (ob) {
+                    building:function (ob, params) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
-                    }
-                },
-                compareAttribute:{
-                    validator:'compare',
-                    title:'Comparison Validator for attribute',
-                    params:['compareAttribute','operator'],
-                    building:function (ob) {
+                        var tr = $('<tr class="item"></tr>')
+                            .attr('data-validator','compare')
+                            .append($('<td></td>').text('Comparison Validator for value OR atribute'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','number')
+                                            .attr('placeholder','Value')
+                                            .attr('data-parametr','compareValue')
+                                            .val(params.compareValue ? params.compareValue : null)
+                                    )
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','string')
+                                            .attr('placeholder','Attribute')
+                                            .attr('data-parametr','compareAttribute')
+                                            .val(params.compareAttribute ? params.compareAttribute : null)
+                                    )
+                                    .append(
+                                        $('<select name="parametr" class="form-control">')
+                                            .attr('data-parametr','operator')
+                                            .append($('<option></option>').val('=').text('Equally'))
+                                            .append($('<option></option>').val('!=').text('Not equal'))
+                                            .append($('<option></option>').val('>').text('More'))
+                                            .append($('<option></option>').val('>=').text('More or equal'))
+                                            .append($('<option></option>').val('<').text('Less'))
+                                            .append($('<option></option>').val('<=').text('Less or equal'))
+                                            .val(params.operator ? params.operator : '=')
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
 
+                        tbody.append(tr);
                     }
                 },
                 match:{
                     validator:'match',
                     title:'Regular Expression Validator',
                     params:['pattern'],
-                    building:function (ob) {
+                    building:function (ob, params) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
+                        var tr = $('<tr class="item"></tr>')
+                            .attr('data-validator','match')
+                            .append($('<td></td>').text('Regular Expression Validator'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','string')
+                                            .attr('placeholder','Pattern. Example: /^[a-z]\\w*$/i')
+                                            .attr('data-parametr','pattern')
+                                            .val(params.pattern ? params.pattern : null)
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
                     }
                 },
                 default:{
                     validator:'default',
                     title:'Validator assigning a default value',
                     params:['value'],
-                    building:function (ob) {
+                    building:function (ob, params) {
+                        var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
+                        var tr = $('<tr class="item"></tr>')
+                            .attr('data-validator','default')
+                            .append($('<td></td>').text('Validator assigning a default value'))
+                            .append(
+                                $('<td></td>')
+                                    .append(
+                                        $('<input name="parametr" class="form-control">')
+                                            .attr('type','string')
+                                            .attr('placeholder','Value')
+                                            .attr('data-parametr','value')
+                                            .val(params.value ? params.value : null)
+                                    )
+                            )
+                            .append(properties.validations.btnGroup());
+
+                        tbody.append(tr);
                     }
                 },
                 safe:{
                     validator:'safe',
                     title:'Validator safe',
                     params:null,
-                    building:function (ob) {
+                    building:function (ob, params) {
                         var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
                         var tr = $('<tr class="item"></tr>')
-                            .data('validator','safe')
+                            .attr('data-validator','safe')
                             .append($('<td></td>').text('Validator safe'))
                             .append($('<td></td>'))
                             .append(properties.validations.btnGroup());
@@ -673,7 +807,31 @@ $json_settings = json_encode($settings, JSON_UNESCAPED_UNICODE);
             },
 
             save:function (ob) {
+                var modal = properties.find(ob, '.modal.validations .modal-body');
 
+                var new_data = [];
+
+                $.each(modal.find('[data-validator]'), function (i, ob) {
+                    var validator_arr = [$(ob).data('validator')];
+
+                    var params = {};
+                    $.each($(ob).find('[data-parametr]'), function (q, elem) {
+                        var elem_param = $(elem);
+                        if(elem_param.val() != '') params[elem_param.data('parametr')] = elem_param.val();
+                    });
+
+                    if(!$.isEmptyObject(params)) validator_arr.push(params);
+
+                    new_data.push(validator_arr);
+                });
+
+                var data_json = JSON.stringify(new_data);
+
+                var new_type = properties.getType(ob);
+
+                $(ob).parents('.property').attr('data-validations', data_json);
+                $(ob).parents('.property').attr('data-old-validations', data_json);
+                $(ob).parents('.property').attr('data-old-type', new_type);
             }
         },
 
