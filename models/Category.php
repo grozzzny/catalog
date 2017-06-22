@@ -61,6 +61,19 @@ class Category extends Base
         ];
     }
 
+    public function getParentsCategories()
+    {
+        $categories_arr = [$this];
+        $parent = $this->parentCategory;
+
+        while ($parent){
+            $categories_arr[] = $parent;
+            $parent = $parent->parentCategory;
+        };
+
+        return array_reverse($categories_arr, true);
+    }
+
     public function getParentCategory()
     {
         return $this->hasOne(self::className(), ['id' => 'parent_id']);
@@ -128,6 +141,20 @@ class Category extends Base
         $provider->setSort($sort);
     }
 
+
+    public function getProperties()
+    {
+        return $this->hasMany(Properties::className(), ['id' => 'property_id'])
+            ->viaTable('gr_catalog_relations_categories_properties', ['category_id' => 'id']);
+    }
+
+
+    public function getItems()
+    {
+        return $this->hasMany(Item::className(), ['id' => 'item_id'])
+            ->viaTable('gr_catalog_relations_categories_items', ['category_id' => 'id']);
+    }
+
     public function getFullTitle()
     {
         $arr_name = [$this->title];
@@ -164,7 +191,7 @@ class Category extends Base
     {
         $categories_arr = [];
         $categories = self::find()
-          //  ->where(['status' => self::STATUS_ON])
+            //->where(['status' => self::STATUS_ON])
             ->orderBy('title')
             ->all();
 

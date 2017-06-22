@@ -2,6 +2,8 @@
 namespace grozzzny\catalog\controllers;
 
 use grozzzny\catalog\models\Base;
+use grozzzny\catalog\models\Category;
+use grozzzny\catalog\models\Properties;
 use kartik\select2\Select2;
 use kartik\select2\Select2Asset;
 use Yii;
@@ -82,4 +84,81 @@ class PropertiesController extends Controller
         ]);
     }
 
+
+    /**
+ * Список категорий при получении ajax запросом
+ * @return string
+ */
+    public function actionGetListCategories()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+
+            $query = Category::find();
+
+            if(!empty(Yii::$app->request->get('q'))) $query->where(['LIKE','title',Yii::$app->request->get('q')]);
+
+            $data = [];
+            foreach($query->limit(10)->all() AS $category){
+                $data[] = [
+                    'id' => $category->id,
+                    'text' => $category->fullTitle
+                ];
+            }
+
+            return json_encode($data, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * Получение имени категории ajax запросом
+     * @return string
+     */
+    public function actionGetTitleCategories()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+            $category = Category::findOne(Yii::$app->request->get('id'));
+            return $category->fullTitle;
+        }
+    }
+
+
+    /**
+     * Список свойств при получении ajax запросом
+     * @return string
+     */
+    public function actionGetListProperties()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+
+            $query = Properties::find();
+
+            if(!empty(Yii::$app->request->get('q'))) $query->where(['LIKE','title',Yii::$app->request->get('q')]);
+
+            $data = [];
+            foreach($query->limit(10)->all() AS $property){
+                $data[] = [
+                    'id' => $property->slug,
+                    'text' => $property->title
+                ];
+            }
+
+            return json_encode($data, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * Получение имени категории ajax запросом
+     * @return string
+     */
+    public function actionGetTitleProperty()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+            $property = Properties::findOne(['slug' => Yii::$app->request->get('slug')]);
+            return $property->title;
+        }
+    }
 }
