@@ -56,11 +56,13 @@ $this->title = Yii::t('gr', 'Properties');
 
 <? endforeach;?>
 
-<?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('easyii', 'Save fields'), ['class' => 'btn btn-primary', 'id' => 'saveCategoryBtn']) ?>
+<?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('easyii', 'Save fields'), [
+    'class' => 'btn btn-primary',
+    'onclick' => 'properties.save(this);'
+]) ?>
 
 <?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii', 'Add property'), [
     'class' => 'btn btn-default',
-    'id' => 'addField',
     'onclick' => 'properties.clone(this);'
 ]) ?>
 
@@ -157,6 +159,44 @@ $this->title = Yii::t('gr', 'Properties');
         },
 
 
+        save:function (ob) {
+
+            //Праверка на валидацию
+            var form = $('.properties-all-categories').get(0);
+            if(form['checkValidity']){
+                form.reportValidity();
+                if(!form.checkValidity()) return false;
+            }
+
+
+            var data = [];
+            $.each($('.properties-category'), function () {
+                var category = $(this);
+                var category_id = category.attr('data-category');
+
+                $.each(category.find('.property'), function () {
+                    var property = $(this);
+
+                    var item = {
+                        category_id : category_id,
+                        id : property.attr('data-id'),
+                        title : property.find('[name="title"]').val(),
+                        slug : property.find('[name="slug"]').val(),
+                        type : property.find('[name="type"]').val(),
+                        options : JSON.parse(property.attr('data-options')),
+                        settings : JSON.parse(property.attr('data-settings')),
+                        validations : JSON.parse(property.attr('data-validations'))
+                    };
+
+                    data.push(item);
+                });
+
+            });
+
+            console.log(data);
+
+        },
+
 
         /**
          * Опции
@@ -250,8 +290,27 @@ $this->title = Yii::t('gr', 'Properties');
             item:function (key, value) {
                 var tr = $('<tr class="item"></tr>');
 
-                tr.append($('<td><input name="key" type="text" class="form-control" value="'+key+'"></td>'));
-                tr.append($('<td><input onkeyup="properties.options.translit(this);" onblur="properties.options.translit(this);" name="value" type="text" class="form-control" value="'+value+'"></td>'));
+//                'required' => true,
+//                    'pattern' => "^[a-z_]{1}[a-z0-9\-_]*",
+//                    'size' => 100,
+
+                tr.append(
+                    $('<td></td>').append(
+                        $('<input name="key" type="text" class="form-control" value="'+key+'">')
+                            .attr('required', true)
+                            .attr('pattern', "^[a-z_]{1}[a-z0-9\-_]*")
+                            .attr('size', 100)
+                    )
+                );
+                tr.append(
+                    $('<td></td>').append(
+                        $('<input name="value" type="text" class="form-control" value="'+value+'">')
+                            .attr("onkeyup", "properties.options.translit(this);")
+                            .attr("onblur", "properties.options.translit(this);")
+                            .attr('required', true)
+                            .attr('size', 100)
+                    )
+                );
 
 
                 var btnGroup = $('<div class="btn-group btn-group-sm"></div>');
@@ -290,8 +349,27 @@ $this->title = Yii::t('gr', 'Properties');
 
                 if(type == 'select') {
                     $.each(modal.find('.item'), function (i, ob) {
-                        var value = $(ob).find('[name="value"]').val();
-                        var key = $(ob).find('[name="key"]').val();
+
+                        var value_elem = $(ob).find('[name="value"]');
+                        var key_elem = $(ob).find('[name="key"]');
+
+                        //Праверка на валидацию
+                        if(value_elem.get(0)['checkValidity']){
+                            value_elem.get(0).reportValidity();
+                            key_elem.get(0).reportValidity();
+
+                            if(!value_elem.get(0).checkValidity()){
+                                event.stopPropagation();
+                                return false;
+                            }
+                            if(!key_elem.get(0).checkValidity()){
+                                event.stopPropagation();
+                                return false;
+                            }
+                        }
+
+                        var value = value_elem.val();
+                        var key = key_elem.val();
                         if (value != "" && key != "") new_data[key] = value;
                     });
                 }else if(type == 'category'){
@@ -354,10 +432,12 @@ $this->title = Yii::t('gr', 'Properties');
              */
             parametr:function (key, value, label) {
                 var li = $('<li class="list-group-item"></li>').text(label);
-                var div = $('<div class="material-switch pull-right">&nbsp;</div>');
-                var id = "settings-" + key;
-                div.append($('<input id="'+id+'" name="settings-key" type="checkbox"/>').attr('data-key', key).prop('checked', value));
-                div.append($('<label for="'+id+'" class="label-success"></label>'));
+                var div = $('<div class="material-switch pull-right">&nbsp;</div>').on('click',function () {
+                    $(this).find('[name="settings-key"]').click();
+                });
+
+                div.append($('<input name="settings-key" type="checkbox"/>').attr('data-key', key).prop('checked', value));
+                div.append($('<label class="label-success"></label>'));
 
                 return li.append(div);
             },
@@ -368,7 +448,6 @@ $this->title = Yii::t('gr', 'Properties');
              */
             save:function (ob) {
                 var modal = properties.find(ob, '.modal.settings .modal-body');
-
                 var new_data = {};
 
                 $.each(modal.find('[name="settings-key"]'), function (i, ob) {

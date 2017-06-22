@@ -5,7 +5,7 @@ use grozzzny\catalog\models\Properties;
 
 <?=Html::beginTag('tr', [
     'class' => 'property',
-    'data-id' => $property->id,
+    'data-id' => empty($property->id) ? : $property->id,
     'data-options' => empty($property->optionsJson) ? '{}' : $property->optionsJson,
     'data-settings' => empty($property->settingsJson) ? '{}' : $property->settingsJson,
     'data-validations' => empty($property->validationsJson) ? '[["string"]]' : $property->validationsJson,
@@ -16,13 +16,20 @@ use grozzzny\catalog\models\Properties;
     <td>
         <?=Html::input('text', 'title', $property->title, [
             'class' => 'form-control',
+            'required' => true,
+            'size' => 100,
             'onkeyup' => "properties.translit(this)",
             'onblur' => "properties.translit(this)",
         ]) ?>
     </td>
 
     <td>
-        <?=Html::input('text', 'slug', $property->slug, ['class' => 'form-control']) ?>
+        <?=Html::input('text', 'slug', $property->slug, [
+            'class' => 'form-control',
+            'required' => true,
+            'pattern' => "^[a-z_]{1}[a-z0-9\-_]*",
+            'size' => 100,
+        ]) ?>
     </td>
 
     <td>
