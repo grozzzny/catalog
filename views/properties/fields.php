@@ -72,13 +72,55 @@ $this->title = Yii::t('gr', 'Properties');
 
 <?
 $i18n = json_encode([
-    'name' => Yii::t('gr','dsf')
+    'select_category' => Yii::t('gr','Select category..'),
+    'key' => Yii::t('gr','Key'),
+    'value' => Yii::t('gr','Value'),
+    'add_option' => Yii::t('gr','Add option'),
+    'remove_option' => Yii::t('gr','Remove option'),
+    'settings_type_not_apply' => Yii::t('gr','Settings to this type do not apply'),
+    'options_type_not_apply' => Yii::t('gr','Options to this type do not apply'),
+    'multiple' => Yii::t('gr','Multiple'),
+    'filter_range' => Yii::t('gr','Filter range'),
+    'name' => Yii::t('gr','Name'),
+    'params' => Yii::t('gr','Params'),
+    'add_validation_rule' => Yii::t('gr','Add validation rule:'),
+    'remove_rule' => Yii::t('gr','Remove rule'),
+    'integer_number' => Yii::t('gr','Integer number'),
+    'minimum_value' => Yii::t('gr','Minimum value'),
+    'maximum_value' => Yii::t('gr','Maximum value'),
+    'floating_point_number' => Yii::t('gr','Floating point number'),
+    'boolean_true_false' => Yii::t('gr','Boolean (true or false)'),
+    'number' => Yii::t('gr','Number'),
+    'string' => Yii::t('gr','String'),
+    'date' => Yii::t('gr','Date'),
+    'format_date' => Yii::t('gr','Format. Example: dd-mm-yy'),
+    'required' => Yii::t('gr','Required'),
+    'email' => Yii::t('gr','Email'),
+    'url' => Yii::t('gr','Url'),
+    'image' => Yii::t('gr','Image'),
+    'extensions_image' => Yii::t('gr','Extensions. Example: png, jpg, gif'),
+    'extensions_file' => Yii::t('gr','Extensions. Example: pdf, doc'),
+    'file' => Yii::t('gr','File'),
+    'unique' => Yii::t('gr','Unique'),
+    'filter' => Yii::t('gr','Filter'),
+    'filter_trim' => Yii::t('gr','Trim the lines on both sides'),
+    'filter_register' => Yii::t('gr','Transform the register'),
+    'compare_validator' => Yii::t('gr','Comparison Validator for value OR atribute'),
+    'operator_equally' => Yii::t('gr','Equally'),
+    'operator_not_equal' => Yii::t('gr','Not equal'),
+    'operator_more' => Yii::t('gr','More'),
+    'operator_more_or_equal' => Yii::t('gr','More or equal'),
+    'operator_less' => Yii::t('gr','Less'),
+    'operator_less_or_equal' => Yii::t('gr','Less or equal'),
+    'select_property' => Yii::t('gr','Select property..'),
+    'regular_expression_validator' => Yii::t('gr','Regular Expression Validator'),
+    'pattern' => Yii::t('gr','Pattern. Example: /^[a-z]\\w*$/i'),
+    'validator_default' => Yii::t('gr','Validator assigning a default value'),
+    'validator_safe' => Yii::t('gr','Validator safe'),
 ], JSON_UNESCAPED_UNICODE);
 
 $script = <<< JS
-    var properties_i18n = {
-        i18n : $i18n
-    };
+    var properties_i18n = $i18n;
 JS;
 
 $this->registerJs($script, \yii\web\View::POS_BEGIN);
