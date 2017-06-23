@@ -50,7 +50,7 @@ class Properties extends Base
                 ActiveRecord::EVENT_BEFORE_UPDATE => 'settings',
             ],
             'value' => function () {
-                return json_encode($this->settings);
+                return json_encode($this->settings, JSON_UNESCAPED_UNICODE);
             },
         ];
 
@@ -62,7 +62,7 @@ class Properties extends Base
                 ActiveRecord::EVENT_AFTER_FIND => 'settings',
             ],
             'value' => function () {
-                return json_decode($this->settings, true);
+                return json_decode($this->settings);
             },
         ];
 
@@ -77,7 +77,7 @@ class Properties extends Base
                 ActiveRecord::EVENT_BEFORE_UPDATE => 'validation_rule',
             ],
             'value' => function () {
-                return json_encode($this->validation_rule);
+                return json_encode($this->validation_rule, JSON_UNESCAPED_UNICODE);
             },
         ];
 
@@ -104,7 +104,7 @@ class Properties extends Base
                 ActiveRecord::EVENT_BEFORE_UPDATE => 'options',
             ],
             'value' => function () {
-                return json_encode($this->options);
+                return json_encode($this->options, JSON_UNESCAPED_UNICODE);
             },
         ];
 
@@ -116,7 +116,7 @@ class Properties extends Base
                 ActiveRecord::EVENT_AFTER_FIND => 'options',
             ],
             'value' => function () {
-                return json_decode($this->options, true);
+                return json_decode($this->options);
             },
         ];
 
