@@ -44,6 +44,11 @@ return [
     'Save' => 'Сохранить',
     'Integer' => 'Число',
     'Apply' => 'Применить',
+    'Properties category: «{category}»' => 'Свойства категории: «{category}»',
+    'Add property' => 'Добавить свойство',
+    'Properties save' => 'Свойства сохранены',
+    'Move up' => 'Переместить наверх',
+    'Move down' => 'Переместить вниз',
 
     /**
      * Properties

@@ -6,6 +6,7 @@ use grozzzny\catalog\models\Properties;
 <?=Html::beginTag('tr', [
     'class' => 'property',
     'data-id' => empty($property->id) ? : $property->id,
+    'data-index' => empty($property->index) ? 0 : $property->index,
     'data-options' => empty($property->optionsJson) ? '{}' : $property->optionsJson,
     'data-settings' => empty($property->settingsJson) ? '{}' : $property->settingsJson,
     'data-validations' => empty($property->validationsJson) ? '[["string"]]' : $property->validationsJson,
@@ -16,7 +17,7 @@ use grozzzny\catalog\models\Properties;
     <td>
         <?=Html::input('text', 'title', $property->title, [
             'class' => 'form-control',
-            'required' => true,
+          //  'required' => true,
             'size' => 100,
             'onkeyup' => "properties.translit(this)",
             'onblur' => "properties.translit(this)",
@@ -26,7 +27,7 @@ use grozzzny\catalog\models\Properties;
     <td>
         <?=Html::input('text', 'slug', $property->slug, [
             'class' => 'form-control',
-            'required' => true,
+           // 'required' => true,
             'pattern' => "^[a-z_]{1}[a-z0-9\-_]*",
             'size' => 100,
         ]) ?>
@@ -58,13 +59,13 @@ use grozzzny\catalog\models\Properties;
 
     <td class="text-right">
         <div class="btn-group btn-group-sm" role="group" style="text-align: left;">
-<!--            <a href="#" class="btn btn-default move-up" title="Переместить выше">-->
-<!--                <span class="glyphicon glyphicon-arrow-up"></span>-->
-<!--            </a>-->
-<!---->
-<!--            <a href="#" class="btn btn-default move-down" title="Переместить ниже">-->
-<!--                <span class="glyphicon glyphicon-arrow-down"></span>-->
-<!--            </a>-->
+            <a onclick="properties.moveUp(this);" class="btn btn-default" title="<?=Yii::t('gr','Move up')?>">
+                <span class="glyphicon glyphicon-arrow-up"></span>
+            </a>
+
+            <a onclick="properties.moveDown(this);" class="btn btn-default" title="<?=Yii::t('gr','Move down')?>">
+                <span class="glyphicon glyphicon-arrow-down"></span>
+            </a>
 
             <a onclick="properties.clone(this);" class="btn btn-default" style="color: green;" title="<?=Yii::t('gr','Add property')?>">
                 <span class="glyphicon glyphicon-plus"></span>

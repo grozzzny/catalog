@@ -1,5 +1,6 @@
 /**
- * Created by PRkenig on 23.06.2017.
+ * Created by grozzzny on 23.06.2017.
+ * MIT license
  */
 var properties = {
 
@@ -125,6 +126,9 @@ var properties = {
         item_clone = properties.clear(item_clone);
 
         item.after(item_clone);
+
+        //Пересчитать индекс
+        properties.reIndex(ob);
     },
 
     /**
@@ -140,6 +144,9 @@ var properties = {
         } else {
             properties.clear(item);
         }
+
+        //Пересчитать индекс
+        properties.reIndex(ob);
     },
 
 
@@ -161,23 +168,55 @@ var properties = {
             $.each(category.find('.property'), function () {
                 var property = $(this);
 
+                var title = property.find('[name="title"]').val();
+                var slug = property.find('[name="slug"]').val();
+
                 var item = {
                     category_id: category_id,
                     id: property.attr('data-id'),
-                    title: property.find('[name="title"]').val(),
-                    slug: property.find('[name="slug"]').val(),
+                    index: property.attr('data-index'),
+                    title: title,
+                    slug: slug,
                     type: property.find('[name="type"]').val(),
                     options: JSON.parse(property.attr('data-options')),
                     settings: JSON.parse(property.attr('data-settings')),
                     validations: JSON.parse(property.attr('data-validations'))
                 };
 
-                data.push(item);
+                if(title != '' && slug != '') data.push(item);
             });
 
         });
 
-        console.log(data);
+        //Формируем ajax запрос
+        $.ajax({
+            type: "POST",
+            url: "/admin/newcatalog/properties/save",
+            data: {data: JSON.stringify(data)},
+            success: function (data) {
+                var res = JSON.parse(data);
+
+                if(res.status == 'success'){
+                    $('.response-server')
+                        .addClass('alert-success')
+                        .removeClass('alert-danger')
+                        .show()
+                        .text(res.response.message);
+                }else{
+                    var errors = res.response.errors;
+                    $.each(errors, function (attribute, arr) {
+                        $('.response-server')
+                            .addClass('alert-danger')
+                            .removeClass('alert-success')
+                            .show()
+                            .text(arr[0]);
+                        return true;
+                    });
+                }
+            }
+        });
+
+
 
     },
 
@@ -278,7 +317,7 @@ var properties = {
                 $('<td></td>').append(
                     $('<input name="key" type="text" class="form-control" value="' + key + '">')
                         .attr('required', true)
-                        .attr('pattern', "^[a-z_]{1}[a-z0-9\-_]*")
+                        .attr('pattern', "^[a-z0-9\-_]+")
                         .attr('size', 100)
                 )
             );
@@ -381,7 +420,7 @@ var properties = {
         data: function (ob) {
             var property = $(ob);
             if (!property.hasClass('property')) property = property.parents('.property');
-            return property.data('settings');
+            return JSON.parse(property.attr('data-settings'));
         },
 
         /**
@@ -431,10 +470,10 @@ var properties = {
             var new_data = {};
 
             $.each(modal.find('[name="settings-key"]'), function (i, ob) {
-                new_data[$(ob).data('key')] = $(ob).prop('checked');
+                new_data[$(ob).attr('data-key')] = $(ob).prop('checked');
             });
 
-            $(ob).parents('.property').data('settings', new_data);
+            $(ob).parents('.property').attr('data-settings', JSON.stringify(new_data));
         }
     },
 
@@ -1038,6 +1077,24 @@ var properties = {
      */
     translit: function (ob) {
         properties.find(ob, '[name="slug"]').val(translit(ob.value))
+    },
+
+    moveUp:function (ob) {
+        var property = $(ob).parents('.property');
+        property.insertBefore(property.prev());
+        properties.reIndex(ob);
+    },
+
+    moveDown:function (ob) {
+        var property = $(ob).parents('.property');
+        property.insertAfter(property.next());
+        properties.reIndex(ob);
+    },
+
+    reIndex:function (ob) {
+        $.each($(ob).parents('.properties-category').find('.property'), function (i, elem) {
+            $(elem).attr('data-index', i);
+        });
     }
 };
 properties.init();

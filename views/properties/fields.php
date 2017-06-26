@@ -33,13 +33,13 @@ $this->title = Yii::t('gr', 'Properties');
     ])?>
 
         <thead>
-            <caption><?=Yii::t('easyii', 'Properties category: «{category}»', ['category' => $category->title])?></caption>
+            <caption><?=Yii::t('gr', 'Properties category: «{category}»', ['category' => $category->title])?></caption>
             <tr>
                 <th><?=Yii::t('gr','Title')?></th>
                 <th><?=Yii::t('gr','Slug')?></th>
                 <th><?=Yii::t('gr','Type')?></th>
                 <th width="120"><?=Yii::t('gr','Params')?></th>
-                <th width="100"></th>
+                <th width="150"></th>
             </tr>
         </thead>
         <tbody>
@@ -58,12 +58,14 @@ $this->title = Yii::t('gr', 'Properties');
 
 <? endforeach;?>
 
-<?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('easyii', 'Save fields'), [
+<?= Html::tag('div','', ['class' => 'alert response-server', 'style' => 'display:none;']) ?>
+
+<?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('gr', 'Save'), [
     'class' => 'btn btn-primary',
     'onclick' => 'properties.save(this);'
 ]) ?>
 
-<?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii', 'Add property'), [
+<?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('gr', 'Add property'), [
     'class' => 'btn btn-default',
     'onclick' => 'properties.clone(this);'
 ]) ?>
@@ -125,5 +127,3 @@ JS;
 
 $this->registerJs($script, \yii\web\View::POS_BEGIN);
 ?>
-
-

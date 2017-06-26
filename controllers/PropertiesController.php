@@ -20,6 +20,9 @@ class PropertiesController extends Controller
 
     public $defaultAction = 'fields';
 
+    const RESPONSE_SUCCESS = 'success';
+    const RESPONSE_ERROR = 'error';
+
     use TraitController;
 
     public function behaviors()
@@ -84,6 +87,36 @@ class PropertiesController extends Controller
         ]);
     }
 
+    public function actionSave()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+
+            $data = json_decode(Yii::$app->request->post('data'), true);
+
+            $arr_id = [];
+            foreach ($data as $item){
+
+                $property = Properties::findOne($item['id']);
+                if(!$property) $property = Yii::createObject(Properties::className());
+
+                $property->setAttributes($item);
+                $property->validate();
+
+                if($errors = $property->getErrors()){
+                    return json_encode(self::response(self::RESPONSE_ERROR, ['slug' => $property->slug, 'errors' => $errors]), JSON_UNESCAPED_UNICODE);
+                }
+
+                $property->save();
+                $arr_id[] = $property->id;
+            }
+
+            Properties::deleteAll(['NOT IN', 'id', $arr_id]);
+
+            return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('gr', 'Properties save')]), JSON_UNESCAPED_UNICODE);
+
+        }
+    }
 
     /**
  * Список категорий при получении ajax запросом
@@ -160,5 +193,14 @@ class PropertiesController extends Controller
             $property = Properties::findOne(['slug' => Yii::$app->request->get('slug')]);
             return $property->title;
         }
+    }
+
+
+    private static function response($status, $response)
+    {
+        return [
+            'status' => $status,
+            'response' => $response
+        ];
     }
 }

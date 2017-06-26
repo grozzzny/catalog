@@ -145,7 +145,8 @@ class Category extends Base
     public function getProperties()
     {
         return $this->hasMany(Properties::className(), ['id' => 'property_id'])
-            ->viaTable('gr_catalog_relations_categories_properties', ['category_id' => 'id']);
+            ->viaTable('gr_catalog_relations_categories_properties', ['category_id' => 'id'])
+            ->orderBy(['index' => SORT_ASC]);
     }
 
 
