@@ -29,6 +29,7 @@ class Properties extends Base
     const TYPE_DATETIME = 'datetime';
     const TYPE_IMAGE = 'image';
     const TYPE_FILE = 'file';
+    const TYPE_CODE = 'code';
 
     public $category_id = null;
 
@@ -178,6 +179,7 @@ class Properties extends Base
             self::TYPE_DATETIME => Yii::t('gr','Datetime'),
             self::TYPE_IMAGE => Yii::t('gr','Image'),
             self::TYPE_FILE => Yii::t('gr','File'),
+            self::TYPE_CODE => Yii::t('gr','Code'),
         ];
     }
 

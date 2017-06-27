@@ -49,6 +49,7 @@ return [
     'Properties save' => 'Свойства сохранены',
     'Move up' => 'Переместить наверх',
     'Move down' => 'Переместить вниз',
+    'Code' => 'Код',
 
     /**
      * Properties

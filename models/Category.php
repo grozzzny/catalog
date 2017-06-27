@@ -156,6 +156,19 @@ class Category extends Base
             ->viaTable('gr_catalog_relations_categories_items', ['category_id' => 'id']);
     }
 
+    /**
+     * For special widget
+     */
+    public function getListItems()
+    {
+        $item_arr = [];
+        foreach ($this->items as $item)
+        {
+            $item_arr[$item->slug] = $item->title;
+        }
+        return $item_arr;
+    }
+
     public function getFullTitle()
     {
         $arr_name = [$this->title];

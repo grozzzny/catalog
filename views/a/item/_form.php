@@ -7,6 +7,7 @@ use yii\easyii\widgets\Redactor;
 use yii\helpers\Url;
 use kartik\select2\Select2;
 use grozzzny\catalog\models\Category;
+use grozzzny\catalog\widgets\PropertyWidget;
 
 if(!empty(Yii::$app->request->get('category'))) $current_model->categories = [Yii::$app->request->get('category')];
 
@@ -37,7 +38,7 @@ $module = $this->context->module->id;
 ]); ?>
 
 <? foreach ($current_model->dataProperties->getAttributes() as $attribute => $value):?>
-    <?= $form->field($current_model->dataProperties, $attribute) ?>
+    <?= $form->field($current_model->dataProperties, $attribute)->widget(PropertyWidget::className()) ?>
 <? endforeach;?>
 
 <?= $form->field($current_model, 'price') ?>

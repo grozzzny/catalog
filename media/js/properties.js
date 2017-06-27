@@ -549,6 +549,7 @@ var properties = {
             select: [['safe']],
             checkbox: [['boolean']],
             html: [['safe']],
+            code: [['safe']],
             category: [['safe']],
             datetime: [['integer']],
             image: [['image']],

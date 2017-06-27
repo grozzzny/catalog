@@ -3,6 +3,7 @@ namespace grozzzny\catalog\controllers;
 
 use grozzzny\catalog\models\Base;
 use grozzzny\catalog\models\Category;
+use grozzzny\catalog\models\DataProperties;
 use grozzzny\catalog\models\Properties;
 use kartik\select2\Select2;
 use kartik\select2\Select2Asset;
@@ -10,6 +11,8 @@ use Yii;
 use yii\base\DynamicModel;
 use yii\data\ActiveDataProvider;
 use yii\easyii\behaviors\SortableController;
+use yii\easyii\helpers\Image;
+use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
 use yii\easyii\components\Controller;
@@ -195,6 +198,27 @@ class PropertiesController extends Controller
         }
     }
 
+
+    /**
+     * Получение имени категории ajax запросом
+     * @return string
+     */
+    public function actionFileUpload()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+            $post = Yii::$app->request->post();
+            $path = $post['attribute'];
+            $file = UploadedFile::getInstance((new DataProperties()), $post['attribute']);
+
+            $image = Image::upload($file, $path);
+
+            return json_encode([
+                'image' => $image
+            ], JSON_UNESCAPED_UNICODE);
+
+        }
+    }
 
     private static function response($status, $response)
     {
