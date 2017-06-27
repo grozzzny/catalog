@@ -1,6 +1,7 @@
 <?php
 namespace grozzzny\catalog\controllers;
 
+use grozzzny\catalog\api\DataBehavior;
 use grozzzny\catalog\models\Base;
 use Yii;
 use yii\data\ActiveDataProvider;

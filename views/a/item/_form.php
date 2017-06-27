@@ -36,6 +36,10 @@ $module = $this->context->module->id;
     ],
 ]); ?>
 
+<? foreach ($current_model->dataProperties->getAttributes() as $attribute => $value):?>
+    <?= $form->field($current_model->dataProperties, $attribute) ?>
+<? endforeach;?>
+
 <?= $form->field($current_model, 'price') ?>
 <?= $form->field($current_model, 'discount') ?>
 <?= $form->field($current_model, 'views')->input('text',['disabled' => true]) ?>

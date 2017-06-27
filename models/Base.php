@@ -16,7 +16,7 @@ class Base extends \yii\easyii\components\ActiveRecord
     {
         return [
             CacheFlush::className(),
-            SortableModel::className()
+            //SortableModel::className()
         ];
     }
 

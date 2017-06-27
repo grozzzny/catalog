@@ -1,6 +1,6 @@
 var translit = function (text){
     // Символ, на который будут заменяться все спецсимволы
-    var space = '-';
+    var space = '_';
     // Берем значение из нужного поля и переводим в нижний регистр
     text = text.toLowerCase();
 

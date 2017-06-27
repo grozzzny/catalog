@@ -41,4 +41,14 @@ class Data extends Base
         ];
     }
 
+    public function getItem()
+    {
+        return $this->hasOne(Item::className(), ['id' => 'item_id']);
+    }
+
+    public function getProperty()
+    {
+        return $this->hasOne(Properties::className(), ['slug' => 'property_slug']);
+    }
+
 }
