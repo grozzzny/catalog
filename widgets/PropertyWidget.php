@@ -95,17 +95,72 @@ class PropertyWidget extends InputWidget
 
             case Properties::TYPE_IMAGE:
             case Properties::TYPE_FILE:
-                return FileInput::widget([
-                    'model' => $this->model,
-                    'attribute' => $this->attribute,
-                    'pluginOptions' => [
-                        'uploadUrl' => Url::to(['/admin/newcatalog/properties/file-upload']),
-                        'uploadExtraData' => [
-                            'attribute' => $this->attribute,
+
+                $html = Html::beginTag('div', ['class' => 'list_files_'.$this->attribute]);
+                if($settings->multiple){
+                    $initialPreview = [];
+                    foreach ($this->model->{$this->attribute} as $value){
+                        $html .= Html::hiddenInput($this->model->formName().'['.$this->attribute.'][]', $value);
+                        $initialPreview[]= $value;
+                    }
+                    $js_function = 'function(event, data, previewId, index){addValues(event, data, previewId, index);}';
+                    $js_function_remove = 'function(event, key, jqXHR, data){removeValues(event, key, jqXHR, data);}';
+                }else{
+                    $html .= Html::activeHiddenInput($this->model, $this->attribute);
+                    $js_function = 'function(event, data, previewId, index){addValue(event, data, previewId, index);}';
+                    $js_function_remove = 'function(event, key, jqXHR, data){removeValue(event, key, jqXHR, data);}';
+                    $initialPreview = [$this->model->{$this->attribute}];
+                    $initialPreviewConfig = [
+                        [
+                            'caption' => basename($this->model->{$this->attribute}),
+                            'size' => filesize(Yii::getAlias('@webroot').$this->model->{$this->attribute}),
+                            'width' => '120px',
+                            'url' => '/admin/newcatalog/properties/file-delete',
+                            'key' => $this->model->{$this->attribute}
+                        ]
+                    ];
+                }
+                $html .= Html::endTag('div');
+
+                $html .= FileInput::widget([
+                        'name' => 'file_input_' . $this->attribute,
+                        'pluginOptions' => [
+                            'uploadUrl' => Url::to(['/admin/newcatalog/properties/file-upload']),
+                            'uploadExtraData' => [
+                                'attribute' => $this->attribute,
+                                'append' => $settings->multriple === true
+                            ],
+                            //'maxFileCount' => 10,
+                            'initialPreview' => $initialPreview,
+                            'initialPreviewAsData'=>true,
+                            'initialPreviewConfig' => $initialPreviewConfig,
+                            'overwriteInitial'=>false,
                         ],
-                        'maxFileCount' => 10
-                    ],
-                ]);
+                        'pluginEvents' => [
+                            'fileuploaded' => $js_function,
+                            'filedeleted' => $js_function_remove,
+                        ]
+                    ]);
+
+                $script = <<< JS
+                function addValues(event, data, previewId, index) {
+                    console.log(data);
+                }
+                function addValue(event, data, previewId, index) {
+                    $('#dataproperties-{$this->attribute}').val(data.response.initialPreview);
+                }
+                function removeValue(event, key, jqXHR, data) {
+                    $('#dataproperties-{$this->attribute}').val('');
+                }
+                function removeValues(event, key, jqXHR, data) {
+                    console.log(data);
+                }
+JS;
+                $view = $this->getView();
+                $view->registerJs($script, $view::POS_READY);
+
+                return $html;
+
             default:
                 return Html::activeInput('string', $this->model, $this->attribute, ['class' => 'form-control']);
         }

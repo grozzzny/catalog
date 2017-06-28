@@ -552,8 +552,8 @@ var properties = {
             code: [['safe']],
             category: [['safe']],
             datetime: [['integer']],
-            image: [['image']],
-            file: [['file']]
+            image: [['safe']],
+            file: [['safe']]
         },
 
         /**

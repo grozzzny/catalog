@@ -3,7 +3,9 @@ namespace grozzzny\catalog\controllers;
 
 use grozzzny\catalog\models\Base;
 use grozzzny\catalog\models\Category;
+use grozzzny\catalog\models\Data;
 use grozzzny\catalog\models\DataProperties;
+use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
 use kartik\select2\Select2;
 use kartik\select2\Select2Asset;
@@ -12,6 +14,7 @@ use yii\base\DynamicModel;
 use yii\data\ActiveDataProvider;
 use yii\easyii\behaviors\SortableController;
 use yii\easyii\helpers\Image;
+use yii\web\ForbiddenHttpException;
 use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
@@ -208,15 +211,48 @@ class PropertiesController extends Controller
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
             $post = Yii::$app->request->post();
+
             $path = $post['attribute'];
-            $file = UploadedFile::getInstance((new DataProperties()), $post['attribute']);
+            $append = $post['append'];
+
+            $file = UploadedFile::getInstanceByName('file_input_'.$post['attribute']);
 
             $image = Image::upload($file, $path);
 
             return json_encode([
-                'image' => $image
+                'initialPreview' => [
+                    $image
+                ],
+                'initialPreviewConfig' => [
+                    ['caption' => basename($image), 'size' => filesize(Yii::getAlias('@webroot').$image), 'width' => '120px', 'url' => '/admin/newcatalog/properties/file-delete', 'key' => $image],
+                ],
+                'append' => $append == 'true'
             ], JSON_UNESCAPED_UNICODE);
 
+        }
+    }
+
+
+    public function actionFileDelete()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+            $post = Yii::$app->request->post();
+            $image = $post['key'];
+
+            $data = Data::find()->where(['value' => $image])->one();
+            if (!empty($data)) {
+                if ($data->item->created_by != Yii::$app->user->id && !Yii::$app->user->can('admin')) {
+                    throw new ForbiddenHttpException();
+                }
+                $data->delete();
+            }
+
+            @unlink(Yii::getAlias('@webroot').$image);
+
+            return json_encode([
+                'image' => $image
+            ], JSON_UNESCAPED_UNICODE);
         }
     }
 
