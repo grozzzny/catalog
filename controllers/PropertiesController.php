@@ -14,6 +14,7 @@ use yii\base\DynamicModel;
 use yii\data\ActiveDataProvider;
 use yii\easyii\behaviors\SortableController;
 use yii\easyii\helpers\Image;
+use yii\easyii\helpers\Upload;
 use yii\web\ForbiddenHttpException;
 use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
@@ -211,20 +212,19 @@ class PropertiesController extends Controller
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
             $post = Yii::$app->request->post();
-
-            $path = $post['attribute'];
             $append = $post['append'];
+            $deleteUrl = $post['deleteUrl'];
 
             $file = UploadedFile::getInstanceByName('file_input_'.$post['attribute']);
 
-            $image = Image::upload($file, $path);
+            $image_data = @getimagesize(Yii::getAlias('@webroot').$file);
+
+            $path = !empty($image_data) ? Image::upload($file, $post['attribute']) : Upload::file($file, $post['attribute']);
 
             return json_encode([
-                'initialPreview' => [
-                    $image
-                ],
+                'initialPreview' => !empty($image_data) ? [$path] : false,
                 'initialPreviewConfig' => [
-                    ['caption' => basename($image), 'size' => filesize(Yii::getAlias('@webroot').$image), 'width' => '120px', 'url' => '/admin/newcatalog/properties/file-delete', 'key' => $image],
+                    ['caption' => basename($path), 'size' => filesize(Yii::getAlias('@webroot').$path), 'width' => '120px', 'url' => $deleteUrl, 'key' => $path],
                 ],
                 'append' => $append == 'true'
             ], JSON_UNESCAPED_UNICODE);

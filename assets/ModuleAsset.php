@@ -5,7 +5,9 @@ class ModuleAsset extends \yii\web\AssetBundle
 {
     public $sourcePath = '@grozzzny/catalog/media';
 
-    public $css = [];
+    public $css = [
+        'font-awesome-4.7.0/css/font-awesome.min.css',
+    ];
 
     public $js = [
         'js/admin_module.js',
