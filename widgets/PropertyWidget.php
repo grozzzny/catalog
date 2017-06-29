@@ -26,7 +26,22 @@ class PropertyWidget extends InputWidget
 
         switch ($type){
             case Properties::TYPE_STRING:
-                return Html::activeInput('string', $this->model, $this->attribute, ['class' => 'form-control']);
+                if($settings->multiple){
+                    return Select2::widget([
+                        'model' => $this->model,
+                        'attribute' => $this->attribute,
+                        'options' => [
+                            'placeholder' => Yii::t('gr', 'Enter value..'),
+                            'multiple' => true,
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'tags' => true,
+                        ],
+                    ]);
+                }else{
+                    return Html::activeInput('string', $this->model, $this->attribute, ['class' => 'form-control']);
+                }
             case Properties::TYPE_INTEGER:
                 return Html::activeInput('number', $this->model, $this->attribute, ['class' => 'form-control']);
             case Properties::TYPE_SELECT:
@@ -35,10 +50,12 @@ class PropertyWidget extends InputWidget
                     'model' => $this->model,
                     'attribute' => $this->attribute,
                     'data' => $options,
-                    'options' => ['placeholder' => Yii::t('gr', 'Enter value..')],
+                    'options' => [
+                        'placeholder' => Yii::t('gr', 'Enter value..'),
+                        'multiple' => $settings->multiple ? true : false,
+                    ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        //'multiple' => true,
                     ],
                 ]);
 
@@ -79,10 +96,12 @@ class PropertyWidget extends InputWidget
                     'model' => $this->model,
                     'attribute' => $this->attribute,
                     'data' => Category::findOne([$options->category_id])->listItems,
-                    'options' => ['placeholder' => Yii::t('gr', 'Enter value..')],
+                    'options' => [
+                        'placeholder' => Yii::t('gr', 'Enter value..'),
+                        'multiple' => $settings->multiple ? true : false,
+                    ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        //'multiple' => true,
                     ],
                 ]);
 

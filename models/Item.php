@@ -200,13 +200,12 @@ class Item extends Base
         {
             Data::deleteAll(['item_id' => $this->id, 'property_slug' => $slug]);
             $values = (is_array($values)) ? $values : [$values];
+
             foreach ($values as $value){
 
                 $value = (is_array($value)) ? array_values($value)[0] : $value;
-                $key = (is_array($value)) ? array_keys($value)[0] : null ;
 
                 $data = new Data();
-                $data->key = $key;
                 $data->value = $value;
                 $data->property_slug = $slug;
                 $data->item_id = $this->id;

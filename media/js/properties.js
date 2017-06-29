@@ -131,6 +131,48 @@ var properties = {
         properties.reIndex(ob);
     },
 
+    add: function (ob, data) {
+        var elem = $(ob).parents('.property');
+        elem.attr('data-id', data.id);
+        elem.attr('data-options', JSON.stringify(data.options));
+        elem.attr('data-settings', JSON.stringify(data.settings));
+        elem.attr('data-validations', JSON.stringify(data.validations));
+        elem.attr('data-old-type', data.type);
+        elem.attr('data-old-validations', JSON.stringify(data.validations));
+
+        //elem.find('[name="title"]').val('');
+        setTimeout(
+            function () {
+                elem.find('[name="slug"]').val(data.slug)
+            }, 300
+        );
+
+        elem.find('[name="type"]').val(data.type);
+    },
+
+    initAutoComplete: function (ob) {
+        $(ob).autocomplete({
+            source: function(request, response) {
+                var properties = [];
+                $.each($('.property [name="slug"]'), function () {
+                    var slug = $(this).val();
+                    if(slug != '') properties.push(slug);
+                });
+                $.getJSON("/admin/newcatalog/properties/get-data-properties",
+                    {
+                        term: request.term,
+                        properties: properties
+                    },
+                    response
+                );
+            },
+            autoFill: true,
+            select: function( event, ui ) {
+                properties.add(event.target, ui.item)
+            }
+        });
+    },
+
     /**
      * Метод удаления опции
      * @param ob
@@ -433,10 +475,10 @@ var properties = {
 
             var type = properties.getType(ob);
 
-            if (jQuery.inArray(type, ['html', 'datetime']) != -1) modal.html(properties.i18n.settings_type_not_apply);
+            if (jQuery.inArray(type, ['html', 'datetime', 'checkbox', 'code']) != -1) modal.html(properties.i18n.settings_type_not_apply);
 
             //Параметр - множественности
-            if (jQuery.inArray(type, ['string', 'select', 'checkbox', 'category', 'image', 'file']) != -1) modal.append(properties.settings.parametr('multiple', data.multiple, properties.i18n.multiple));
+            if (jQuery.inArray(type, ['string', 'select', 'category', 'image', 'file']) != -1) modal.append(properties.settings.parametr('multiple', data.multiple, properties.i18n.multiple));
 
             //Параметр диапазона для фильтра
             if (type == 'integer') modal.append(properties.settings.parametr('filter_range', data.filter_range, properties.i18n.filter_range));

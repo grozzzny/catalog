@@ -21,7 +21,6 @@ class Data extends Base
             ['id', 'number', 'integerOnly' => true],
             [[
                 'property_slug',
-                'key',
             ], 'string'],
             [[
                 'item_id',
@@ -36,7 +35,6 @@ class Data extends Base
             'id' => Yii::t('gr', 'ID'),
             'property_slug' => Yii::t('gr', 'Slug'),
             'item_id' => Yii::t('gr', 'Element'),
-            'key' => Yii::t('gr', 'Key'),
             'value' => Yii::t('gr', 'Value'),
         ];
     }

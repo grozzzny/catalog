@@ -1,6 +1,10 @@
 <?
 use yii\helpers\Html;
 use grozzzny\catalog\models\Properties;
+use kartik\select2\Select2;
+use yii\jui\AutoComplete;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 ?>
 
 <?=Html::beginTag('tr', [
@@ -19,8 +23,9 @@ use grozzzny\catalog\models\Properties;
             'class' => 'form-control',
           //  'required' => true,
             'size' => 100,
+            'onfocus' => "properties.initAutoComplete(this)",
             'onkeyup' => "properties.translit(this)",
-            'onblur' => "properties.translit(this)",
+            //'onblur' => "properties.translit(this)",
         ]) ?>
     </td>
 

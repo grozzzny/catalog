@@ -87,7 +87,7 @@ class FileInputWidget extends InputWidget
     {
         $script = <<< JS
             function addValues(event, data, previewId, index) {
-                $('.list_files_portfolio').append(
+                $('.list_files_{$this->attribute}').append(
                     $('<input />')
                         .attr('type','hidden')
                         .attr('name', 'DataProperties[{$this->attribute}][]')

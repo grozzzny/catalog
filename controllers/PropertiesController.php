@@ -48,39 +48,6 @@ class PropertiesController extends Controller
      */
     public function actionFields($slug, $id)
     {
-
-        //Select2::widget();
-/*
-        // объявляем экземпляр класса
-        $model = new DynamicModel(['name','price_1','price_2', 'phone']);
-        $model->name = ' Kisa';
-        $model->price_1 = 3000;
-        $model->price_2 = 4000;
-
-        //$model->addRule(['name'], 'string', ['min' =>2, 'max' => 3]);
-        //$model->addRule(['name'], 'string', ['length' => [2, 5]]);
-//        $model->addRule(['name'], 'filter', ['filter'=>'strtolower']);
-//        $model->addRule(['name'], 'filter', ['filter'=>'trim']);
-//        $model->addRule(['price_1'], 'compare', ['compareValue' => 2000, 'operator' => '>=']);
-//        $model->addRule(['price_1'], 'compare', ['compareValue' => 2000, 'operator' => '>=']);
-        $model->addRule(['price_1'], 'compare', ['compareAttribute' => 'price_2', 'operator' => '>=']);
-        $model->addRule(['phone'], 'default', ['value' => '888888']);
-
-
-
-        if ($model->validate()) {
-            echo $model->name;
-            echo '<br>';
-            echo $model->phone;
-            echo '<br>ok';
-        } else {
-            // данные не корректны: $errors - массив содержащий сообщения об ошибках
-            print_r($model->errors);
-        }
-
-        exit();
-*/
-
         $current_model = Base::getModel($slug);
 
         $current_model = $current_model::findOne($id);
@@ -118,7 +85,7 @@ class PropertiesController extends Controller
                 $arr_id[] = $property->id;
             }
 
-            Properties::deleteAll(['NOT IN', 'id', $arr_id]);
+            Properties::deleteAll([['NOT IN', '123id', $arr_id]]);
 
             return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('gr', 'Properties save')]), JSON_UNESCAPED_UNICODE);
 
@@ -188,6 +155,46 @@ class PropertiesController extends Controller
             return json_encode($data, JSON_UNESCAPED_UNICODE);
         }
     }
+
+
+    /**
+     * Список свойств при получении ajax запросом
+     * @return string
+     */
+    public function actionGetDataProperties()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+
+            $properties = empty(Yii::$app->request->get('properties')) ? [] : Yii::$app->request->get('properties');
+
+            $query = Properties::find();
+
+            if(!empty(Yii::$app->request->get('term'))) {
+                $query->andWhere([
+                    'AND',
+                    ['NOT IN', 'slug', $properties],
+                    ['LIKE', 'title', Yii::$app->request->get('term')]
+                ]);
+            }
+
+            $result = [];
+            foreach($query->limit(10)->all() AS $property){
+                $result[] = [
+                    'id' => $property->id,
+                    'label' => $property->title,
+                    'slug' => $property->slug,
+                    'type' => $property->type,
+                    'settings' => $property->settings,
+                    'validations' => $property->validations,
+                    'options' => $property->options,
+                ];
+            }
+
+            return json_encode($result, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
 
     /**
      * Получение имени категории ajax запросом

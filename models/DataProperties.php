@@ -26,9 +26,9 @@ class DataProperties extends DynamicModel
 
         foreach ($data as $data_property){
             if($data_property->property->settings->multiple){
-                $values[$data_property->property_slug][] = (!empty($data_property->key)) ? $data_property->key : $data_property->value;
+                $values[$data_property->property_slug][] = $data_property->value;
             }else{
-                $values[$data_property->property_slug] = (!empty($data_property->key)) ? $data_property->key : $data_property->value;
+                $values[$data_property->property_slug] = $data_property->value;
             }
         }
 
@@ -76,28 +76,4 @@ class DataProperties extends DynamicModel
         return $this->labels;
     }
 
-
-    /**
-     * Сохранение изображений и файлов. Отличе в методе сохранения
-     */
-    public function saveFiles($attribute)
-    {
-        $path = $attribute;
-        if($this->hasValidator('image', $attribute)) {
-            $this->$attribute = UploadedFile::getInstance($this, $attribute);
-            if($this->$attribute && $this->validate([$attribute])){
-                $this->$attribute = Image::upload($this->$attribute, $path);
-            }
-            else{
-                $this->$attribute = $this->isNewRecord ? '' : $this->oldAttributes[$attribute];
-            }
-        }elseif ($this->hasValidator('file', $attribute)){
-            if($fileInstanse = UploadedFile::getInstance($this, $attribute)) {
-                $this->$attribute = Upload::file($fileInstanse, $path);
-            }else{
-                $this->$attribute = $this->isNewRecord ? '' : $this->oldAttributes[$attribute];
-            }
-        }
-
-    }
 }

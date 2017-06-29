@@ -164,7 +164,7 @@ class Category extends Base
         $item_arr = [];
         foreach ($this->items as $item)
         {
-            $item_arr[$item->slug] = $item->title;
+            $item_arr[$item->id] = $item->title;
         }
         return $item_arr;
     }

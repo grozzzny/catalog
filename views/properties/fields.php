@@ -7,6 +7,7 @@ use grozzzny\widgets\switch_checkbox\assets\SwitchCheckboxAsset;
 use kartik\select2\Select2Asset;
 use kartik\select2\ThemeBootstrapAsset;
 use grozzzny\catalog\assets\PropertiesAsset;
+use yii\jui\JuiAsset;
 
 BootstrapPluginAsset::register($this);
 ModuleAsset::register($this);
@@ -14,6 +15,7 @@ SwitchCheckboxAsset::register($this);
 Select2Asset::register($this);
 ThemeBootstrapAsset::register($this);
 PropertiesAsset::register($this);
+JuiAsset::register($this);
 
 
 
