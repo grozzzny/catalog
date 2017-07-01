@@ -96,12 +96,19 @@ class PropertiesController extends Controller
 
             $get = Yii::$app->request->get();
 
-            $property = Properties::findOne(['id' => $get['id'], 'category_id' => $get['category_id']]);
+            $property = Properties::find()
+                ->joinWith('categories')
+                ->where([
+                    'gr_catalog_properties.id' => $get['id'],
+                    'category_id' => $get['category_id']
+                ])
+            ->one();
+
             if(!$property) {
                 throw new NotFoundHttpException();
             }
 
-            Category::findOne([$get['category_id']])->unlink('properties', $property);
+            $property->categories[0]->unlink('properties', $property, true);
 
             if(empty($property->categories)) $property->delete();
 
@@ -111,9 +118,9 @@ class PropertiesController extends Controller
     }
 
     /**
- * Список категорий при получении ajax запросом
- * @return string
- */
+     * Список категорий при получении ajax запросом
+     * @return string
+     */
     public function actionGetListCategories()
     {
         $this->enableCsrfValidation = false;
@@ -121,13 +128,44 @@ class PropertiesController extends Controller
 
             $query = Category::find();
 
-            if(!empty(Yii::$app->request->get('q'))) $query->where(['LIKE','title',Yii::$app->request->get('q')]);
+            $query->filterWhere(['LIKE', 'title', Yii::$app->request->get('q')]);
+
+            $query->andFilterWhere(['parent_id' => Yii::$app->request->get('category_id')]);
 
             $data = [];
             foreach($query->limit(10)->all() AS $category){
-                $data[] = [
+                $data['results'][] = [
                     'id' => $category->id,
                     'text' => $category->fullTitle
+                ];
+            }
+
+            return json_encode($data, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * Список категорий при получении ajax запросом
+     * @return string
+     */
+    public function actionGetListItemsCategory()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+
+            $query = Item::find();
+
+            $query->joinWith('categories');
+
+            $query->filterWhere(['LIKE', 'title', Yii::$app->request->get('q')]);
+
+            $query->andFilterWhere(['gr_catalog_categories.id' => Yii::$app->request->get('category_id')]);
+
+            $data = [];
+            foreach($query->limit(10)->all() AS $item){
+                $data['results'][] = [
+                    'id' => $item->id,
+                    'text' => $item->title
                 ];
             }
 

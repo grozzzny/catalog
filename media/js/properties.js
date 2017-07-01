@@ -14,6 +14,7 @@ var properties = {
         options_type_not_apply: 'Options to this type do not apply',
         multiple: 'Multiple',
         filter_range: 'Filter range',
+        group: 'Group',
         name: 'Name',
         params: 'Params',
         add_validation_rule: 'Add validation rule:',
@@ -181,9 +182,9 @@ var properties = {
         var item = $(ob).parents('tr.property');
 
         var property_id = item.attr('data-id');
-        var category_id = item.attr('category-id');
+        var category_id = item.parents('.properties-category').attr('data-category');
 
-        if(category_id != '') {
+        if(property_id != '') {
             var response = $.ajax({
                 url: "/admin/newcatalog/properties/remove-property",
                 data: ({
@@ -193,7 +194,12 @@ var properties = {
                 async: false
             }).responseText;
 
-            console.log(response);
+            response = JSON.parse(response);
+
+            if (response.status != 'success') {
+                console.error(response);
+                return false;
+            }
         }
         //Если элемент не остался единственным
         if (item.parent().children().length != 1) {
@@ -328,7 +334,7 @@ var properties = {
                     url: '/admin/newcatalog/properties/get-list-categories',
                     processResults: function (data) {
                         return {
-                            results: JSON.parse(data)
+                            results: JSON.parse(data).results
                         };
                     }
                 }
@@ -448,7 +454,7 @@ var properties = {
                     var key = key_elem.val();
                     if (value != "" && key != "") new_data[key] = value;
                 });
-            } else if (type == 'category') {
+            } else {
                 var value = modal.find('.list-categories').val();
                 if (value != '') new_data['category_id'] = value;
             }
@@ -490,13 +496,21 @@ var properties = {
 
             var type = properties.getType(ob);
 
-            if (jQuery.inArray(type, ['html', 'datetime', 'checkbox', 'code']) != -1) modal.html(properties.i18n.settings_type_not_apply);
+            modal.append(properties.settings.input('group', data.group, properties.i18n.group));
 
             //Параметр - множественности
-            if (jQuery.inArray(type, ['string', 'select', 'category', 'image', 'file']) != -1) modal.append(properties.settings.parametr('multiple', data.multiple, properties.i18n.multiple));
+            if (jQuery.inArray(type, [
+                'string',
+                'select',
+                'category',
+                'multicategory',
+                'itemscategory',
+                'image',
+                'file'
+            ]) != -1) modal.append(properties.settings.checkbox('multiple', data.multiple, properties.i18n.multiple));
 
             //Параметр диапазона для фильтра
-            if (type == 'integer') modal.append(properties.settings.parametr('filter_range', data.filter_range, properties.i18n.filter_range));
+            if (type == 'integer') modal.append(properties.settings.checkbox('filter_range', data.filter_range, properties.i18n.filter_range));
 
         },
 
@@ -506,7 +520,7 @@ var properties = {
          * @param value - true | false
          * @param label - Описание свойства
          */
-        parametr: function (key, value, label) {
+        checkbox: function (key, value, label) {
             var li = $('<li class="list-group-item"></li>').text(label);
             var div = $('<div class="material-switch pull-right">&nbsp;</div>').on('click', function () {
                 $(this).find('[name="settings-key"]').click();
@@ -514,6 +528,26 @@ var properties = {
 
             div.append($('<input name="settings-key" type="checkbox"/>').attr('data-key', key).prop('checked', value));
             div.append($('<label class="label-success"></label>'));
+
+            return li.append(div);
+        },
+
+        /**
+         * Создание нового параметра для "Настроек"
+         * @param key
+         * @param value - true | false
+         * @param label - Описание свойства
+         */
+        input: function (key, value, label) {
+            var li = $('<li class="list-group-item" style="overflow: hidden;"></li>').text(label);
+            var div = $('<div style="width: 200px;" class="pull-right"></div>');
+
+            div.append(
+                $('<input name="settings-key" type="text"/>')
+                .addClass('form-control')
+                .attr('data-key', key)
+                .val(value)
+            );
 
             return li.append(div);
         },
@@ -527,7 +561,7 @@ var properties = {
             var new_data = {};
 
             $.each(modal.find('[name="settings-key"]'), function (i, ob) {
-                new_data[$(ob).attr('data-key')] = $(ob).prop('checked');
+                new_data[$(ob).attr('data-key')] = $(ob).attr('type') == 'checkbox' ? $(ob).prop('checked') : $(ob).val();
             });
 
             $(ob).parents('.property').attr('data-settings', JSON.stringify(new_data));
@@ -608,6 +642,8 @@ var properties = {
             html: [['safe']],
             code: [['safe']],
             category: [['safe']],
+            multicategory: [['safe']],
+            itemscategory: [['safe']],
             datetime: [['integer']],
             image: [['safe']],
             file: [['safe']]
@@ -630,17 +666,17 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'number')
                                         .attr('placeholder', properties.i18n.minimum_value)
-                                        .attr('data-parametr', 'min')
+                                        .attr('data-checkbox', 'min')
                                         .val(params.min ? params.min : null)
                                 )
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'number')
                                         .attr('placeholder', properties.i18n.maximum_value)
-                                        .attr('data-parametr', 'max')
+                                        .attr('data-checkbox', 'max')
                                         .val(params.max ? params.max : null)
                                 )
                         )
@@ -694,17 +730,17 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'number')
                                         .attr('placeholder', properties.i18n.minimum_value)
-                                        .attr('data-parametr', 'min')
+                                        .attr('data-checkbox', 'min')
                                         .val(params.min ? params.min : null)
                                 )
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'number')
                                         .attr('placeholder', properties.i18n.maximum_value)
-                                        .attr('data-parametr', 'max')
+                                        .attr('data-checkbox', 'max')
                                         .val(params.max ? params.max : null)
                                 )
                         )
@@ -726,17 +762,17 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'number')
                                         .attr('placeholder', properties.i18n.minimum_value)
-                                        .attr('data-parametr', 'min')
+                                        .attr('data-checkbox', 'min')
                                         .val(params.min ? params.min : null)
                                 )
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'number')
                                         .attr('placeholder', properties.i18n.maximum_value)
-                                        .attr('data-parametr', 'max')
+                                        .attr('data-checkbox', 'max')
                                         .val(params.max ? params.max : null)
                                 )
                         )
@@ -758,10 +794,10 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'string')
                                         .attr('placeholder', properties.i18n.format_date)
-                                        .attr('data-parametr', 'format')
+                                        .attr('data-checkbox', 'format')
                                         .val(params.format ? params.format : null)
                                 )
                         )
@@ -831,10 +867,10 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'string')
                                         .attr('placeholder', properties.i18n.extensions_image)
-                                        .attr('data-parametr', 'extensions')
+                                        .attr('data-checkbox', 'extensions')
                                         .val(params.extensions ? params.extensions : null)
                                 )
                         )
@@ -856,10 +892,10 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'string')
                                         .attr('placeholder', properties.i18n.extensions_file)
-                                        .attr('data-parametr', 'extensions')
+                                        .attr('data-checkbox', 'extensions')
                                         .val(params.extensions ? params.extensions : null)
                                 )
                         )
@@ -897,8 +933,8 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<select name="parametr" class="form-control">')
-                                        .attr('data-parametr', 'filter')
+                                    $('<select name="checkbox" class="form-control">')
+                                        .attr('data-checkbox', 'filter')
                                         .append(
                                             $('<option></option>')
                                                 .val('trim')
@@ -924,8 +960,8 @@ var properties = {
                 building: function (ob, params) {
                     var tbody = properties.find(ob, '.modal.validations').find('tbody');
 
-                    var select = $('<select name="parametr" class="form-control list-properties">')
-                        .attr('data-parametr', 'compareAttribute');
+                    var select = $('<select name="checkbox" class="form-control list-properties">')
+                        .attr('data-checkbox', 'compareAttribute');
 
                     if (params.compareAttribute) {
                         //Получаем имя свойства. Запрос синхронный
@@ -946,16 +982,16 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'number')
                                         .attr('placeholder', properties.i18n.value)
-                                        .attr('data-parametr', 'compareValue')
+                                        .attr('data-checkbox', 'compareValue')
                                         .val(params.compareValue ? params.compareValue : null)
                                 )
                                 .append(select)
                                 .append(
-                                    $('<select name="parametr" class="form-control">')
-                                        .attr('data-parametr', 'operator')
+                                    $('<select name="checkbox" class="form-control">')
+                                        .attr('data-checkbox', 'operator')
                                         .append($('<option></option>').val('=').text(properties.i18n.operator_equally))
                                         .append($('<option></option>').val('!=').text(properties.i18n.operator_not_equal))
                                         .append($('<option></option>').val('>').text(properties.i18n.operator_more))
@@ -999,10 +1035,10 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'string')
                                         .attr('placeholder', properties.i18n.pattern)
-                                        .attr('data-parametr', 'pattern')
+                                        .attr('data-checkbox', 'pattern')
                                         .val(params.pattern ? params.pattern : null)
                                 )
                         )
@@ -1024,10 +1060,10 @@ var properties = {
                         .append(
                             $('<td></td>')
                                 .append(
-                                    $('<input name="parametr" class="form-control">')
+                                    $('<input name="checkbox" class="form-control">')
                                         .attr('type', 'string')
                                         .attr('placeholder', properties.i18n.value)
-                                        .attr('data-parametr', 'value')
+                                        .attr('data-checkbox', 'value')
                                         .val(params.value ? params.value : null)
                                 )
                         )
@@ -1063,9 +1099,9 @@ var properties = {
                 var validator_arr = [$(ob).data('validator')];
 
                 var params = {};
-                $.each($(ob).find('[data-parametr]'), function (q, elem) {
+                $.each($(ob).find('[data-checkbox]'), function (q, elem) {
                     var elem_param = $(elem);
-                    if (elem_param.val() != '') params[elem_param.data('parametr')] = elem_param.val();
+                    if (elem_param.val() != '') params[elem_param.data('checkbox')] = elem_param.val();
                 });
 
                 if (!$.isEmptyObject(params)) validator_arr.push(params);
@@ -1103,6 +1139,8 @@ var properties = {
                         properties.options.buildingSelect(ob);
                         break;
                     case 'category':
+                    case 'multicategory':
+                    case 'itemscategory':
                         properties.options.buildingCategory(ob);
                         break;
                     default:

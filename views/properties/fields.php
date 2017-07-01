@@ -85,6 +85,7 @@ $i18n = json_encode([
     'options_type_not_apply' => Yii::t('gr','Options to this type do not apply'),
     'multiple' => Yii::t('gr','Multiple'),
     'filter_range' => Yii::t('gr','Filter range'),
+    'group' => Yii::t('gr','Group'),
     'name' => Yii::t('gr','Name'),
     'params' => Yii::t('gr','Params'),
     'add_validation_rule' => Yii::t('gr','Add validation rule:'),

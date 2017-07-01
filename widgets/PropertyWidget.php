@@ -3,15 +3,18 @@ namespace grozzzny\catalog\widgets;
 
 use bl\ace\AceWidget;
 use grozzzny\catalog\models\Category;
+use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
 use grozzzny\catalog\widgets\fileinput\FileInputWidget;
 use grozzzny\widgets\switch_checkbox\SwitchCheckbox;
 use kartik\select2\Select2;
 use yii\easyii\widgets\DateTimePicker;
 use yii\easyii\widgets\Redactor;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use Yii;
+use yii\web\JsExpression;
 use yii\widgets\InputWidget;
 
 
@@ -90,21 +93,69 @@ class PropertyWidget extends InputWidget
                     'attributes' => ['style' => 'width: 100%;min-height: 200px;']
                 ]);
 
+            case Properties::TYPE_ITEMSCATEGORY:
             case Properties::TYPE_CATEGORY:
+
+                if($type == Properties::TYPE_CATEGORY) {
+                    $data = ArrayHelper::map(Category::findAll(['id' => $this->model{$this->attribute}]), 'id', 'fullTitle');
+                }else{
+                    $data = ArrayHelper::map(Item::findAll(['id' => $this->model{$this->attribute}]), 'id', 'title');
+                }
 
                 return Select2::widget([
                     'model' => $this->model,
                     'attribute' => $this->attribute,
-                    'data' => Category::findOne([$options->category_id])->listItems,
+                    'data' => $data,
                     'options' => [
                         'placeholder' => Yii::t('gr', 'Enter value..'),
                         'multiple' => $settings->multiple ? true : false,
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
+                        'ajax' => [
+                            'url' => $type == Properties::TYPE_ITEMSCATEGORY ? '/admin/newcatalog/properties/get-list-items-category' : '/admin/newcatalog/properties/get-list-categories',
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { 
+                               return {
+                                    q:params.term'.((empty($options->category_id)) ? '': ', category_id:'.$options->category_id).'
+                                }; 
+                            }'),
+                        ],
                     ],
                 ]);
 
+            case Properties::TYPE_MULTICATEGORY:
+                $values = $this->model{$this->attribute};
+
+                echo '<pre>';
+                print_r($values);
+                echo '</pre>';
+
+                $data = ArrayHelper::map(Category::findAll(['id' => $values]), 'id', 'fullTitle');
+
+                $subcategories = Category::find()->where(['parent_id' => $options->category_id])->all();
+
+                return Select2::widget([
+                    'model' => $this->model,
+                    'attribute' => $this->attribute,
+                    'data' => $data,
+                    'options' => [
+                        'placeholder' => Yii::t('gr', 'Enter value..'),
+                        'multiple' => $settings->multiple ? true : false,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'ajax' => [
+                            'url' => $type == Properties::TYPE_ITEMSCATEGORY ? '/admin/newcatalog/properties/get-list-items-category' : '/admin/newcatalog/properties/get-list-categories',
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { 
+                               return {
+                                    q:params.term'.((empty($options->category_id)) ? '': ', category_id:'.$options->category_id).'
+                                }; 
+                            }'),
+                        ],
+                    ],
+                ]);
             case Properties::TYPE_DATETIME:
 
                 return DateTimePicker::widget([
