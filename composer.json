@@ -3,7 +3,7 @@
     "description": "Catalog for EasyiiCMS",
     "keywords": ["yii", "easyiiCMS", "CMS", "module"],
     "type": "yii2-extension",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "license": "MIT",
     "authors": [
         {
@@ -18,7 +18,7 @@
         "yiisoft/yii2": "*",
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-widget-fileinput": "@dev",
-        "black-lamp/yii2-text-editor": "2.0.0",
+        "black-lamp/yii2-text-editor": "@dev",
         "yiisoft/yii2-jui": "~2.0.0"
     },
     "autoload": {
