@@ -180,6 +180,21 @@ var properties = {
     remove: function (ob) {
         var item = $(ob).parents('tr.property');
 
+        var property_id = item.attr('data-id');
+        var category_id = item.attr('category-id');
+
+        if(category_id != '') {
+            var response = $.ajax({
+                url: "/admin/newcatalog/properties/remove-property",
+                data: ({
+                    id: property_id,
+                    category_id: category_id
+                }),
+                async: false
+            }).responseText;
+
+            console.log(response);
+        }
         //Если элемент не остался единственным
         if (item.parent().children().length != 1) {
             item.remove();

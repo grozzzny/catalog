@@ -16,6 +16,7 @@ use yii\easyii\behaviors\SortableController;
 use yii\easyii\helpers\Image;
 use yii\easyii\helpers\Upload;
 use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
@@ -68,7 +69,6 @@ class PropertiesController extends Controller
 
             $data = json_decode(Yii::$app->request->post('data'), true);
 
-            $arr_id = [];
             foreach ($data as $item){
 
                 $property = Properties::findOne($item['id']);
@@ -82,12 +82,30 @@ class PropertiesController extends Controller
                 }
 
                 $property->save();
-                $arr_id[] = $property->id;
             }
 
-            Properties::deleteAll([['NOT IN', '123id', $arr_id]]);
-
             return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('gr', 'Properties save')]), JSON_UNESCAPED_UNICODE);
+
+        }
+    }
+
+    public function actionRemoveProperty()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+
+            $get = Yii::$app->request->get();
+
+            $property = Properties::findOne(['id' => $get['id'], 'category_id' => $get['category_id']]);
+            if(!$property) {
+                throw new NotFoundHttpException();
+            }
+
+            Category::findOne([$get['category_id']])->unlink('properties', $property);
+
+            if(empty($property->categories)) $property->delete();
+
+            return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('gr', 'Property remove')]), JSON_UNESCAPED_UNICODE);
 
         }
     }
