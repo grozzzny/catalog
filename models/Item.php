@@ -194,9 +194,10 @@ class Item extends Base
      */
     private function saveData()
     {
-        if(empty($this->_data)) return false;
+        $attributes = $this->dataProperties->getAttributes();
+        if(empty($attributes)) return false;
 
-        foreach ($this->_data as $slug => $values)
+        foreach ($attributes as $slug => $values)
         {
             Data::deleteAll(['item_id' => $this->id, 'property_slug' => $slug]);
             $values = (is_array($values)) ? $values : [$values];

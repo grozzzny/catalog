@@ -94,12 +94,25 @@ class PropertyWidget extends InputWidget
                 ]);
 
             case Properties::TYPE_ITEMSCATEGORY:
+            case Properties::TYPE_MULTICATEGORY:
             case Properties::TYPE_CATEGORY:
 
-                if($type == Properties::TYPE_CATEGORY) {
+                if( in_array($type, [Properties::TYPE_CATEGORY, Properties::TYPE_MULTICATEGORY])) {
                     $data = ArrayHelper::map(Category::findAll(['id' => $this->model{$this->attribute}]), 'id', 'fullTitle');
                 }else{
                     $data = ArrayHelper::map(Item::findAll(['id' => $this->model{$this->attribute}]), 'id', 'title');
+                }
+
+                switch ($type){
+                    case Properties::TYPE_ITEMSCATEGORY:
+                        $url = '/admin/newcatalog/properties/get-list-items-category';
+                        break;
+                    case Properties::TYPE_MULTICATEGORY:
+                        $url = '/admin/newcatalog/properties/get-list-multicategories';
+                        break;
+                    case Properties::TYPE_CATEGORY:
+                        $url = '/admin/newcatalog/properties/get-list-categories';
+                        break;
                 }
 
                 return Select2::widget([
@@ -113,7 +126,7 @@ class PropertyWidget extends InputWidget
                     'pluginOptions' => [
                         'allowClear' => true,
                         'ajax' => [
-                            'url' => $type == Properties::TYPE_ITEMSCATEGORY ? '/admin/newcatalog/properties/get-list-items-category' : '/admin/newcatalog/properties/get-list-categories',
+                            'url' => $url,
                             'dataType' => 'json',
                             'data' => new JsExpression('function(params) { 
                                return {
@@ -124,38 +137,6 @@ class PropertyWidget extends InputWidget
                     ],
                 ]);
 
-            case Properties::TYPE_MULTICATEGORY:
-                $values = $this->model{$this->attribute};
-
-                echo '<pre>';
-                print_r($values);
-                echo '</pre>';
-
-                $data = ArrayHelper::map(Category::findAll(['id' => $values]), 'id', 'fullTitle');
-
-                $subcategories = Category::find()->where(['parent_id' => $options->category_id])->all();
-
-                return Select2::widget([
-                    'model' => $this->model,
-                    'attribute' => $this->attribute,
-                    'data' => $data,
-                    'options' => [
-                        'placeholder' => Yii::t('gr', 'Enter value..'),
-                        'multiple' => $settings->multiple ? true : false,
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'ajax' => [
-                            'url' => $type == Properties::TYPE_ITEMSCATEGORY ? '/admin/newcatalog/properties/get-list-items-category' : '/admin/newcatalog/properties/get-list-categories',
-                            'dataType' => 'json',
-                            'data' => new JsExpression('function(params) { 
-                               return {
-                                    q:params.term'.((empty($options->category_id)) ? '': ', category_id:'.$options->category_id).'
-                                }; 
-                            }'),
-                        ],
-                    ],
-                ]);
             case Properties::TYPE_DATETIME:
 
                 return DateTimePicker::widget([

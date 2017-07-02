@@ -148,6 +148,35 @@ class PropertiesController extends Controller
      * Список категорий при получении ajax запросом
      * @return string
      */
+    public function actionGetListMulticategories()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+
+            $query = Category::find();
+
+            $query->filterWhere(['LIKE', 'title', Yii::$app->request->get('q')]);
+
+            if(!empty(Yii::$app->request->get('category_id'))){
+                $query->andWhere(['!=', 'FIND_IN_SET(\''.Yii::$app->request->get('category_id').'\', parents)', '0']);
+            }
+
+            $data = [];
+            foreach($query->limit(10)->all() AS $category){
+                $data['results'][] = [
+                    'id' => $category->id,
+                    'text' => $category->fullTitle
+                ];
+            }
+
+            return json_encode($data, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * Список категорий при получении ajax запросом
+     * @return string
+     */
     public function actionGetListItemsCategory()
     {
         $this->enableCsrfValidation = false;
