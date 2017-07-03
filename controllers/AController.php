@@ -6,6 +6,7 @@ use grozzzny\catalog\models\Base;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\behaviors\SortableController;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 use yii\easyii\components\Controller;
@@ -43,6 +44,8 @@ class AController extends Controller
 
         $current_model::queryFilter($query, Yii::$app->request->get());
 
+        Url::remember();
+
         return $this->render('index', [
             'data' => $data,
             'current_model' => $current_model
@@ -71,7 +74,7 @@ class AController extends Controller
 
                 if($current_model->save()){
                     $this->flash('success', Yii::t('gr', 'Post created'));
-                    return $this->redirect(['/admin/'.$this->module->id.'/a', 'slug' => $current_model::SLUG]);
+                    return $this->redirect([Url::previous()]);
                 }
                 else{
                     $this->flash('error', Yii::t('gr', 'Error'));
@@ -118,7 +121,7 @@ class AController extends Controller
                 else{
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $current_model->formatErrors()));
                 }
-                return $this->refresh();
+                return $this->redirect([Url::previous()]);
             }
         }
         else {
