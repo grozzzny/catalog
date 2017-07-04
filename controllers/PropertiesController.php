@@ -109,9 +109,9 @@ class PropertiesController extends Controller
                 throw new NotFoundHttpException();
             }
 
-            $property->categories[0]->unlink('properties', $property, true);
+            Category::findOne($get['category_id'])->unlink('properties', $property, true);
 
-            if(empty($property->categories)) $property->delete();
+            if(empty(Properties::findOne($get['id'])->categories)) $property->delete();
 
             return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('gr', 'Property remove')]), JSON_UNESCAPED_UNICODE);
 
