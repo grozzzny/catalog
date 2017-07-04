@@ -3,6 +3,7 @@ namespace grozzzny\catalog\controllers;
 
 use grozzzny\catalog\api\DataBehavior;
 use grozzzny\catalog\models\Base;
+use grozzzny\catalog\models\Properties;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\behaviors\SortableController;
@@ -40,9 +41,9 @@ class AController extends Controller
 
         $data = new ActiveDataProvider(['query' => $query]);
 
-        $current_model::querySort($data);
+        $current_model->querySort($data);
 
-        $current_model::queryFilter($query, Yii::$app->request->get());
+        $current_model->queryFilter($query, Yii::$app->request->get());
 
         Url::remember();
 

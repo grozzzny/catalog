@@ -52,6 +52,7 @@ return [
     'Move up' => 'Переместить наверх',
     'Move down' => 'Переместить вниз',
     'Code' => 'Код',
+    'Filter' => 'Фильтр',
 
     /**
      * Properties

@@ -107,7 +107,7 @@ class Category extends Base
      * @param $query
      * @param $get
      */
-    public static function queryFilter(&$query, $get)
+    public function queryFilter(&$query, $get)
     {
         if(!empty($get['text'])){
             $query->andFilterWhere(['LIKE', 'title', $get['text']]);
@@ -142,7 +142,7 @@ class Category extends Base
      * Сортировка
      * @param $provider
      */
-    public static function querySort(&$provider)
+    public function querySort(&$provider)
     {
         $sort = [];
 
