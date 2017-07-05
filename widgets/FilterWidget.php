@@ -1,21 +1,16 @@
 <?php
 namespace grozzzny\catalog\widgets;
 
-use bl\ace\AceWidget;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
-use grozzzny\catalog\widgets\fileinput\FileInputWidget;
-use grozzzny\widgets\switch_checkbox\SwitchCheckbox;
 use kartik\select2\Select2;
 use grozzzny\catalog\widgets\date_time_picker\DateTimePicker;
-use yii\easyii\widgets\Redactor;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use Yii;
 use yii\web\JsExpression;
 use yii\widgets\InputWidget;
+use Yii;
 
 
 class FilterWidget extends InputWidget
@@ -47,10 +42,23 @@ class FilterWidget extends InputWidget
                         ],
                     ]);
                 }else{
-                    return Html::input('string', $this->attribute, $this->value, ['class' => 'form-control', 'placeholder' => $label]);
+                    return Html::input('string', $this->attribute, $value, ['class' => 'form-control', 'placeholder' => $label]);
                 }
             case Properties::TYPE_INTEGER:
-                return Html::input('number', $this->attribute, $value, ['class' => 'form-control']);
+                if($settings->filter_range){
+                    $html = Html::beginTag('div', ['class' => 'row']);
+                    $html .= Html::tag('div',
+                        Html::input('number', $this->attribute . '_from', $this->query_param[$this->attribute . '_from'], ['class' => 'form-control', 'placeholder' => $label . Yii::t('gr',' from')])
+                        , ['class' => 'col-xs-5']);
+                    $html .= Html::tag('div', ' - ', ['class' => 'col-xs-2', 'style' => 'text-align: center;']);
+                    $html .= Html::tag('div',
+                        Html::input('number', $this->attribute . '_to', $this->query_param[$this->attribute . '_to'], ['class' => 'form-control', 'placeholder' => $label . Yii::t('gr',' to')])
+                        , ['class' => 'col-xs-5']);
+                    $html .= Html::endTag('div');
+                    return $html;
+                }else{
+                    return Html::input('number', $this->attribute, $value, ['class' => 'form-control', 'placeholder' => $label]);
+                }
             case Properties::TYPE_SELECT:
 
                 return Select2::widget([
@@ -110,10 +118,10 @@ class FilterWidget extends InputWidget
                     'value' => $this->query_param[$this->attribute],
                     'data' => $data,
                     'options' => [
-                        'placeholder' => $label,
                         'multiple' => $settings->multiple ? true : false,
                     ],
                     'pluginOptions' => [
+                        'placeholder' => $label,
                         'allowClear' => true,
                         'ajax' => [
                             'url' => $url,
@@ -128,12 +136,32 @@ class FilterWidget extends InputWidget
                 ]);
 
             case Properties::TYPE_DATETIME:
-
-                return DateTimePicker::widget([
-                    'name' => $this->attribute,
-                    'value' => $value,
-                ]);
-
+                if($settings->filter_range){
+                    $html = Html::beginTag('div', ['class' => 'row']);
+                    $html .= Html::tag('div',
+                        DateTimePicker::widget([
+                            'name' => $this->attribute . '_from',
+                            'value' => $this->query_param[$this->attribute . '_from'],
+                            'placeholder' => $label . Yii::t('gr', ' from'),
+                        ])
+                        , ['class' => 'col-xs-5']);
+                    $html .= Html::tag('div', ' - ', ['class' => 'col-xs-2', 'style' => 'text-align: center;']);
+                    $html .= Html::tag('div',
+                        DateTimePicker::widget([
+                            'name' => $this->attribute . '_to',
+                            'value' => $this->query_param[$this->attribute . '_to'],
+                            'placeholder' => $label . Yii::t('gr', ' to'),
+                        ])
+                        , ['class' => 'col-xs-5']);
+                    $html .= Html::endTag('div');
+                    return $html;
+                }else{
+                    return DateTimePicker::widget([
+                        'name' => $this->attribute,
+                        'value' => $value,
+                        'placeholder' => $label,
+                    ]);
+                }
             case Properties::TYPE_IMAGE:
             case Properties::TYPE_FILE:
 
@@ -153,7 +181,7 @@ class FilterWidget extends InputWidget
             return $html;
 
             default:
-                return Html::input('string', $this->attribute, $this->value, ['class' => 'form-control', 'placeholder' => $label]);
+                return Html::input('string', $this->attribute, $value, ['class' => 'form-control', 'placeholder' => $label]);
         }
 
     }

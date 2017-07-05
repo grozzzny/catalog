@@ -53,6 +53,8 @@ return [
     'Move down' => 'Переместить вниз',
     'Code' => 'Код',
     'Filter' => 'Фильтр',
+    ' from' => ' с',
+    ' to' => ' по',
 
     /**
      * Properties

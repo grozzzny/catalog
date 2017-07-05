@@ -510,7 +510,10 @@ var properties = {
             ]) != -1) modal.append(properties.settings.checkbox('multiple', data.multiple, properties.i18n.multiple));
 
             //Параметр диапазона для фильтра
-            if (type == 'integer') modal.append(properties.settings.checkbox('filter_range', data.filter_range, properties.i18n.filter_range));
+            if (jQuery.inArray(type, [
+                    'integer',
+                    'datetime'
+                ]) != -1) modal.append(properties.settings.checkbox('filter_range', data.filter_range, properties.i18n.filter_range));
 
         },
 

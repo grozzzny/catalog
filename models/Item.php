@@ -251,7 +251,7 @@ class Item extends Base
      */
     public function queryFilter(&$query, $get)
     {
-        //$query->distinct('gr_catalog_items.id');
+        $query->distinct('gr_catalog_items.id');
 
         $query->joinWith('categories');
 
@@ -269,9 +269,27 @@ class Item extends Base
 
             foreach ($this->properties as $property){
 
-                $value = ArrayHelper::getValue($get, $property->slug, '');
+                if ($property->settings->filter_range){
 
-                if(empty($value)) continue;
+                    $value_from = ArrayHelper::getValue($get, $property->slug . '_from', '');
+                    $value_to = ArrayHelper::getValue($get, $property->slug . '_to', '');
+
+                    if(empty($value_from) && empty($value_to)) continue;
+
+                    if(!$value_from){
+                        $additionalCondition = ['<=', 'value', (int)$value_to];
+                    } elseif(!$value_to) {
+                        $additionalCondition = ['>=', 'value', (int)$value_from];
+                    } else {
+                        $additionalCondition = ['between', 'value', (int)$value_from, (int)$value_to];
+                    }
+
+                    $subQuery->orFilterWhere(['and', ['property_slug' => $property->slug], $additionalCondition]);
+
+                }else{
+                    $value = ArrayHelper::getValue($get, $property->slug, '');
+
+                    if(empty($value)) continue;
 
                     switch ($property->type){
                         case Properties::TYPE_DATETIME:
@@ -285,20 +303,8 @@ class Item extends Base
                         default:
                             $subQuery->orFilterWhere(['and', ['property_slug' => $property->slug], ['value' => $value]]);
                     }
-//                if(!is_array($value)) {
-                    $filtersApplied++;
-//                } else {
-////                    if(!$value[0]){
-////                        $additionalCondition = ['<=', 'value', (int)$value[1]];
-////                    } elseif(!$value[1]) {
-////                        $additionalCondition = ['>=', 'value', (int)$value[0]];
-////                    } else {
-////                        $additionalCondition = ['between', 'value', (int)$value[0], (int)$value[1]];
-////                    }
-//                    $subQuery->orFilterWhere(['and', ['property_slug' => $property->slug], ['value' => $value]]);
-//
-//                    $filtersApplied++;
-//                }
+                }
+                $filtersApplied++;
             }
 
             if($filtersApplied) {

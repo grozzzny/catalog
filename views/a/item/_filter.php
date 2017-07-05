@@ -7,6 +7,8 @@ use yii\bootstrap\Modal;
 use grozzzny\catalog\widgets\FilterWidget;
 use grozzzny\catalog\models\DataProperties;
 use grozzzny\catalog\models\Properties;
+use yii\helpers\ArrayHelper;
+use yii\web\JsExpression;
 ?>
 
 <?=Html::beginForm(Url::toRoute(['a/', 'slug' => $current_model::SLUG]), 'get');?>
@@ -55,19 +57,30 @@ use grozzzny\catalog\models\Properties;
 
     <li style="float:right; margin-left: 20px;">
 
-        <?= Select2::widget([
+        <?=Select2::widget([
             'name' => 'category',
             'value' => Yii::$app->request->get('category'),
-            'data' => Category::listCategories(),
+            'data' => ArrayHelper::map(Category::findAll(['id' => Yii::$app->request->get('category')]), 'id', 'fullTitle'),
             'options' => [
-                'placeholder' => Yii::t('gr', 'Select category..'),
                 'onchange' => 'submit();',
             ],
             'pluginOptions' => [
+                'placeholder' => Yii::t('gr', 'Select category..'),
                 'allowClear' => true,
-                'width' => 400
+                'width' => 400,
+                'ajax' => [
+                    'url' => '/admin/newcatalog/properties/get-list-categories',
+                    'dataType' => 'json',
+                    'data' => new JsExpression('function(params) { 
+                           return {
+                                q:params.term
+                            }; 
+                        }'),
+                ],
             ],
-        ]); ?>
+        ]);
+
+        ?>
 
     </li>
 
