@@ -8,6 +8,8 @@ use yii\helpers\Url;
 use kartik\select2\Select2;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\widgets\PropertyWidget;
+use yii\helpers\ArrayHelper;
+use yii\web\JsExpression;
 
 if(!empty(Yii::$app->request->get('category'))) $current_model->categories = [Yii::$app->request->get('category')];
 
@@ -28,14 +30,24 @@ $module = $this->context->module->id;
 ]) ?>
 <?= $form->field($current_model, 'slug') ?>
 
-<?= $form->field($current_model, 'categories')->widget(Select2::className(),[
-    'data' => Category::listCategories(),
-    'options' => ['placeholder' => Yii::t('gr', 'Enter value..')],
+<?=$form->field($current_model, 'categories')->widget(Select2::className(),[
+    'data' => ArrayHelper::map(Category::findAll(['id' => $current_model->categories]), 'id', 'fullTitle'),
     'pluginOptions' => [
+        'placeholder' => Yii::t('gr', 'Select category..'),
         'allowClear' => true,
         'multiple' => true,
+        'ajax' => [
+            'url' => '/admin/newcatalog/properties/get-list-categories',
+            'dataType' => 'json',
+            'data' => new JsExpression('function(params) { 
+               return {
+                    q:params.term
+                }; 
+            }'),
+        ],
     ],
-]); ?>
+]);
+?>
 
 <? foreach ($current_model->dataProperties->getAttributes() as $attribute => $value):?>
     <?= $form->field($current_model->dataProperties, $attribute)->widget(PropertyWidget::className()) ?>

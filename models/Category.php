@@ -179,6 +179,15 @@ class Category extends Base
             ->viaTable('gr_catalog_relations_categories_items', ['category_id' => 'id']);
     }
 
+    public function getAllChildren()
+    {
+        return self::find()->where(['!=', 'FIND_IN_SET(\''.$this->id.'\', parents)', '0'])->all();
+    }
+
+    public function getChildren()
+    {
+        return self::findAll(['parent_id' => $this->id]);
+    }
 
     public function afterDelete()
     {
@@ -242,6 +251,7 @@ class Category extends Base
     }
 
     /**
+     * НЕ АКТУАЛЕН
      * Возвращает список всех категорий в алфавитном порядке
      * @return array
      */

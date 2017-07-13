@@ -7,6 +7,8 @@ use grozzzny\catalog\models\Category;
 use kartik\select2\Select2;
 use yii\easyii\widgets\Redactor;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use yii\web\JsExpression;
 
 $module = $this->context->module->id;
 
@@ -30,13 +32,23 @@ if(!empty(Yii::$app->request->get('category'))) $current_model->parent_id = Yii:
 ]) ?>
 <?= $form->field($current_model, 'slug') ?>
 
-<?= $form->field($current_model, 'parent_id')->widget(Select2::className(),[
-    'data' => Category::listCategories(),
-    'options' => ['placeholder' => 'Введите значение ...'],
+<?=$form->field($current_model, 'parent_id')->widget(Select2::className(),[
+    'data' => ArrayHelper::map(Category::findAll(['id' => $current_model->parent_id]), 'id', 'fullTitle'),
     'pluginOptions' => [
+        'placeholder' => Yii::t('gr', 'Select category..'),
         'allowClear' => true,
+        'ajax' => [
+            'url' => '/admin/newcatalog/properties/get-list-categories',
+            'dataType' => 'json',
+            'data' => new JsExpression('function(params) { 
+               return {
+                    q:params.term
+                }; 
+            }'),
+        ],
     ],
-]); ?>
+]);
+?>
 
 <?= $form->field($current_model, 'views')->input('text',['disabled' => true]) ?>
 
