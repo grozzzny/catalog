@@ -42,6 +42,9 @@ use yii\web\JsExpression;
                 $dataProperties->setAttributes(Yii::$app->request->get());
                 ?>
                 <? foreach ($dataProperties->getAttributes() as $attribute => $value):?>
+
+                    <? if(!$dataProperties->getSettings($attribute)->filter_show) continue;?>
+
                     <div class="form-group">
                         <?= FilterWidget::widget([
                             'model' => $dataProperties,

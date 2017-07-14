@@ -85,7 +85,6 @@ return [
     'Extensions. Example: png, jpg, gif' => 'Расширения. Пример: png, jpg, gif',
     'Extensions. Example: pdf, doc' => 'Расширения. Пример: pdf, doc',
     'Unique' => 'Уникальный',
-    'Filter' => 'Фильтр',
     'Trim the lines on both sides' => 'Убрать пробелы с обеих сторон',
     'Transform the register' => 'Преобразовать в нижний регистр',
     'Comparison Validator for value OR atribute' => 'Валидатор сравнения',
@@ -100,4 +99,5 @@ return [
     'Pattern. Example: /^[a-z]\\w*$/i' => 'Шаблон. пример: /^[a-z]\\w*$/i',
     'Validator assigning a default value' => 'Валидатор, назначающий значение по умолчанию',
     'Validator safe' => 'Валидатор безопасных значений',
+    'Show in filter' => 'Показывать в фильтре',
 ];

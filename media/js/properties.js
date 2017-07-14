@@ -50,7 +50,8 @@ var properties = {
         regular_expression_validator: 'Regular Expression Validator',
         pattern: 'Pattern. Example: /^[a-z]\\w*$/i',
         validator_default: 'Validator assigning a default value',
-        validator_safe: 'Validator safe'
+        validator_safe: 'Validator safe',
+        filter_show: 'Show in filter'
     },
 
     init:function () {
@@ -497,6 +498,8 @@ var properties = {
             var type = properties.getType(ob);
 
             modal.append(properties.settings.input('group', data.group, properties.i18n.group));
+
+            modal.append(properties.settings.checkbox('filter_show', data.filter_show, properties.i18n.filter_show));
 
             //Параметр - множественности
             if (jQuery.inArray(type, [

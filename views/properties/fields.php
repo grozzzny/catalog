@@ -122,6 +122,7 @@ $i18n = json_encode([
     'pattern' => Yii::t('gr','Pattern. Example: /^[a-z]\\w*$/i'),
     'validator_default' => Yii::t('gr','Validator assigning a default value'),
     'validator_safe' => Yii::t('gr','Validator safe'),
+    'filter_show' => Yii::t('gr','Show in filter'),
 ], JSON_UNESCAPED_UNICODE);
 
 $script = <<< JS
