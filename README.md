@@ -47,7 +47,7 @@ $i18n = json_encode([
 
 ## Inheritability of properties
 ![alt text](https://raw.githubusercontent.com/grozzzny/catalog/master/media/2017-07-17_09-15-52.png)
-![alt text](https://raw.githubusercontent.com/grozzzny/catalog/master/media/2017-07-17_09-16-30.png
+![alt text](https://raw.githubusercontent.com/grozzzny/catalog/master/media/2017-07-17_09-16-30.png)
 
 ## Large selection of property types
 ![alt text](https://raw.githubusercontent.com/grozzzny/catalog/master/media/2017-07-17_09-18-47.png)
