@@ -16,3 +16,7 @@ Run migrations
 ```bash
 php yii migrate --migrationPath=@vendor/grozzzny/catalog/migrations
 ```
+
+### Schema
+![alt text](https://raw.githubusercontent.com/grozzzny/catalog/master/media/2017-07-17_08-59-16.png)
+
