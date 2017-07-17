@@ -34,7 +34,7 @@ $module = $this->context->module->id;
     <? if(Yii::$app->controller->actionParams['slug'] == Category::SLUG): ?>
         <li <?= (Yii::$app->controller->route === 'admin/newcatalog/properties/fields') ? 'class="active"' : '' ?>>
             <a href="<?= Url::to(['/admin/'.$module.'/properties', 'id' => $current_model->primaryKey, 'slug' => $current_model::SLUG]) ?>">
-                Свойства
+                <?=Yii::t('gr', 'Properties')?>
             </a>
         </li>
     <? endif;?>
