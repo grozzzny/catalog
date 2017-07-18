@@ -179,14 +179,16 @@ class Category extends Base
             ->viaTable('gr_catalog_relations_categories_items', ['category_id' => 'id']);
     }
 
-    public function getAllChildren()
+    public function getAllChildren($condition = null)
     {
-        return self::find()->where(['!=', 'FIND_IN_SET(\''.$this->id.'\', parents)', '0'])->all();
+        $query = self::find()->where(['!=', 'FIND_IN_SET(\''.$this->id.'\', parents)', '0']);
+        if(!empty($condition)) $query->andWhere($condition);
+        return $query->all();
     }
 
     public function getChildren()
     {
-        return self::findAll(['parent_id' => $this->id]);
+        return $this->hasMany(self::className(), ['parent_id' => 'id']);
     }
 
     public function afterDelete()
