@@ -3,11 +3,9 @@ use yii\bootstrap\BootstrapPluginAsset;
 use grozzzny\catalog\assets\ModuleAsset;
 use yii\widgets\Breadcrumbs;
 use grozzzny\catalog\models\Category;
-use grozzzny\widgets\switch_checkbox\assets\SwitchCheckboxAsset;
 
 BootstrapPluginAsset::register($this);
 ModuleAsset::register($this);
-
 $this->title = Yii::t('gr', $current_model::TITLE);
 ?>
 

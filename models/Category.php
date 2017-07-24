@@ -4,6 +4,7 @@ namespace grozzzny\catalog\models;
 use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
+use yii\easyii\helpers\Image;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
@@ -188,7 +189,11 @@ class Category extends Base
 
     public function getChildren()
     {
-        return $this->hasMany(self::className(), ['parent_id' => 'id']);
+        $query = $this->hasMany(self::className(), ['parent_id' => 'id']);
+
+        if(Yii::$app->controller->layout != '@easyii/views/layouts/main') $query->where(['status' => self::STATUS_ON]);
+
+        return $query;
     }
 
     public function afterDelete()
@@ -271,6 +276,12 @@ class Category extends Base
 
         return $categories_arr;
     }
+
+
+    public function getImage($width = null, $height = null, $crop = true){
+        return Image::thumb((empty($this->image_file)? \Yii::$app->params['nophoto'] : $this->image_file), $width, $height, $crop);
+    }
+
 
     public function getLinkCreateElement()
     {
