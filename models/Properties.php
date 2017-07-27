@@ -143,6 +143,7 @@ class Properties extends Base
                 'order_num',
                 'index',
             ], 'integer'],
+            [['order_num'],'default', 'value' => 0],
             [['settings','validations','options'], 'safe'],
             ['category_id', 'required']
         ];
