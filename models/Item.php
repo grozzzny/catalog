@@ -61,6 +61,7 @@ class Item extends Base
             ], 'integer'],
             ['image_file', 'image'],
             [['description', 'categories'], 'safe'],
+            ['views','default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_ON],
             [['order_num'], 'integer'],
             [['title', 'slug'], 'required'],

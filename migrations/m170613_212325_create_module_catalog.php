@@ -1,7 +1,7 @@
 <?php
 
 
-class m170613_212325_create_module_catalog extends \grozzzny\call_back\migrations\Migration
+class m170613_212325_create_module_catalog extends \grozzzny\catalog\migrations\Migration
 {
     public function safeUp()
     {

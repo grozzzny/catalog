@@ -62,6 +62,7 @@ class Category extends Base
             ], 'integer'],
             ['image_file', 'image'],
             ['parent_id','default', 'value' => 0],
+            ['views','default', 'value' => 0],
             [['description'], 'safe'],
             ['status', 'default', 'value' => self::STATUS_ON],
             [['order_num'], 'integer'],
