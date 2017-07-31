@@ -259,56 +259,15 @@ class Item extends Base
 
             $this->categories = [$get['category']];
 
-            $filtersApplied = 0;
-            $subQuery = Data::find()->select('item_id, COUNT(*) as filter_matched')->groupBy('item_id');
-
-            foreach ($this->properties as $property){
-
-                if(!$property->settings->filter_show) continue;
-
-                if ($property->settings->filter_range){
-
-                    $value_from = ArrayHelper::getValue($get, $property->slug . '_from', '');
-                    $value_to = ArrayHelper::getValue($get, $property->slug . '_to', '');
-
-                    if(empty($value_from) && empty($value_to)) continue;
-
-                    if(!$value_from){
-                        $additionalCondition = ['<=', 'value', (int)$value_to];
-                    } elseif(!$value_to) {
-                        $additionalCondition = ['>=', 'value', (int)$value_from];
-                    } else {
-                        $additionalCondition = ['between', 'value', (int)$value_from, (int)$value_to];
-                    }
-
-                    $subQuery->orFilterWhere(['and', ['property_slug' => $property->slug], $additionalCondition]);
-
-                }else{
-                    $value = ArrayHelper::getValue($get, $property->slug, '');
-
-                    if(empty($value)) continue;
-
-                    switch ($property->type){
-                        case Properties::TYPE_DATETIME:
-                            $subQuery->orFilterWhere(['and', ['property_slug' => $property->slug], ['=', 'FROM_UNIXTIME(`value`,\'%Y-%m-%d\')', date('Y-m-d',$value)]]);
-                            break;
-                        case Properties::TYPE_CHECKBOX:
-                        case Properties::TYPE_FILE:
-                        case Properties::TYPE_IMAGE:
-                            $subQuery->orFilterWhere(['and', ['property_slug' => $property->slug], ['not', ['value' => null]]]);
-                            break;
-                        default:
-                            $subQuery->orFilterWhere(['and', ['property_slug' => $property->slug], ['value' => $value]]);
-                    }
-                }
-                $filtersApplied++;
-            }
-
-            if($filtersApplied) {
-                $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = gr_catalog_items.id');
-                $query->andFilterWhere(['f.filter_matched' => $filtersApplied]);
-            }
+            DataProperties::queryFilter($query, $get, $this->properties);
         }
+    }
+
+
+    public function getImage($width = null, $height = null, $crop = true)
+    {
+        $image = empty($this->image) ? Yii::$app->params['nophoto'] : $this->image;
+        return Image::thumb($image, $width, $height, $crop);
     }
 
 

@@ -11,6 +11,7 @@ class DateTimePicker extends \yii\easyii\widgets\DateTimePicker
 
     public $inputId;
     public $placeholder;
+    public $size;
 
     private $_defaultOptions = [
         'showTodayButton' => true,
@@ -29,7 +30,7 @@ class DateTimePicker extends \yii\easyii\widgets\DateTimePicker
     public function run()
     {
         echo '
-            <div class="input-group date" id="'.$this->widgetId.'">
+            <div class="input-group date '.(!empty($this->size) ? 'input-group-'.$this->size : '').'" id="'.$this->widgetId.'">
                 '.Html::textInput('', '', ['class' => 'form-control', 'placeholder' => $this->placeholder]).'
                 '.Html::hiddenInput($this->name, $this->value, ['id' => $this->inputId]).'
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>

@@ -178,6 +178,16 @@ class Category extends Base
     }
 
 
+    public function getAllProperties()
+    {
+        $properties = $this->properties;
+        foreach ($this->parentsCategories as $category){
+            $properties = ArrayHelper::merge($properties, $category->properties);
+        }
+        return $properties;
+    }
+
+
     public function getItems()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
