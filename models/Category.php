@@ -207,6 +207,14 @@ class Category extends Base
     }
 
 
+    public function getItemsCount()
+    {
+        return Yii::$app->cache->getOrSet(['count-products', 'slug' => $this->slug], function ($cache) {
+            return $this->getItems()->count();
+        }, 3600);
+    }
+
+
     /**
      * For special widget
      */
