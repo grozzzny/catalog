@@ -127,13 +127,17 @@ class Category extends Base
         $breadcrumbs = ['label' => $this->title];
         $parent = $this->parentCategory;
 
+        $adminPanel = $this->hasAdminPanel();
+
         while ($parent){
             array_push($breadcrumbs, [
-                'url' => $parent->linkAdmin,
+                'url' => $adminPanel ? $parent->linkAdmin : $parent->link,
                 'label' => $parent->title
             ]);
             $parent = $parent->parentCategory;
         };
+
+        if(!$adminPanel) array_pop($breadcrumbs);
 
         return array_reverse($breadcrumbs, true);
     }
@@ -191,7 +195,7 @@ class Category extends Base
     {
         $query = $this->hasMany(self::className(), ['parent_id' => 'id']);
 
-        if(Yii::$app->controller->layout != '@easyii/views/layouts/main') $query->where(['status' => self::STATUS_ON]);
+        if(!$this->hasAdminPanel()) $query->where(['status' => self::STATUS_ON]);
 
         return $query;
     }
@@ -280,6 +284,12 @@ class Category extends Base
 
     public function getImage($width = null, $height = null, $crop = true){
         return Image::thumb((empty($this->image_file)? \Yii::$app->params['nophoto'] : $this->image_file), $width, $height, $crop);
+    }
+
+
+    public function getLink()
+    {
+        return Url::to(['/' . $this->slug ]);
     }
 
 

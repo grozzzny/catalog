@@ -3,7 +3,9 @@ namespace grozzzny\catalog\models;
 
 use yii\easyii\behaviors\CacheFlush;
 use Yii;
+use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\models\SeoText;
 
 class Base extends \yii\easyii\components\ActiveRecord
 {
@@ -16,6 +18,7 @@ class Base extends \yii\easyii\components\ActiveRecord
     {
         return [
             CacheFlush::className(),
+            'seoBehavior' => SeoBehavior::className(),
             //SortableModel::className()
         ];
     }
@@ -90,4 +93,14 @@ class Base extends \yii\easyii\components\ActiveRecord
             }
         }
     }
+
+    public function hasAdminPanel()
+    {
+        return (Yii::$app->controller->layout == '@easyii/views/layouts/main')? true: false;
+    }
+
+    public function seo($attribute, $default = ''){
+        return !empty($this->seo->{$attribute}) ? $this->seo->{$attribute} : $default;
+    }
+
 }

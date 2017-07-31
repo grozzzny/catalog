@@ -1,4 +1,5 @@
 <?php
+use yii\easyii\widgets\SeoForm;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use grozzzny\widgets\switch_checkbox\SwitchCheckbox;
@@ -74,6 +75,8 @@ $module = $this->context->module->id;
         'status'
     ]
 ])?>
+
+<?= SeoForm::widget(['model' => $current_model]) ?>
 
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>
