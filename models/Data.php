@@ -3,12 +3,21 @@ namespace grozzzny\catalog\models;
 
 
 use Yii;
+use yii\easyii\behaviors\CacheFlush;
 
 class Data extends Base
 {
     const CACHE_KEY = 'gr_catalog_data';
 
     const PRIMARY_MODEL = false;
+
+    public function behaviors()
+    {
+        return [
+            CacheFlush::className(),
+            //SortableModel::className()
+        ];
+    }
 
     public static function tableName()
     {
