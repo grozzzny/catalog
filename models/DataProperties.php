@@ -121,7 +121,7 @@ class DataProperties extends DynamicModel
 
         foreach ($properties as $property){
 
-            if(!$property->settings->filter_show) continue;
+            //if(!$property->settings->filter_show) continue;
 
             if ($property->settings->filter_range){
 
