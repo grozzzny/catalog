@@ -51,7 +51,8 @@ var properties = {
         pattern: 'Pattern. Example: /^[a-z]\\w*$/i',
         validator_default: 'Validator assigning a default value',
         validator_safe: 'Validator safe',
-        filter_show: 'Show in filter'
+        filter_show: 'Show in filter',
+        filter_show_admin: 'Show in filter in Admin panel',
     },
 
     init:function () {
@@ -500,6 +501,8 @@ var properties = {
             modal.append(properties.settings.input('group', data.group, properties.i18n.group));
 
             modal.append(properties.settings.checkbox('filter_show', data.filter_show, properties.i18n.filter_show));
+
+            modal.append(properties.settings.checkbox('filter_show_admin', data.filter_show_admin, properties.i18n.filter_show_admin));
 
             //Параметр - множественности
             if (jQuery.inArray(type, [

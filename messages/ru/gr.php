@@ -100,4 +100,5 @@ return [
     'Validator assigning a default value' => 'Валидатор, назначающий значение по умолчанию',
     'Validator safe' => 'Валидатор безопасных значений',
     'Show in filter' => 'Показывать в фильтре',
+    'Show in filter in Admin panel' => 'Показывать в фильтре в админ панеле',
 ];

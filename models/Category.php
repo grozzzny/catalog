@@ -180,7 +180,7 @@ class Category extends Base
 
     public function getAllProperties()
     {
-        $properties = $this->properties;
+        $properties = [];
         foreach ($this->parentsCategories as $category){
             $properties = ArrayHelper::merge($properties, $category->properties);
         }

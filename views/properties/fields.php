@@ -123,6 +123,7 @@ $i18n = json_encode([
     'validator_default' => Yii::t('gr','Validator assigning a default value'),
     'validator_safe' => Yii::t('gr','Validator safe'),
     'filter_show' => Yii::t('gr','Show in filter'),
+    'filter_show_admin' => Yii::t('gr','Show in filter in Admin panel'),
 ], JSON_UNESCAPED_UNICODE);
 
 $script = <<< JS

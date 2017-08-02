@@ -43,7 +43,7 @@ use yii\web\JsExpression;
                 ?>
                 <? foreach ($dataProperties->getAttributes() as $attribute => $value):?>
 
-                    <? if(!$dataProperties->getSettings($attribute)->filter_show) continue;?>
+                    <? if(!$dataProperties->getSettings($attribute)->filter_show_admin) continue;?>
 
                     <div class="form-group">
                         <?= FilterWidget::widget([
