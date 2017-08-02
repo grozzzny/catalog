@@ -266,7 +266,7 @@ class Item extends Base
 
     public function getImage($width = null, $height = null, $crop = true)
     {
-        $image = empty($this->image) ? Yii::$app->params['nophoto'] : $this->image;
+        $image = empty($this->image_file) ? Yii::$app->params['nophoto'] : $this->image_file;
         return Image::thumb($image, $width, $height, $crop);
     }
 
