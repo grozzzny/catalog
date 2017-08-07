@@ -1,6 +1,7 @@
 <?php
 namespace grozzzny\catalog\models;
 
+use grozzzny\catalog\components\ItemQuery;
 use yii\easyii\behaviors\CacheFlush;
 use Yii;
 use yii\easyii\behaviors\SeoBehavior;
@@ -52,10 +53,6 @@ class Base extends \yii\easyii\components\ActiveRecord
         return empty($slug) ? current($models) : $models[$slug];
     }
 
-    public static function queryFilter(&$query, $get)
-    {
-
-    }
 
     /**
      * Используется при отчистке ранее загруженных файлов
