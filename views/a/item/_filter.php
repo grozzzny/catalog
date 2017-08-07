@@ -14,7 +14,7 @@ use yii\web\JsExpression;
 <?=Html::beginForm(Url::toRoute(['a/', 'slug' => $current_model::SLUG]), 'get');?>
 
     <li style="float:right; margin-left: 20px;">
-        <?=Html::input('string', 'text', Yii::$app->request->get('text'),[
+        <?=Html::input('string', 'search_text', Yii::$app->request->get('search_text'),[
             'placeholder'=> Yii::t('gr', 'Search..'),
             'class'=> 'form-control',
         ])?>

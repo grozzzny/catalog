@@ -108,7 +108,7 @@ class Category extends Base
      * @param $query
      * @param $get
      */
-    public function queryFilter(&$query, $get)
+    public static function queryFilter(&$query, $get)
     {
         if(!empty($get['text'])){
             $query->andFilterWhere(['LIKE', 'title', $get['text']]);
@@ -217,13 +217,6 @@ class Category extends Base
     }
 
 
-    public function getItemsCount()
-    {
-        return Yii::$app->cache->getOrSet(['count-products', 'slug' => $this->slug], function ($cache) {
-            return $this->getItems()->count();
-        }, 3600);
-    }
-
 
     /**
      * For special widget
@@ -266,6 +259,10 @@ class Category extends Base
         return $arr_id;
     }
 
+    /**
+     * @param $parent_id
+     * @return array [3,2,1]
+     */
     public static function getOnlyParentId($parent_id)
     {
         $arr_id = [];
@@ -284,20 +281,20 @@ class Category extends Base
      * Возвращает список всех категорий в алфавитном порядке
      * @return array
      */
-    public static function listCategories()
-    {
-        $categories_arr = [];
-        $categories = self::find()
-            //->where(['status' => self::STATUS_ON])
-            ->orderBy('title')
-            ->all();
-
-        foreach ($categories as $category){
-            $categories_arr[$category->id] = $category->fullTitle;
-        }
-
-        return $categories_arr;
-    }
+//    public static function listCategories()
+//    {
+//        $categories_arr = [];
+//        $categories = self::find()
+//            //->where(['status' => self::STATUS_ON])
+//            ->orderBy('title')
+//            ->all();
+//
+//        foreach ($categories as $category){
+//            $categories_arr[$category->id] = $category->fullTitle;
+//        }
+//
+//        return $categories_arr;
+//    }
 
 
     public function getImage($width = null, $height = null, $crop = true){

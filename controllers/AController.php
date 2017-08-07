@@ -43,7 +43,7 @@ class AController extends Controller
 
         $current_model->querySort($data);
 
-        $current_model->queryFilter($query, Yii::$app->request->get());
+        $current_model::queryFilter($query, Yii::$app->request->get());
 
         Url::remember();
 

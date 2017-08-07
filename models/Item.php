@@ -2,14 +2,12 @@
 namespace grozzzny\catalog\models;
 
 
-use grozzzny\catalog\controllers\TraitController;
+use grozzzny\catalog\components\ItemQuery;
 use yii\behaviors\BlameableBehavior;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\easyii\helpers\Image;
-use yii\easyii\helpers\Upload;
 use yii\helpers\ArrayHelper;
-use yii\web\UploadedFile;
 
 class Item extends Base
 {
@@ -239,28 +237,22 @@ class Item extends Base
         return $this->hasMany(Data::className(), ['item_id' => 'id']);
     }
 
+
     /**
      * Параметры фильтра
-     * @param $query
+     * @param ItemQuery $query
      * @param $get
      */
-    public function queryFilter(&$query, $get)
+    public static function queryFilter(ItemQuery &$query, $get)
     {
-        $query->distinct('gr_catalog_items.id');
+        $query->whereSearch($get['search_text']);
 
-        $query->joinWith('categories');
+        $query->whereRange(['price' => [ArrayHelper::getValue($get, 'price_from', ''), ArrayHelper::getValue($get, 'price_to', '')]]);
 
-        if(!empty($get['text'])){
-            $query->andFilterWhere(['LIKE', 'gr_catalog_items.title', $get['text']]);
-        }
+        if(!empty($get['category'])) $query->category(Category::findOne($get['category']));
 
-        if(!empty($get['category'])){
-            $query->andFilterWhere(['gr_catalog_categories.id' => $get['category']]);
+        $query->whereProperties($get);
 
-            $this->categories = [$get['category']];
-
-            DataProperties::queryFilter($query, $get, $this->properties);
-        }
     }
 
 
@@ -294,6 +286,16 @@ class Item extends Base
         $sort = $sort + ['attributes' => $attributes];
 
         $provider->setSort($sort);
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return ItemQuery the newly created [[ActiveQuery]] instance.
+     */
+    public static function find()
+    {
+        return Yii::createObject(ItemQuery::className(), [get_called_class()]);
     }
 
 }

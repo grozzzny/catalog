@@ -52,7 +52,7 @@ class Base extends \yii\easyii\components\ActiveRecord
         return empty($slug) ? current($models) : $models[$slug];
     }
 
-    public function queryFilter(&$query, $get)
+    public static function queryFilter(&$query, $get)
     {
 
     }
