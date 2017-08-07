@@ -304,7 +304,7 @@ class Category extends Base
 
     public function getLink()
     {
-        return Url::to(['/' . $this->slug ]);
+        return Url::to(['/category/' . $this->slug ]);
     }
 
 
