@@ -53,6 +53,7 @@ var properties = {
         validator_safe: 'Validator safe',
         filter_show: 'Show in filter',
         filter_show_admin: 'Show in filter in Admin panel',
+        characteristic: 'Characteristic',
     },
 
     init:function () {
@@ -503,6 +504,8 @@ var properties = {
             modal.append(properties.settings.checkbox('filter_show', data.filter_show, properties.i18n.filter_show));
 
             modal.append(properties.settings.checkbox('filter_show_admin', data.filter_show_admin, properties.i18n.filter_show_admin));
+
+            modal.append(properties.settings.checkbox('characteristic', data.characteristic, properties.i18n.characteristic));
 
             //Параметр - множественности
             if (jQuery.inArray(type, [

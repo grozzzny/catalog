@@ -7,6 +7,8 @@ use yii\behaviors\BlameableBehavior;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\easyii\helpers\Image;
+use yii\easyii\models\Photo;
+use yii\easyii\modules\catalog\api\PhotoObject;
 use yii\helpers\ArrayHelper;
 
 class Item extends Base
@@ -25,6 +27,8 @@ class Item extends Base
     private $_categories = [];
 
     private $_dataProperties = null;
+
+    private $_photos;
 
     public function behaviors()
     {
@@ -298,4 +302,16 @@ class Item extends Base
         return Yii::createObject(ItemQuery::className(), [get_called_class()]);
     }
 
+
+    public function getPhotos()
+    {
+        if(!$this->_photos){
+            $this->_photos = [];
+
+            foreach(Photo::find()->where(['class' => Item::className(), 'item_id' => $this->id])->sort()->all() as $model){
+                $this->_photos[] = new PhotoObject($model);
+            }
+        }
+        return $this->_photos;
+    }
 }

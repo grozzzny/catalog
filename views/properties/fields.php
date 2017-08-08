@@ -124,6 +124,7 @@ $i18n = json_encode([
     'validator_safe' => Yii::t('gr','Validator safe'),
     'filter_show' => Yii::t('gr','Show in filter'),
     'filter_show_admin' => Yii::t('gr','Show in filter in Admin panel'),
+    'characteristic' => Yii::t('gr','Characteristic'),
 ], JSON_UNESCAPED_UNICODE);
 
 $script = <<< JS

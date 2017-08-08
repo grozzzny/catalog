@@ -4,6 +4,7 @@
 namespace grozzzny\catalog\models;
 
 
+use Yii;
 use yii\base\DynamicModel;
 use yii\easyii\helpers\Image;
 use yii\easyii\helpers\Upload;
@@ -14,10 +15,10 @@ class DataProperties extends DynamicModel
 {
     const PRIMARY_MODEL = false;
 
-    private $labels = [];
-    private $types = [];
-    private $settings = [];
-    private $options = [];
+    private $_labels = [];
+    private $_types = [];
+    private $_settings = [];
+    private $_options = [];
 
     public function __construct(array $properties = [], array $data = [], $config = [])
     {
@@ -53,10 +54,10 @@ class DataProperties extends DynamicModel
 
             if (!empty(ArrayHelper::getValue($values, $property->slug, null))) $attributes[$property->slug] = $values[$property->slug];
 
-            $this->labels[$property->slug] = $property->title;
-            $this->types[$property->slug] = $property->type;
-            $this->settings[$property->slug] = $property->settings;
-            $this->options[$property->slug] = $property->options;
+            $this->_labels[$property->slug] = $property->title;
+            $this->_types[$property->slug] = $property->type;
+            $this->_settings[$property->slug] = $property->settings;
+            $this->_options[$property->slug] = $property->options;
 
             foreach ($property->validations as $validation){
                 $validator = $validation[0];
@@ -71,17 +72,52 @@ class DataProperties extends DynamicModel
 
     public function getType($slug)
     {
-        return $this->types[$slug];
+        return $this->_types[$slug];
     }
 
     public function getSettings($slug)
     {
-        return $this->settings[$slug];
+        return $this->_settings[$slug];
     }
 
     public function getOptions($slug)
     {
-        return $this->options[$slug];
+        return $this->_options[$slug];
+    }
+
+    public function getParseValue($slug)
+    {
+        $values = is_array($this->$slug) ? $this->$slug : [$this->$slug];
+
+        switch ($this->getType($slug)){
+            case Properties::TYPE_STRING:
+            case Properties::TYPE_INTEGER:
+            case Properties::TYPE_IMAGE:
+            case Properties::TYPE_FILE:
+                 return $values;
+
+            case Properties::TYPE_SELECT:
+                $options = ArrayHelper::toArray($this->getOptions($slug));
+                $values_arr = [];
+                foreach ($values as $value){
+                    $values_arr[] = ArrayHelper::getValue($options, $value, '');
+                }
+                return $values_arr;
+
+            case Properties::TYPE_CHECKBOX:
+                return $this->$slug == true ? Yii::t('app', 'yes') : Yii::t('app', 'no');
+
+            case Properties::TYPE_ITEMSCATEGORY:
+                return ArrayHelper::getColumn(Item::findAll(['id' => $this->$slug]), 'title');
+
+            case Properties::TYPE_MULTICATEGORY:
+            case Properties::TYPE_CATEGORY:
+                return ArrayHelper::getColumn(Category::findAll(['id' => $this->$slug]), 'fullTitle');
+
+            case Properties::TYPE_DATETIME:
+                return date('d.m.Y', $this->$slug);
+            //default:
+        }
     }
 
     /**
@@ -89,7 +125,7 @@ class DataProperties extends DynamicModel
      */
     public function attributeLabels()
     {
-        return $this->labels;
+        return $this->_labels;
     }
 
     public function setAttributes($values, $safeOnly = true)
