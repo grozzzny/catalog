@@ -87,6 +87,8 @@ class DataProperties extends DynamicModel
 
     public function getParseValue($slug)
     {
+        if (empty($this->$slug)) return null;
+
         $values = is_array($this->$slug) ? $this->$slug : [$this->$slug];
 
         switch ($this->getType($slug)){
@@ -100,7 +102,7 @@ class DataProperties extends DynamicModel
                 $options = ArrayHelper::toArray($this->getOptions($slug));
                 $values_arr = [];
                 foreach ($values as $value){
-                    $values_arr[] = ArrayHelper::getValue($options, $value, '');
+                    $values_arr[$value] = ArrayHelper::getValue($options, $value, '');
                 }
                 return $values_arr;
 
