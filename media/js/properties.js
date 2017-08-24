@@ -54,6 +54,7 @@ var properties = {
         filter_show: 'Show in filter',
         filter_show_admin: 'Show in filter in Admin panel',
         characteristic: 'Characteristic',
+        scenario: 'Scenario'
     },
 
     init:function () {
@@ -500,6 +501,8 @@ var properties = {
             var type = properties.getType(ob);
 
             modal.append(properties.settings.input('group', data.group, properties.i18n.group));
+
+            modal.append(properties.settings.input('scenario', data.scenario, properties.i18n.scenario));
 
             modal.append(properties.settings.checkbox('filter_show', data.filter_show, properties.i18n.filter_show));
 

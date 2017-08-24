@@ -8,6 +8,46 @@ use yii\easyii\helpers\Image;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
+
+/**
+ * Category ActiveRecord model.
+ *
+ * Database fields:
+ * @property integer $id
+ * @property string  $slug
+ * @property string  $title
+ * @property integer $parent_id
+ * @property string  $image_file
+ * @property integer $views
+ * @property string  $short
+ * @property string  $description
+ * @property integer $created_by
+ * @property integer $updated_by
+ * @property integer $status
+ * @property integer $order_num
+ * @property integer $parents
+ *
+ * Defined relations:
+ * @property Category[]  $parentsCategories
+ * @property Category[]  $allChildren
+ * @property Category  $parentCategory
+ * @property Category[]  $children
+ * @property array  $breadcrumbs
+ * @property Properties[]  $properties
+ * @property Properties[]  $allProperties
+ * @property Item[]  $items
+ * @property string  $fullTitle
+ * @property array  $allParentId
+ * @property array  $listItems
+ * @property string  $link
+ * @property string  $linkCreateElement
+ * @property string  $linkList
+ * @property string  $linkAdmin
+ * @property string  $linkEdit
+ * @property string  $linkProperties
+ * @property string  $linkDelete
+ *
+ */
 class Category extends Base
 {
     const PRIMARY_MODEL = true;
@@ -278,8 +318,6 @@ class Category extends Base
 
     /**
      * НЕ АКТУАЛЕН
-     * Возвращает список всех категорий в алфавитном порядке
-     * @return array
      */
 //    public static function listCategories()
 //    {
@@ -297,8 +335,15 @@ class Category extends Base
 //    }
 
 
+    /**
+     * @param null $width
+     * @param null $height
+     * @param bool $crop
+     * @return string
+     */
     public function getImage($width = null, $height = null, $crop = true){
-        return Image::thumb((empty($this->image_file)? \Yii::$app->params['nophoto'] : $this->image_file), $width, $height, $crop);
+        $image = empty($this->image_file)? \Yii::$app->params['nophoto'] : $this->image_file;
+        return Image::thumb($image, $width, $height, $crop);
     }
 
 

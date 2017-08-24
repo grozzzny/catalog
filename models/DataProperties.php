@@ -19,6 +19,7 @@ class DataProperties extends DynamicModel
     private $_types = [];
     private $_settings = [];
     private $_options = [];
+    private $_scenarios = [];
 
     public function __construct(array $properties = [], array $data = [], $config = [])
     {
@@ -53,6 +54,8 @@ class DataProperties extends DynamicModel
             $attributes[$property->slug] = $property->settings->multiple ? [] : null;
 
             if (!empty(ArrayHelper::getValue($values, $property->slug, null))) $attributes[$property->slug] = $values[$property->slug];
+
+            if (!empty($property->settings->scenario)) $this->_scenarios[$property->settings->scenario][] = $property->slug;
 
             $this->_labels[$property->slug] = $property->title;
             $this->_types[$property->slug] = $property->type;
@@ -128,6 +131,13 @@ class DataProperties extends DynamicModel
     public function attributeLabels()
     {
         return $this->_labels;
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios = ArrayHelper::merge($scenarios, $this->_scenarios);
+        return $scenarios;
     }
 
     public function setAttributes($values, $safeOnly = true)
