@@ -102,5 +102,5 @@ return [
     'Show in filter' => 'Показывать в фильтре',
     'Show in filter in Admin panel' => 'Показывать в фильтре в админ панеле',
     'Characteristic' => 'Характеристика',
-    'Scenario' => 'Сценарий',
+    'Scenarios' => 'Сценарии',
 ];

@@ -125,7 +125,7 @@ $i18n = json_encode([
     'filter_show' => Yii::t('gr','Show in filter'),
     'filter_show_admin' => Yii::t('gr','Show in filter in Admin panel'),
     'characteristic' => Yii::t('gr','Characteristic'),
-    'scenario' => Yii::t('gr','Scenario'),
+    'scenarios' => Yii::t('gr','Scenarios'),
 ], JSON_UNESCAPED_UNICODE);
 
 $script = <<< JS

@@ -54,7 +54,7 @@ var properties = {
         filter_show: 'Show in filter',
         filter_show_admin: 'Show in filter in Admin panel',
         characteristic: 'Characteristic',
-        scenario: 'Scenario'
+        scenarios: 'Scenarios'
     },
 
     init:function () {
@@ -269,6 +269,9 @@ var properties = {
                         .removeClass('alert-danger')
                         .show()
                         .text(res.response.message);
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
                 }else{
                     var errors = res.response.errors;
                     $.each(errors, function (attribute, arr) {
@@ -502,7 +505,7 @@ var properties = {
 
             modal.append(properties.settings.input('group', data.group, properties.i18n.group));
 
-            modal.append(properties.settings.input('scenario', data.scenario, properties.i18n.scenario));
+            modal.append(properties.settings.input('scenarios', data.scenarios, properties.i18n.scenarios));
 
             modal.append(properties.settings.checkbox('filter_show', data.filter_show, properties.i18n.filter_show));
 
