@@ -12,12 +12,14 @@ use kartik\select2\Select2Asset;
 use Yii;
 use yii\base\DynamicModel;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveRecord;
 use yii\easyii\behaviors\SortableController;
 use yii\easyii\helpers\Image;
 use yii\easyii\helpers\Upload;
 use yii\helpers\Url;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
@@ -238,6 +240,36 @@ class PropertiesController extends Controller
                 ];
             }
 
+            return json_encode($data, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+
+    /**
+     * Список пользователей
+     * @return string
+     */
+    public function actionGetListUsers()
+    {
+        $this->enableCsrfValidation = false;
+        if (Yii::$app->request->isAjax) {
+
+            /**
+             * @var ActiveRecord $model
+             */
+            $model = new Yii::$app->user->identityClass;
+
+            $query = $model->find();
+
+            if(!empty(Yii::$app->request->get('q'))) $query->where(['LIKE','email', Yii::$app->request->get('q')]);
+
+            $data = [];
+            foreach($query->limit(10)->all() AS $user){
+                $data['results'][] = [
+                    'id' => $user->id,
+                    'text' => $user->email
+                ];
+            }
             return json_encode($data, JSON_UNESCAPED_UNICODE);
         }
     }

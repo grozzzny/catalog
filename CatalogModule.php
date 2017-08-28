@@ -5,8 +5,11 @@ use Yii;
 
 class CatalogModule extends \yii\easyii\components\Module
 {
-    public $settings = [];
-
+    public $settings = [
+        'modelItem' => '',
+        'modelCategory' => '',
+        'modelData' => ''
+    ];
 
     public function init()
     {

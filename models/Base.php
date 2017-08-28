@@ -1,12 +1,10 @@
 <?php
 namespace grozzzny\catalog\models;
 
-use grozzzny\catalog\components\ItemQuery;
 use yii\easyii\behaviors\CacheFlush;
 use Yii;
 use yii\easyii\behaviors\SeoBehavior;
-use yii\easyii\behaviors\SortableModel;
-use yii\easyii\models\SeoText;
+use yii\helpers\ArrayHelper;
 
 class Base extends \yii\easyii\components\ActiveRecord
 {
@@ -28,12 +26,16 @@ class Base extends \yii\easyii\components\ActiveRecord
     {
         $models = [];
 
+        $settings = Yii::$app->getModule('admin')->activeModules[Yii::$app->controller->module->id]->settings;
+
         foreach (glob(__DIR__ . "/*.php") as $file){
             $file_name = basename($file, '.php');
 
             if($file_name == 'Base') continue;
 
-            $class_name = __NAMESPACE__ . '\\' . $file_name;
+            $alternative_class_name = ArrayHelper::getValue($settings, 'model'.$file_name, '');
+
+            $class_name = !empty($alternative_class_name) ? $alternative_class_name : __NAMESPACE__ . '\\' . $file_name;
 
             if(!class_exists($class_name)) continue;
 
