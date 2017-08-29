@@ -24,7 +24,7 @@ use yii\helpers\ArrayHelper;
  * @property string  $description
  * @property string  $price
  * @property string  $discount
- * @property string  $views
+ * @property integer  $views
  * @property integer $created_by
  * @property integer $updated_by
  * @property integer $created_at
@@ -333,6 +333,14 @@ class Item extends Base
     public static function find()
     {
         return Yii::createObject(ItemQuery::className(), [get_called_class()]);
+    }
+
+    /**
+     * Увеличивает показатель просмотров
+     */
+    public function addViews()
+    {
+        self::updateAll(['views' => $this->views + 1], ['id' => $this->id]);
     }
 
 

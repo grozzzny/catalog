@@ -10,6 +10,7 @@ use grozzzny\catalog\models\Properties;
 use kartik\select2\Select2;
 use kartik\select2\Select2Asset;
 use Yii;
+use yii\base\ActionEvent;
 use yii\base\DynamicModel;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
@@ -17,6 +18,7 @@ use yii\easyii\behaviors\SortableController;
 use yii\easyii\helpers\Image;
 use yii\easyii\helpers\Upload;
 use yii\helpers\Url;
+use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -44,6 +46,24 @@ class PropertiesController extends Controller
                 'model' => Base::getModel(Yii::$app->request->get('slug'))
             ],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeAction($action)
+    {
+        $event = new ActionEvent($action);
+        $this->trigger(self::EVENT_BEFORE_ACTION, $event);
+
+        if($event->isValid){
+            if ($this->enableCsrfValidation && Yii::$app->getErrorHandler()->exception === null && !Yii::$app->getRequest()->validateCsrfToken()) {
+                throw new BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
