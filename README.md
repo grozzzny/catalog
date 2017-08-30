@@ -3,9 +3,9 @@ Catalog for EasyiiCMS
 
 This module allows to [Easy yii2 cms](http://github.com/noumo/easyii) 
 
-## Installation guide
+Demo: [salesmarket.org](https://salesmarket.org/) 
 
-Please, install [User module for EasyiiCMS by following these instructions](https://github.com/grozzzny/catalog) before going further
+## Installation guide
 
 ```bash
 $ php composer.phar require grozzzny/catalog "dev-master"
