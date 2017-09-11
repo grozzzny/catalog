@@ -283,7 +283,7 @@ class Category extends Base
 
         $arr_name = array_reverse($arr_name, true);
 
-        return join('→', $arr_name);
+        return join(' → ', $arr_name);
     }
 
     public function getAllParentId()
