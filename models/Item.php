@@ -6,6 +6,7 @@ use grozzzny\catalog\components\ItemQuery;
 use yii\behaviors\BlameableBehavior;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\easyii\helpers\Image;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\api\PhotoObject;
@@ -24,7 +25,7 @@ use yii\helpers\ArrayHelper;
  * @property string  $description
  * @property string  $price
  * @property string  $discount
- * @property integer  $views
+ * @property integer $views
  * @property integer $created_by
  * @property integer $updated_by
  * @property integer $created_at
@@ -34,11 +35,13 @@ use yii\helpers\ArrayHelper;
  * @property integer $order_num
  *
  * Defined relations:
- * @property DataProperties  $dataProperties
- * @property Properties[]  $properties
- * @property Category[]  $categories
- * @property Data[]  $data
- * @property PhotoObject[]  $photos
+ * @property-read DataProperties $dataProperties
+ * @property-read Properties[]   $properties
+ * @property Category[]          $categories
+ * @property-read Data[]         $data
+ * @property-read PhotoObject[]  $photos
+ * @property-read ActiveRecord   $updatedBy
+ * @property-read ActiveRecord   $createdBy
  *
  */
 class Item extends Base
@@ -272,6 +275,18 @@ class Item extends Base
     public function getData()
     {
         return $this->hasMany(Data::className(), ['item_id' => 'id']);
+    }
+
+
+    public function getCreatedBy()
+    {
+        return $this->hasOne(Yii::$app->user->identityClass, ['id' => 'created_by']);
+    }
+
+
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(Yii::$app->user->identityClass, ['id' => 'updated_by']);
     }
 
 
