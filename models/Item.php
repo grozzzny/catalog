@@ -11,6 +11,7 @@ use yii\easyii\helpers\Image;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\api\PhotoObject;
 use yii\helpers\ArrayHelper;
+use yii\helpers\FileHelper;
 
 
 /**
@@ -168,7 +169,7 @@ class Item extends Base
 
         $scope = $formName === null ? (new DataProperties())->formName() : $formName;
         if ($scope === '' && !empty($data)) {
-            $this->setAttributes($data);
+            $this->dataProperties->setAttributes($data);
         } elseif (isset($data[$scope])) {
             $_data = $data[$scope];
             if(!empty($_data)) $this->dataProperties->setAttributes($_data);
