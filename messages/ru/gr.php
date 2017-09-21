@@ -103,4 +103,7 @@ return [
     'Show in filter in Admin panel' => 'Показывать в фильтре в админ панеле',
     'Characteristic' => 'Характеристика',
     'Scenarios' => 'Сценарии',
+    'Description' => 'Описание',
+    'Example #1' => 'Пример №1',
+    'Example #2' => 'Пример №2',
 ];

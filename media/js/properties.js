@@ -54,7 +54,10 @@ var properties = {
         filter_show: 'Show in filter',
         filter_show_admin: 'Show in filter in Admin panel',
         characteristic: 'Characteristic',
-        scenarios: 'Scenarios'
+        scenarios: 'Scenarios',
+        description: 'Description',
+        example_1: 'Example #1',
+        example_2: 'Example #2'
     },
 
     init:function () {
@@ -506,6 +509,10 @@ var properties = {
             modal.append(properties.settings.input('group', data.group, properties.i18n.group));
 
             modal.append(properties.settings.input('scenarios', data.scenarios, properties.i18n.scenarios));
+
+            modal.append(properties.settings.input('description', data.description, properties.i18n.description));
+            modal.append(properties.settings.input('example_1', data.example_1, properties.i18n.example_1));
+            modal.append(properties.settings.input('example_2', data.example_2, properties.i18n.example_2));
 
             modal.append(properties.settings.checkbox('filter_show', data.filter_show, properties.i18n.filter_show));
 
