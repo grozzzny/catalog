@@ -6,7 +6,29 @@ use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use stdClass;
 
+/**
+ * Properties ActiveRecord model.
+ *
+ * Database fields:
+ * @property integer $id
+ * @property string  $slug
+ * @property string  $title
+ * @property string  $type
+ * @property stdClass  $settings
+ * @property array  $validations
+ * @property stdClass  $options
+ * @property integer  $order_num
+ * @property integer  $index
+ *
+ * Defined relations:
+ * @property Category[]  $categories
+ * @property Category  $category
+ * @property string  $validationsJson
+ * @property string  $optionsJson
+ * @property string  $settingsJson
+ */
 class Properties extends Base
 {
     const PRIMARY_MODEL = false;
