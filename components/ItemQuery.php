@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
 class ItemQuery extends ActiveQuery
 {
 
-    private $_category;
+    public $_category;
 
     /**
      * Установит категорию. И осуществит поиск элементов определенной категории
