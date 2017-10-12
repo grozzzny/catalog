@@ -182,6 +182,8 @@ class PropertiesController extends Controller
 
             $identifier = 'id';
 
+            $fullTitle = Yii::$app->request->get('fullTitle', 'on');
+
             if(!empty(Yii::$app->request->get('category_id'))){
                 $query->andWhere(['!=', 'FIND_IN_SET(\''.Yii::$app->request->get('category_id').'\', parents)', '0']);
             }
@@ -195,7 +197,7 @@ class PropertiesController extends Controller
             foreach($query->limit(10)->all() AS $category){
                 $data['results'][] = [
                     'id' => $category->{$identifier},
-                    'text' => $category->fullTitle
+                    'text' => $fullTitle == 'on' ? $category->fullTitle : $category->title
                 ];
             }
 
