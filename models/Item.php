@@ -307,7 +307,7 @@ class Item extends Base
 
         $query->whereRange(['price' => [ArrayHelper::getValue($get, 'price_from', ''), ArrayHelper::getValue($get, 'price_to', '')]]);
 
-        if(empty($query->_category)) $query->category(Category::findOne($get['category']));
+        if(empty($query->_category) && !empty($get['category'])) $query->category(Category::findOne($get['category']));
 
         $query->whereProperties($get);
 
