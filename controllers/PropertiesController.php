@@ -180,14 +180,21 @@ class PropertiesController extends Controller
 
             $query->filterWhere(['LIKE', 'title', Yii::$app->request->get('q')]);
 
+            $identifier = 'id';
+
             if(!empty(Yii::$app->request->get('category_id'))){
                 $query->andWhere(['!=', 'FIND_IN_SET(\''.Yii::$app->request->get('category_id').'\', parents)', '0']);
+            }
+
+            if(!empty(Yii::$app->request->get('category_slug'))){
+                $identifier = 'slug';
+                $query->andWhere(['!=', 'FIND_IN_SET(\''.Category::findOne(['slug' => Yii::$app->request->get('category_slug')])->id.'\', parents)', '0']);
             }
 
             $data = [];
             foreach($query->limit(10)->all() AS $category){
                 $data['results'][] = [
-                    'id' => $category->id,
+                    'id' => $category->{$identifier},
                     'text' => $category->fullTitle
                 ];
             }

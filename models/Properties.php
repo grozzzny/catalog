@@ -71,7 +71,7 @@ class Properties extends Base
          * Settings
          */
         $behaviors[] = [
-            'class' => AttributeBehavior::class,
+            'class' => AttributeBehavior::className(),
             'attributes' => [
                 ActiveRecord::EVENT_BEFORE_INSERT => 'settings',
                 ActiveRecord::EVENT_BEFORE_UPDATE => 'settings',
@@ -82,7 +82,7 @@ class Properties extends Base
         ];
 
         $behaviors[] = [
-            'class' => AttributeBehavior::class,
+            'class' => AttributeBehavior::className(),
             'attributes' => [
                 ActiveRecord::EVENT_AFTER_INSERT => 'settings',
                 ActiveRecord::EVENT_AFTER_UPDATE => 'settings',
@@ -98,7 +98,7 @@ class Properties extends Base
          * validations
          */
         $behaviors[] = [
-            'class' => AttributeBehavior::class,
+            'class' => AttributeBehavior::className(),
             'attributes' => [
                 ActiveRecord::EVENT_BEFORE_INSERT => 'validations',
                 ActiveRecord::EVENT_BEFORE_UPDATE => 'validations',
@@ -109,7 +109,7 @@ class Properties extends Base
         ];
 
         $behaviors[] = [
-            'class' => AttributeBehavior::class,
+            'class' => AttributeBehavior::className(),
             'attributes' => [
                 ActiveRecord::EVENT_AFTER_INSERT => 'validations',
                 ActiveRecord::EVENT_AFTER_UPDATE => 'validations',
@@ -125,7 +125,7 @@ class Properties extends Base
          * Options
          */
         $behaviors[] = [
-            'class' => AttributeBehavior::class,
+            'class' => AttributeBehavior::className(),
             'attributes' => [
                 ActiveRecord::EVENT_BEFORE_INSERT => 'options',
                 ActiveRecord::EVENT_BEFORE_UPDATE => 'options',
@@ -136,7 +136,7 @@ class Properties extends Base
         ];
 
         $behaviors[] = [
-            'class' => AttributeBehavior::class,
+            'class' => AttributeBehavior::className(),
             'attributes' => [
                 ActiveRecord::EVENT_AFTER_INSERT => 'options',
                 ActiveRecord::EVENT_AFTER_UPDATE => 'options',
