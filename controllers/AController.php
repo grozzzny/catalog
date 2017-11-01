@@ -290,7 +290,7 @@ class AController extends Controller
 
         if($current_model = $current_model::findOne($id)){
             $current_model->status = $status;
-            $current_model->update();
+            $current_model->save();
         }else{
             $this->error = Yii::t('easyii', 'Not found');
         }
