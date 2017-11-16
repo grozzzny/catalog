@@ -5,6 +5,19 @@ namespace grozzzny\catalog\models;
 use Yii;
 use yii\easyii\behaviors\CacheFlush;
 
+/**
+ * Data ActiveRecord model.
+ *
+ * Database fields:
+ * @property integer $id
+ * @property integer $item_id
+ * @property string  $property_slug
+ * @property string  $value
+ *
+ * Defined relations:
+ * @property-read Item         $item
+ * @property-read Properties   $property
+ */
 class Data extends Base
 {
     const CACHE_KEY = 'gr_catalog_data';

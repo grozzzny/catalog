@@ -178,6 +178,8 @@ class DataProperties extends DynamicModel
 
     public static function reParseValueMulticategory($values)
     {
+        $values = is_array($values) ? $values : [$values];
+
         $new_values = [];
 
         $old_value = null;
