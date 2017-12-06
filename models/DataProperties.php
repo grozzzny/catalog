@@ -193,13 +193,11 @@ class DataProperties extends DynamicModel
             }else {
                 $new_attributes[$slug] = $values;
             }
-
-            return $new_attributes;
-
         }
+        return $new_attributes;
     }
 
-    private function hasSetValueMulticategory(String $slug)
+    private function hasSetValueMulticategory($slug)
     {
         return in_array($slug, $this->_insertedAttributesMulticategory);
     }
