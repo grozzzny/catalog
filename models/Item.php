@@ -209,37 +209,9 @@ class Item extends Base
         }
 
         //Сохранение значений в таблицу "Data"
-        $this->saveData();
+        $this->dataProperties->saveData($this);
     }
-
-
-    /**
-     * Сохранение значений в таблицу "Data"
-     * @return bool
-     */
-    private function saveData()
-    {
-        $attributes = $this->dataProperties->getAttributes();
-        if(empty($attributes)) return false;
-
-        foreach ($attributes as $slug => $values)
-        {
-            Data::deleteAll(['item_id' => $this->id, 'property_slug' => $slug]);
-            $values = (is_array($values)) ? $values : [$values];
-
-            foreach ($values as $value){
-
-                $value = (is_array($value)) ? array_values($value)[0] : $value;
-
-                $data = new Data();
-                $data->value = $value;
-                $data->property_slug = $slug;
-                $data->item_id = $this->id;
-                if(!empty($value)) $data->save();
-            }
-        }
-    }
-
+    
     /**
      * КОНЕЦ СОХРАНЕНИЯ ДАННЫХ
      */
