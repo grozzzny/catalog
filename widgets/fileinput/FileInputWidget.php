@@ -87,18 +87,18 @@ class FileInputWidget extends InputWidget
     {
         $script = <<< JS
             function addValues(event, data, previewId, index) {
-                $('.list_files_{$this->attribute}').append(
+                $('.list_files_'+data.extra.attribute).append(
                     $('<input />')
                         .attr('type','hidden')
-                        .attr('name', 'DataProperties[{$this->attribute}][]')
+                        .attr('name', 'DataProperties['+data.extra.attribute+'][]')
                         .val(data.response.initialPreviewConfig[0].key)
                 )
             }
             function addValue(event, data, previewId, index) {    
-                $('#dataproperties-{$this->attribute}').val(data.response.initialPreviewConfig[0].key);
+                $('#dataproperties-'+data.extra.attribute).val(data.response.initialPreviewConfig[0].key);
             }
             function removeValue(event, key, jqXHR, data) {
-                $('#dataproperties-{$this->attribute}').val('');
+                $('[value="'+key+'"]').val('');
             }
             function removeValues(event, key, jqXHR, data) {
                 $('[value="'+key+'"]').remove();
