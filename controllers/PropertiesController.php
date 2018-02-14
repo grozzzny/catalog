@@ -373,9 +373,14 @@ class PropertiesController extends Controller
 
             if(empty($file)) return json_encode([], JSON_UNESCAPED_UNICODE);
 
-            $image_data = @getimagesize(Yii::getAlias('@webroot').$file);
+            $image_data = @getimagesize($file->tempName);
 
-            $path = $image_data != false ? Image::upload($file, $post['attribute']) : Upload::file($file, $post['attribute']);
+            if($image_data){
+                $this->orientation($file, $image_data[2]);
+                $path = Image::upload($file, $post['attribute']);
+            }else{
+                $path = Upload::file($file, $post['attribute']);
+            }
 
             return json_encode([
                 'initialPreview' => !empty($image_data) ? [$path] : false,
@@ -385,6 +390,41 @@ class PropertiesController extends Controller
                 'append' => $append == 'true'
             ], JSON_UNESCAPED_UNICODE);
 
+        }
+    }
+
+    protected function orientation(&$file, $image_type)
+    {
+        if($image_type == IMAGETYPE_JPEG ) {
+            $resource = imagecreatefromjpeg($file->tempName);
+        } elseif($image_type == IMAGETYPE_GIF ) {
+            $resource = imagecreatefromgif($file->tempName);
+        } elseif($image_type == IMAGETYPE_PNG ) {
+            $resource = imagecreatefrompng($file->tempName);
+        }
+
+        $exif = exif_read_data($file->tempName, 0, true);
+
+        if( false === empty($exif['IFD0']['Orientation'] ) ) {
+            switch( $exif['IFD0']['Orientation'] ) {
+                case 8:
+                    $resource = imagerotate($resource, 90, 0 );
+                    break;
+                case 3:
+                    $resource = imagerotate($resource,180,0);
+                    break;
+                case 6:
+                    $resource = imagerotate($resource,-90,0);
+                    break;
+            }
+        }
+
+        if( $image_type == IMAGETYPE_JPEG ) {
+            imagejpeg($resource,$file->tempName);
+        } elseif( $image_type == IMAGETYPE_GIF ) {
+            imagegif($resource,$file->tempName);
+        } elseif( $image_type == IMAGETYPE_PNG ) {
+            imagepng($resource,$file->tempName);
         }
     }
 
