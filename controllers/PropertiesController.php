@@ -371,9 +371,11 @@ class PropertiesController extends Controller
 
             $file = UploadedFile::getInstanceByName('file_input_'.$post['attribute']);
 
+            if(empty($file)) return json_encode([], JSON_UNESCAPED_UNICODE);
+
             $image_data = @getimagesize(Yii::getAlias('@webroot').$file);
 
-            $path = !empty($image_data) ? Image::upload($file, $post['attribute']) : Upload::file($file, $post['attribute']);
+            $path = $image_data != false ? Image::upload($file, $post['attribute']) : Upload::file($file, $post['attribute']);
 
             return json_encode([
                 'initialPreview' => !empty($image_data) ? [$path] : false,
