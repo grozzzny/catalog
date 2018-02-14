@@ -119,6 +119,7 @@ JS;
             ],
             'pluginOptions' => [
                 'uploadUrl' => Url::to([$this->uploadUrl]),
+                'autoOrientImage' => true,
                 'uploadExtraData' => [
                     'attribute' => $this->attribute,
                     'deleteUrl' => $this->deleteUrl,
@@ -133,6 +134,9 @@ JS;
             'pluginEvents' => [
                 'fileuploaded' => $this->jsFnUploaded(),
                 'filedeleted' => $this->jsFnDeleted(),
+                'filebatchselected' => "function(event, files){ 
+                    $(event.target).parents('.input-group-btn').find('.fileinput-upload').click();
+                }"
             ]
         ]);
 
