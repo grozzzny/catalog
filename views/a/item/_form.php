@@ -1,4 +1,6 @@
 <?php
+
+use grozzzny\catalog\models\Item;
 use yii\easyii\widgets\SeoForm;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -12,7 +14,12 @@ use grozzzny\catalog\widgets\PropertyWidget;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 
-if(!empty(Yii::$app->request->get('category'))) $current_model->categories = [Yii::$app->request->get('category')];
+/**
+ * @var \yii\web\View $this
+ * @var Item $current_model
+ */
+
+if(!empty(Yii::$app->request->get('category_id', ''))) $current_model->categories = [Yii::$app->request->get('category_id')];
 
 $module = $this->context->module->id;
 ?>

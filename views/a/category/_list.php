@@ -3,6 +3,10 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use grozzzny\catalog\models\Base;
 
+/**
+ * @var \yii\web\View $this
+ * @var \grozzzny\catalog\models\Category $item
+ */
 $module = $this->context->module->id;
 
 $sort = $data->getSort();
@@ -27,7 +31,7 @@ $sort = $data->getSort();
         </th>
 
 
-        <th width="190"></th>
+        <th width="120"></th>
 
 
     </tr>
@@ -60,14 +64,6 @@ $sort = $data->getSort();
 
         <td>
             <div class="btn-group btn-group-sm" role="group">
-
-                <a href="<?= $item->linkCreateElement ?>" class="btn btn-default" title="<?= Yii::t('gr', 'Create element') ?>">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </a>
-
-                <a href="<?= $item->linkList ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'List') ?>">
-                    <span class="glyphicon glyphicon-list"></span>
-                </a>
 
                 <a href="<?= $item->linkEdit ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'Edit') ?>">
                     <span class="glyphicon glyphicon-pencil"></span>

@@ -55,6 +55,16 @@ return [
     'Filter' => 'Фильтр',
     ' from' => ' с',
     ' to' => ' по',
+    'Add category' => 'Добавить категорию',
+    'Add item' => 'Добавить элемент',
+    'Catalog' => 'Каталог',
+    'List of subcategories of the category <b>«{0}»</b>' => 'Список подкатегорий категории <b>«{0}»</b>',
+    'List of items of the category <b>«{0}»</b>' => 'Список элементов категории <b>«{0}»</b>',
+    'List all items' => 'Список всех элементов',
+    'Categories not found' => 'Категории не найдены',
+    'Items not found' => 'Элементы не найдены',
+    'Filters not found' => 'Фильтры не найдены',
+    'List of top-level categories' => 'Список категорий верхнего уровня',
 
     /**
      * Properties

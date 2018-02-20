@@ -3,6 +3,7 @@ namespace grozzzny\catalog\models;
 
 use Yii;
 use yii\behaviors\AttributeBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\easyii\helpers\Image;
 use yii\helpers\ArrayHelper;
@@ -74,7 +75,7 @@ class Category extends Base
          * Options
          */
         $behaviors[] = [
-            'class' => AttributeBehavior::class,
+            'class' => AttributeBehavior::className(),
             'attributes' => [
                 ActiveRecord::EVENT_BEFORE_INSERT => 'parents',
                 ActiveRecord::EVENT_BEFORE_UPDATE => 'parents',
@@ -148,13 +149,13 @@ class Category extends Base
      * @param $query
      * @param $get
      */
-    public static function queryFilter(&$query, $get)
+    public static function queryFilter(ActiveQuery &$query, array $get)
     {
         if(!empty($get['text'])){
             $query->andFilterWhere(['LIKE', 'title', $get['text']]);
         }else{
-            if(!empty($get['category'])){
-                $query->andFilterWhere(['parent_id' => $get['category']]);
+            if(!empty($get['category_id'])){
+                $query->andFilterWhere(['parent_id' => $get['category_id']]);
             }else {
                 $query->andFilterWhere(['parent_id' => 0]);
             }
@@ -355,27 +356,27 @@ class Category extends Base
 
     public function getLinkCreateElement()
     {
-        return Url::to(['/admin/'.Yii::$app->controller->module->id . '/a/create', 'slug' => Item::SLUG, 'category' => $this->id]);
+        return Url::to(['/admin/'.Yii::$app->controller->module->id . '/a/create', 'slug' => Item::SLUG, 'category_id' => $this->id]);
     }
 
     public function getLinkList()
     {
-        return Url::to(['/admin/'.Yii::$app->controller->module->id, 'slug' => Item::SLUG, 'category' => $this->id]);
+        return Url::to(['/admin/'.Yii::$app->controller->module->id, 'slug' => Item::SLUG, 'category_id' => $this->id]);
     }
 
     public function getLinkAdmin()
     {
-        return Url::to(['/admin/'.Yii::$app->controller->module->id, 'slug' => self::SLUG, 'category' => $this->id]);
+        return Url::to(['/admin/'.Yii::$app->controller->module->id, 'category_id' => $this->id]);
     }
 
     public function getLinkEdit()
     {
-        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/a/edit', 'id' => $this->id, 'slug' => self::SLUG]);
+        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/a/edit', 'id' => $this->id, 'category_id' => $this->parent_id, 'slug' => self::SLUG]);
     }
 
     public function getLinkProperties()
     {
-        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/properties', 'id' => $this->id, 'slug' => self::SLUG]);
+        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/properties', 'id' => $this->id, 'category_id' => $this->parent_id, 'slug' => self::SLUG]);
     }
 
     public function getLinkDelete()

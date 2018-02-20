@@ -3,6 +3,8 @@ namespace grozzzny\catalog\controllers;
 
 use grozzzny\catalog\api\DataBehavior;
 use grozzzny\catalog\models\Base;
+use grozzzny\catalog\models\Category;
+use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -29,27 +31,38 @@ class AController extends Controller
     }
 
 
-    /**
-     * @param null $slug
-     * @return string
-     */
-    public function actionIndex($slug = null)
+    public function actionIndex($category_id = null)
     {
-        $current_model = Base::getModel($slug);
+        /**
+         * @var Category $category
+         */
+        $category = Base::getModel(Category::SLUG);
+        /**
+         * @var Item $item
+         */
+        $item = Base::getModel(Item::SLUG);
 
-        $query = $current_model->find();
+        $currentCategory = empty($category_id) ? null : $category::findOne(['id' => $category_id]);
 
-        $data = new ActiveDataProvider(['query' => $query]);
+        $queryCategory = $category->find();
+        $queryItem = $item->find();
+        if(!empty($currentCategory)) $queryItem->category($currentCategory);
 
-        $current_model->querySort($data);
+        $dataCategory = new ActiveDataProvider(['query' => $queryCategory, 'pagination' => ['defaultPageSize' => 5]]);
+        $dataItem = new ActiveDataProvider(['query' => $queryItem]);
 
-        $current_model::queryFilter($query, Yii::$app->request->get());
+        $category->querySort($dataCategory);
+        $item->querySort($dataItem);
+
+        $category::queryFilter($queryCategory, Yii::$app->request->get());
+        $item::queryFilter($queryItem, Yii::$app->request->get());
 
         Url::remember();
 
         return $this->render('index', [
-            'data' => $data,
-            'current_model' => $current_model
+            'dataCategory' => $dataCategory,
+            'dataItem' => $dataItem,
+            'currentCategory' => $currentCategory
         ]);
     }
 
@@ -59,9 +72,10 @@ class AController extends Controller
      * @param $slug
      * @return array|string|\yii\web\Response
      */
-    public function actionCreate($slug)
+    public function actionCreate($slug, $category_id = null)
     {
         $current_model = Base::getModel($slug);
+        $currentCategory = empty($category_id) ? null : Category::findOne(['id' => $category_id]);
 
         if ($current_model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -85,7 +99,8 @@ class AController extends Controller
         }
         else {
             return $this->render('create', [
-                'current_model' => $current_model
+                'current_model' => $current_model,
+                'currentCategory' => $currentCategory
             ]);
         }
     }
@@ -96,10 +111,10 @@ class AController extends Controller
      * @param $id
      * @return array|string|\yii\web\Response
      */
-    public function actionEdit($slug, $id)
+    public function actionEdit($slug, $category_id = null, $id)
     {
         $current_model = Base::getModel($slug);
-
+        $currentCategory = empty($category_id) ? null : Category::findOne(['id' => $category_id]);
         $current_model = $current_model::findOne($id);
 
         if($current_model === null){
@@ -127,7 +142,8 @@ class AController extends Controller
         }
         else {
             return $this->render('edit', [
-                'current_model' => $current_model
+                'current_model' => $current_model,
+                'currentCategory' => $currentCategory
             ]);
         }
     }

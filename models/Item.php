@@ -273,7 +273,7 @@ class Item extends Base
      * @param ItemQuery $query
      * @param $get
      */
-    public static function queryFilter(ItemQuery &$query, $get)
+    public static function queryFilter(ItemQuery &$query, array $get)
     {
         $query->whereSearch($get['search_text']);
 
