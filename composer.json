@@ -1,7 +1,7 @@
 {
     "name": "grozzzny/catalog",
     "description": "Catalog for EasyiiCMS",
-    "keywords": ["yii", "easyiiCMS", "CMS", "module"],
+    "keywords": ["yii", "easyii2CMS", "CMS", "module"],
     "type": "yii2-extension",
     "minimum-stability": "dev",
     "license": "MIT",

@@ -1,12 +1,12 @@
 <?php
 namespace grozzzny\catalog\models;
 
-use yii\easyii\behaviors\CacheFlush;
+use yii\easyii2\behaviors\CacheFlush;
 use Yii;
-use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii2\behaviors\SeoBehavior;
 use yii\helpers\ArrayHelper;
 
-class Base extends \yii\easyii\components\ActiveRecord
+class Base extends \yii\easyii2\components\ActiveRecord
 {
     use TraitModel;
 
@@ -95,7 +95,7 @@ class Base extends \yii\easyii\components\ActiveRecord
 
     public function hasAdminPanel()
     {
-        return (Yii::$app->controller->layout == '@easyii/views/layouts/main')? true: false;
+        return (Yii::$app->controller->layout == '@easyii2/views/layouts/main')? true: false;
     }
 
     public function seo($attribute, $default = ''){

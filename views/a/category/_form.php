@@ -1,12 +1,12 @@
 <?php
-use yii\easyii\widgets\SeoForm;
+use yii\easyii2\widgets\SeoForm;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use grozzzny\widgets\switch_checkbox\SwitchCheckbox;
-use yii\easyii\widgets\DateTimePicker;
+use yii\easyii2\widgets\DateTimePicker;
 use grozzzny\catalog\models\Category;
 use kartik\select2\Select2;
-use yii\easyii\widgets\Redactor;
+use yii\easyii2\widgets\Redactor;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
@@ -59,7 +59,32 @@ use yii\web\JsExpression;
         'minHeight' => 400,
         'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => Yii::$app->controller->module->id]),
         'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => Yii::$app->controller->module->id]),
-        'plugins' => ['fullscreen']
+        'plugins' => [
+            "alignment",
+            "clips",
+            "counter",
+            "definedlinks",
+            "fontcolor",
+            "fontfamily",
+            "fontsize",
+            "fullscreen",
+            "filemanager",
+            "imagemanager",
+            "inlinestyle",
+            "limiter",
+            "properties",
+            //"source",
+            "table",
+            //"textdirection",
+            "textexpander",
+            "video",
+            "codemirror",
+        ],
+        'codemirror:' => [
+            'lineNumbers' => true,
+            'mode' => 'xml',
+            'indentUnit' => 4
+        ],
     ]
 ])?>
 
@@ -72,5 +97,5 @@ use yii\web\JsExpression;
 
 <?= SeoForm::widget(['model' => $model]) ?>
 
-<?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
+<?= Html::submitButton(Yii::t('easyii2', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>

@@ -1,5 +1,5 @@
 <?
-use yii\easyii\helpers\Image;
+use yii\easyii2\helpers\Image;
 use yii\helpers\Url;
 ?>
 
@@ -13,6 +13,6 @@ use yii\helpers\Url;
             'id' => $model->id,
             'slug' => $model::SLUG,
             'attribute' => $attribute
-        ]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii', 'Clear image')?>"><?= Yii::t('easyii', 'Clear image')?></a>
+        ]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii2', 'Clear image')?>"><?= Yii::t('easyii2', 'Clear image')?></a>
     </div>
 <? endif; ?>

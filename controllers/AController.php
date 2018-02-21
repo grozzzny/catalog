@@ -8,11 +8,11 @@ use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\SortableController;
+use yii\easyii2\behaviors\SortableController;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-use yii\easyii\components\Controller;
+use yii\easyii2\components\Controller;
 
 
 class AController extends Controller
@@ -131,7 +131,7 @@ class AController extends Controller
         $model = $model::findOne($id);
 
         if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
+            $this->flash('error', Yii::t('easyii2', 'Not found'));
             return $this->redirect(['/admin/'.$this->module->id]);
         }
         if ($model->load(Yii::$app->request->post())) {
@@ -148,7 +148,7 @@ class AController extends Controller
                     $this->flash('success', Yii::t('gr', 'Post updated'));
                 }
                 else{
-                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
+                    $this->flash('error', Yii::t('easyii2', 'Update error. {0}', $model->formatErrors()));
                 }
                 return $this->redirect([Url::previous()]);
             }
@@ -229,14 +229,14 @@ class AController extends Controller
         $model = Files::findOne($id);
 
         if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
+            $this->flash('error', Yii::t('easyii2', 'Not found'));
         }else{
             $url = $model->file;
             if($model->delete()){
                 @unlink(Yii::getAlias('@webroot').$url);
-                $this->flash('success', Yii::t('easyii', 'File cleared'));
+                $this->flash('success', Yii::t('easyii2', 'File cleared'));
             } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
+                $this->flash('error', Yii::t('easyii2', 'Update error. {0}', $model->formatErrors()));
             }
         }
         return $this->back();
@@ -255,7 +255,7 @@ class AController extends Controller
         if(($current_model = $current_model::findOne($id))){
             $current_model->delete();
         } else {
-            $this->error =  Yii::t('easyii', 'Not found');
+            $this->error =  Yii::t('easyii2', 'Not found');
         }
         return $this->formatResponse(Yii::t('gr', 'Post deleted'));
     }
@@ -275,15 +275,15 @@ class AController extends Controller
         $current_model = $current_model::findOne($id);
 
         if($current_model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
+            $this->flash('error', Yii::t('easyii2', 'Not found'));
         }else{
             $url = $current_model->$attribute;
             $current_model->$attribute = '';
             if($current_model->update()){
                 @unlink(Yii::getAlias('@webroot').$url);
-                $this->flash('success', Yii::t('easyii', 'File cleared'));
+                $this->flash('success', Yii::t('easyii2', 'File cleared'));
             } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $current_model->formatErrors()));
+                $this->flash('error', Yii::t('easyii2', 'Update error. {0}', $current_model->formatErrors()));
             }
         }
         return $this->back();
@@ -328,10 +328,10 @@ class AController extends Controller
             $current_model->status = $status;
             $current_model->save();
         }else{
-            $this->error = Yii::t('easyii', 'Not found');
+            $this->error = Yii::t('easyii2', 'Not found');
         }
 
-        return $this->formatResponse(Yii::t('easyii', 'Status successfully changed'));
+        return $this->formatResponse(Yii::t('easyii2', 'Status successfully changed'));
     }
 
 

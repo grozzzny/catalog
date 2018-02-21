@@ -2,8 +2,9 @@
 namespace grozzzny\catalog;
 
 use Yii;
+use yii\easyii2\models\ModuleEasyii2Interface;
 
-class CatalogModule extends \yii\easyii\components\Module
+class CatalogModule extends \yii\easyii2\components\Module implements ModuleEasyii2Interface
 {
     public $settings = [
         'modelItem' => '',
@@ -24,5 +25,23 @@ class CatalogModule extends \yii\easyii\components\Module
             'sourceLanguage' => 'en-US',
             'basePath' => '@grozzzny/catalog/messages',
         ];
+    }
+
+    public function getTitle()
+    {
+        // TODO: Implement getTitle() method.
+        return Yii::t('gr', 'Catalog');
+    }
+
+    public function getName()
+    {
+        // TODO: Implement getName() method.
+        return $this->id;
+    }
+
+    public function getIcon()
+    {
+        // TODO: Implement getIcon() method.
+        return 'globe';
     }
 }

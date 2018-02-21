@@ -14,9 +14,9 @@ use yii\base\ActionEvent;
 use yii\base\DynamicModel;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
-use yii\easyii\behaviors\SortableController;
-use yii\easyii\helpers\Image;
-use yii\easyii\helpers\Upload;
+use yii\easyii2\behaviors\SortableController;
+use yii\easyii2\helpers\Image;
+use yii\easyii2\helpers\Upload;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
@@ -25,7 +25,7 @@ use yii\web\Response;
 use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
-use yii\easyii\components\Controller;
+use yii\easyii2\components\Controller;
 
 
 class PropertiesController extends Controller

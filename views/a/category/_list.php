@@ -65,15 +65,15 @@ $sort = $data->getSort();
         <td>
             <div class="btn-group btn-group-sm" role="group">
 
-                <a href="<?= $item->linkEdit ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'Edit') ?>">
+                <a href="<?= $item->linkEdit ?>" class="btn btn-default" title="<?= Yii::t('easyii2', 'Edit') ?>">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
 
-                <a href="<?= $item->linkProperties ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'Properties') ?>">
+                <a href="<?= $item->linkProperties ?>" class="btn btn-default" title="<?= Yii::t('easyii2', 'Properties') ?>">
                     <span class="glyphicon glyphicon-inbox"></span>
                 </a>
 
-                <a href="<?= $item->linkDelete ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>">
+                <a href="<?= $item->linkDelete ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii2', 'Delete item') ?>">
                     <span class="glyphicon glyphicon-remove"></span>
                 </a>
 

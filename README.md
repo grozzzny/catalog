@@ -1,7 +1,7 @@
-Catalog for EasyiiCMS 
+Catalog for easyii2CMS 
 ==============================
 
-This module allows to [Easy yii2 cms](http://github.com/noumo/easyii) 
+This module allows to [Easy yii2 cms](http://github.com/noumo/easyii2) 
 
 Demo: [salesmarket.org](https://salesmarket.org/) 
 

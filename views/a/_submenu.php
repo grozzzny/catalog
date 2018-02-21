@@ -9,7 +9,7 @@ $module = $this->context->module->id;
 <ul class="nav nav-tabs">
     <li <?= ($action === 'edit') ? 'class="active"' : '' ?>>
         <a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $current_model->primaryKey, 'slug' => $current_model::SLUG]) ?>">
-            <?= Yii::t('easyii', 'Edit') ?>
+            <?= Yii::t('easyii2', 'Edit') ?>
         </a>
     </li>
 
@@ -18,7 +18,7 @@ $module = $this->context->module->id;
     <li <?= ($action === 'photos') ? 'class="active"' : '' ?>>
         <a href="<?= Url::to(['/admin/'.$module.'/a/photos', 'id' => $current_model->primaryKey, 'slug' => $current_model::SLUG]) ?>">
             <span class="glyphicon glyphicon-camera"></span>
-            <?= Yii::t('easyii', 'Photos') ?>
+            <?= Yii::t('easyii2', 'Photos') ?>
         </a>
     </li>
     <? endif;?>

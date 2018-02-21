@@ -96,7 +96,7 @@ class m170613_212325_create_module_catalog extends \grozzzny\catalog\migrations\
         $this->addForeignKey('fk_catalog_data_id', '{{%gr_catalog_data}}', 'item_id', '{{%gr_catalog_items}}', 'id', 'CASCADE');
 
 
-        $this->insert('easyii_modules', [
+        $this->insert('easyii2_modules', [
             'name' => 'newcatalog',
             'class' => 'grozzzny\catalog\CatalogModule',
             'title' => 'New catalog',
@@ -128,7 +128,7 @@ class m170613_212325_create_module_catalog extends \grozzzny\catalog\migrations\
         $this->dropTable('gr_catalog_relations_categories_properties');
         $this->dropTable('gr_catalog_data');
 
-        $this->delete('easyii_modules',['name' => 'newcatalog']);
+        $this->delete('easyii2_modules',['name' => 'newcatalog']);
 
         echo "m170613_212325_create_module_catalog cannot be reverted.\n";
 

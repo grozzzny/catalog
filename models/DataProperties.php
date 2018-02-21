@@ -6,8 +6,8 @@ namespace grozzzny\catalog\models;
 
 use Yii;
 use yii\base\DynamicModel;
-use yii\easyii\helpers\Image;
-use yii\easyii\helpers\Upload;
+use yii\easyii2\helpers\Image;
+use yii\easyii2\helpers\Upload;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 

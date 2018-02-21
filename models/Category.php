@@ -5,7 +5,7 @@ use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\easyii\helpers\Image;
+use yii\easyii2\helpers\Image;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 

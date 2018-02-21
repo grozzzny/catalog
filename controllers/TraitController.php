@@ -4,8 +4,8 @@
 namespace grozzzny\catalog\controllers;
 
 
-use yii\easyii\helpers\Image;
-use yii\easyii\helpers\Upload;
+use yii\easyii2\helpers\Image;
+use yii\easyii2\helpers\Upload;
 use yii\web\UploadedFile;
 
 trait TraitController

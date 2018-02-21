@@ -2,11 +2,11 @@
 
 namespace grozzzny\catalog\widgets\date_time_picker;
 
-use yii\easyii\helpers\Data;
+use yii\easyii2\helpers\Data;
 use yii\helpers\Html;
 use yii\helpers\Json;
 
-class DateTimePicker extends \yii\easyii\widgets\DateTimePicker
+class DateTimePicker extends \yii\easyii2\widgets\DateTimePicker
 {
 
     public $inputId;

@@ -7,9 +7,9 @@ use yii\behaviors\BlameableBehavior;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\easyii\helpers\Image;
-use yii\easyii\models\Photo;
-use yii\easyii\modules\catalog\api\PhotoObject;
+use yii\easyii2\helpers\Image;
+use yii\easyii2\models\Photo;
+use yii\easyii2\modules\catalog\api\PhotoObject;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 

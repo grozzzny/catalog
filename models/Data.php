@@ -3,7 +3,7 @@ namespace grozzzny\catalog\models;
 
 
 use Yii;
-use yii\easyii\behaviors\CacheFlush;
+use yii\easyii2\behaviors\CacheFlush;
 
 /**
  * Data ActiveRecord model.
