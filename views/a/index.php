@@ -18,7 +18,7 @@ ModuleAsset::register($this);
 $this->title = Yii::t('gr', 'Catalog');
 ?>
 
-<?= $this->render('_breadcrumbs', ['currentCategory' => $currentCategory]) ?>
+<?= $this->render('_breadcrumbs', ['currentCategory' => $currentCategory, 'title' => null]) ?>
 
 <div class="row">
     <?= $this->render('_menu', ['currentCategory' => $currentCategory]) ?>
@@ -60,7 +60,8 @@ $this->title = Yii::t('gr', 'Catalog');
         <? if($dataItem->count > 0) : ?>
 
             <?= $this->render(Item::SLUG.'/_list', [
-                'data' => $dataItem
+                'data' => $dataItem,
+                'currentCategory' => $currentCategory
             ]) ?>
 
             <?= LinkPager::widget([

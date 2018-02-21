@@ -62,9 +62,19 @@ return [
     'List of items of the category <b>«{0}»</b>' => 'Список элементов категории <b>«{0}»</b>',
     'List all items' => 'Список всех элементов',
     'Categories not found' => 'Категории не найдены',
+    'Area of visibility' => 'Область видимости',
     'Items not found' => 'Элементы не найдены',
     'Filters not found' => 'Фильтры не найдены',
     'List of top-level categories' => 'Список категорий верхнего уровня',
+    'Create an item in the top-level category' => 'Создать элемент в категории верхнего уровня',
+    'Create subcategory in the top-level category' => 'Создать подкатегорию в категории верхнего уровня',
+    'Edit an item in the top-level category' => 'Редактировать элемент в категории верхнего уровня',
+    'Edit subcategory in the top-level category' => 'Редактировать подкатегорию в категории верхнего уровня',
+    'Create Subcategory in Category <b>«{0}»</b>' => 'Создать подкатегорию в категории <b>«{0}»</b>',
+    'Create Item in Category <b>«{0}»</b>' => 'Создать элемент в категории <b>«{0}»</b>',
+    'Edit Subcategory in Category <b>«{0}»</b>' => 'Редактировать подкатегорию в категории <b>«{0}»</b>',
+    'Edit properties Category <b>«{0}»</b>' => 'Редактировать свойства категории <b>«{0}»</b>',
+    'Edit Item in Category <b>«{0}»</b>' => 'Редактировать элемент в категории <b>«{0}»</b>',
 
     /**
      * Properties

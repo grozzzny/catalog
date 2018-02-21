@@ -74,20 +74,26 @@ class AController extends Controller
      */
     public function actionCreate($slug, $category_id = null)
     {
-        $current_model = Base::getModel($slug);
+        /**
+         * @var Item|Category $model
+         */
+        $model = Base::getModel($slug);
         $currentCategory = empty($category_id) ? null : Category::findOne(['id' => $category_id]);
 
-        if ($current_model->load(Yii::$app->request->post())) {
+        if(!empty($currentCategory) && $slug == Item::SLUG) $model->categories = [$category_id];
+        if(!empty($currentCategory) && $slug == Category::SLUG) $model->parent_id = $currentCategory->id;
+
+        if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($current_model);
+                return ActiveForm::validate($model);
             }
             else{
                 if(isset($_FILES)){
-                    $this->saveFiles($current_model);
+                    $this->saveFiles($model);
                 }
 
-                if($current_model->save()){
+                if($model->save()){
                     $this->flash('success', Yii::t('gr', 'Post created'));
                     return $this->redirect([Url::previous()]);
                 }
@@ -98,9 +104,16 @@ class AController extends Controller
             }
         }
         else {
+            if($slug == Category::SLUG){
+                $title = empty($currentCategory) ? Yii::t('gr', 'Create subcategory in the top-level category') : Yii::t('gr', 'Create Subcategory in Category <b>«{0}»</b>', [$currentCategory->title]);
+            }else{
+                $title = empty($currentCategory) ? Yii::t('gr', 'Create an item in the top-level category') : Yii::t('gr', 'Create Item in Category <b>«{0}»</b>', [$currentCategory->title]);
+            }
+
             return $this->render('create', [
-                'current_model' => $current_model,
-                'currentCategory' => $currentCategory
+                'model' => $model,
+                'currentCategory' => $currentCategory,
+                'title' => $title
             ]);
         }
     }
@@ -113,37 +126,44 @@ class AController extends Controller
      */
     public function actionEdit($slug, $category_id = null, $id)
     {
-        $current_model = Base::getModel($slug);
+        $model = Base::getModel($slug);
         $currentCategory = empty($category_id) ? null : Category::findOne(['id' => $category_id]);
-        $current_model = $current_model::findOne($id);
+        $model = $model::findOne($id);
 
-        if($current_model === null){
+        if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
             return $this->redirect(['/admin/'.$this->module->id]);
         }
-        if ($current_model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($current_model);
+                return ActiveForm::validate($model);
             }
             else{
                 if(isset($_FILES)){
-                    $this->saveFiles($current_model);
+                    $this->saveFiles($model);
                 }
 
-                if($current_model->save()){
+                if($model->save()){
                     $this->flash('success', Yii::t('gr', 'Post updated'));
                 }
                 else{
-                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $current_model->formatErrors()));
+                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
                 }
                 return $this->redirect([Url::previous()]);
             }
         }
         else {
-            return $this->render('edit', [
-                'current_model' => $current_model,
-                'currentCategory' => $currentCategory
+            if($slug == Category::SLUG){
+                $title = empty($currentCategory) ? Yii::t('gr', 'Edit subcategory in the top-level category') : Yii::t('gr', 'Edit Subcategory in Category <b>«{0}»</b>', [$currentCategory->title]);
+            }else{
+                $title = empty($currentCategory) ? Yii::t('gr', 'Edit an item in the top-level category') : Yii::t('gr', 'Edit Item in Category <b>«{0}»</b>', [$currentCategory->title]);
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+                'currentCategory' => $currentCategory,
+                'title' => $title
             ]);
         }
     }

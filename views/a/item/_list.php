@@ -2,7 +2,13 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use grozzzny\catalog\models\Base;
+use yii\helpers\ArrayHelper;
 
+/**
+ * @var \yii\data\ActiveDataProvider $data
+ * @var \grozzzny\catalog\models\Item $item
+ * @var Category|null $currentCategory
+ */
 $module = $this->context->module->id;
 
 $sort = $data->getSort();
@@ -15,6 +21,7 @@ $sort = $data->getSort();
         </th>
         <th><?=$sort->link('title');?></th>
         <th><?=$sort->link('slug');?></th>
+        <th><?=Yii::t('gr', 'Area of visibility')?></th>
 
         <th width="100"><?=$sort->link('status');?></th>
 
@@ -27,12 +34,15 @@ $sort = $data->getSort();
     <tr>
         <td><?= $item->primaryKey ?></td>
         <td>
-            <a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->id, 'slug' => $item::SLUG]) ?>">
+            <a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->id, 'slug' => $item::SLUG, 'category_id' => $currentCategory->id]) ?>">
                 <?= $item->title ?>
             </a>
         </td>
         <td>
             <?= $item->slug ?>
+        </td>
+        <td>
+            <?= $item->categoriesToString ?>
         </td>
 
         <td class="status vtop">

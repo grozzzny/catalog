@@ -11,11 +11,10 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 
-$module = $this->context->module->id;
-
-if(!empty(Yii::$app->request->get('category'))) $current_model->parent_id = Yii::$app->request->get('category');
-
-
+/**
+ * @var \yii\web\View $this
+ * @var Category $model
+ */
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -23,18 +22,18 @@ if(!empty(Yii::$app->request->get('category'))) $current_model->parent_id = Yii:
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 
-<?= $this->render('../_image_file', ['model' => $current_model, 'attribute' => 'image_file'])?>
-<?= $form->field($current_model, 'image_file')->fileInput() ?>
+<?= $this->render('../_image_file', ['model' => $model, 'attribute' => 'image_file'])?>
+<?= $form->field($model, 'image_file')->fileInput() ?>
 
 
-<?= $form->field($current_model, 'title')->input('text', [
+<?= $form->field($model, 'title')->input('text', [
     'onkeyup' => "$('#category-slug').val(translit(this.value))",
     'onblur' => "$('#category-slug').val(translit(this.value))",
 ]) ?>
-<?= $form->field($current_model, 'slug') ?>
+<?= $form->field($model, 'slug') ?>
 
-<?=$form->field($current_model, 'parent_id')->widget(Select2::className(),[
-    'data' => ArrayHelper::map(Category::findAll(['id' => $current_model->parent_id]), 'id', 'fullTitle'),
+<?=$form->field($model, 'parent_id')->widget(Select2::className(),[
+    'data' => ArrayHelper::map(Category::findAll(['id' => $model->parent_id]), 'id', 'fullTitle'),
     'pluginOptions' => [
         'placeholder' => Yii::t('gr', 'Select category..'),
         'allowClear' => true,
@@ -51,11 +50,11 @@ if(!empty(Yii::$app->request->get('category'))) $current_model->parent_id = Yii:
 ]);
 ?>
 
-<?= $form->field($current_model, 'views')->input('text',['disabled' => true]) ?>
+<?= $form->field($model, 'views')->input('text',['disabled' => true]) ?>
 
-<?= $form->field($current_model, 'short')->textarea() ?>
+<?= $form->field($model, 'short')->textarea() ?>
 
-<?= $form->field($current_model, 'description')->widget(Redactor::className(),[
+<?= $form->field($model, 'description')->widget(Redactor::className(),[
     'options' => [
         'minHeight' => 400,
         'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => Yii::$app->controller->module->id]),
@@ -65,13 +64,13 @@ if(!empty(Yii::$app->request->get('category'))) $current_model->parent_id = Yii:
 ])?>
 
 <?=SwitchCheckbox::widget([
-    'model' => $current_model,
+    'model' => $model,
     'attributes' => [
         'status'
     ]
 ])?>
 
-<?= SeoForm::widget(['model' => $current_model]) ?>
+<?= SeoForm::widget(['model' => $model]) ?>
 
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>

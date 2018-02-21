@@ -5,7 +5,6 @@ use yii\easyii\widgets\SeoForm;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use grozzzny\widgets\switch_checkbox\SwitchCheckbox;
-use yii\easyii\widgets\DateTimePicker;
 use yii\easyii\widgets\Redactor;
 use yii\helpers\Url;
 use kartik\select2\Select2;
@@ -16,12 +15,8 @@ use yii\web\JsExpression;
 
 /**
  * @var \yii\web\View $this
- * @var Item $current_model
+ * @var Item $model
  */
-
-if(!empty(Yii::$app->request->get('category_id', ''))) $current_model->categories = [Yii::$app->request->get('category_id')];
-
-$module = $this->context->module->id;
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -29,17 +24,17 @@ $module = $this->context->module->id;
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 
-<?= $this->render('../_image_file', ['model' => $current_model, 'attribute' => 'image_file'])?>
-<?= $form->field($current_model, 'image_file')->fileInput() ?>
+<?= $this->render('../_image_file', ['model' => $model, 'attribute' => 'image_file'])?>
+<?= $form->field($model, 'image_file')->fileInput() ?>
 
-<?= $form->field($current_model, 'title')->input('text', [
+<?= $form->field($model, 'title')->input('text', [
     'onkeyup' => "$('#item-slug').val(translit(this.value))",
     'onblur' => "$('#item-slug').val(translit(this.value))",
 ]) ?>
-<?= $form->field($current_model, 'slug') ?>
+<?= $form->field($model, 'slug') ?>
 
-<?=$form->field($current_model, 'categories')->widget(Select2::className(),[
-    'data' => ArrayHelper::map(Category::findAll(['id' => $current_model->categories]), 'id', 'fullTitle'),
+<?=$form->field($model, 'categories')->widget(Select2::className(),[
+    'data' => ArrayHelper::map(Category::findAll(['id' => $model->categories]), 'id', 'fullTitle'),
     'pluginOptions' => [
         'placeholder' => Yii::t('gr', 'Select category..'),
         'allowClear' => true,
@@ -54,20 +49,20 @@ $module = $this->context->module->id;
             }'),
         ],
     ],
-]);
+])->label(Yii::t('gr', 'Area of visibility'));;
 ?>
 
-<? foreach ($current_model->dataProperties->getAttributes() as $attribute => $value):?>
-    <?= $form->field($current_model->dataProperties, $attribute)->widget(PropertyWidget::className()) ?>
+<? foreach ($model->dataProperties->getAttributes() as $attribute => $value):?>
+    <?= $form->field($model->dataProperties, $attribute)->widget(PropertyWidget::className()) ?>
 <? endforeach;?>
 
-<?= $form->field($current_model, 'price') ?>
-<?= $form->field($current_model, 'discount') ?>
-<?= $form->field($current_model, 'views')->input('text',['disabled' => true]) ?>
+<?= $form->field($model, 'price') ?>
+<?= $form->field($model, 'discount') ?>
+<?= $form->field($model, 'views')->input('text',['disabled' => true]) ?>
 
-<?= $form->field($current_model, 'short')->textarea() ?>
+<?= $form->field($model, 'short')->textarea() ?>
 
-<?= $form->field($current_model, 'description')->widget(Redactor::className(),[
+<?= $form->field($model, 'description')->widget(Redactor::className(),[
     'options' => [
         'minHeight' => 400,
         'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => Yii::$app->controller->module->id]),
@@ -77,13 +72,13 @@ $module = $this->context->module->id;
 ])?>
 
 <?=SwitchCheckbox::widget([
-    'model' => $current_model,
+    'model' => $model,
     'attributes' => [
         'status'
     ]
 ])?>
 
-<?= SeoForm::widget(['model' => $current_model]) ?>
+<?= SeoForm::widget(['model' => $model]) ?>
 
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>

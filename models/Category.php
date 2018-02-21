@@ -42,6 +42,7 @@ use yii\helpers\Url;
  * @property array  $listItems
  * @property string  $link
  * @property string  $linkCreateElement
+ * @property string  $linkCreate
  * @property string  $linkList
  * @property string  $linkAdmin
  * @property string  $linkEdit
@@ -163,12 +164,16 @@ class Category extends Base
     }
 
 
-    public function getBreadcrumbs()
+    public function getBreadcrumbs($lastLink = false)
     {
-        $breadcrumbs = ['label' => $this->title];
-        $parent = $this->parentCategory;
-
         $adminPanel = $this->hasAdminPanel();
+
+        $breadcrumbs[] = [
+            'label' => $this->title,
+            'url' => $lastLink ? ($adminPanel ? $this->linkAdmin : $this->link) : null
+        ];
+
+        $parent = $this->parentCategory;
 
         while ($parent){
             array_push($breadcrumbs, [
@@ -357,6 +362,12 @@ class Category extends Base
     public function getLinkCreateElement()
     {
         return Url::to(['/admin/'.Yii::$app->controller->module->id . '/a/create', 'slug' => Item::SLUG, 'category_id' => $this->id]);
+    }
+
+
+    public function getLinkCreate()
+    {
+        return Url::to(['/admin/'.Yii::$app->controller->module->id . '/a/create', 'slug' => self::SLUG, 'category_id' => $this->id]);
     }
 
     public function getLinkList()

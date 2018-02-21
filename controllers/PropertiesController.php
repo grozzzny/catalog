@@ -70,18 +70,26 @@ class PropertiesController extends Controller
      * @param null $slug
      * @return string
      */
-    public function actionFields($slug, $id)
+    public function actionFields($slug, $category_id = null, $id)
     {
-        $current_model = Base::getModel($slug);
+        /**
+         * @var Category $model
+         */
+        $model = Base::getModel($slug);
+        $model = $model::findOne($id);
 
-        $current_model = $current_model::findOne($id);
+        $currentCategory = empty($category_id) ? null : Category::findOne(['id' => $category_id]);
 
-        if(!($current_model)){
+        if(!($model)){
             return $this->redirect(['/admin/'.$this->module->id]);
         }
 
+        $title = Yii::t('gr', 'Edit properties Category <b>«{0}»</b>', [$model->title]);
+
         return $this->render('fields', [
-            'current_model' => $current_model,
+            'model' => $model,
+            'currentCategory' => $currentCategory,
+            'title' => $title
         ]);
     }
 

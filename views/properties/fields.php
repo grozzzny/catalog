@@ -17,24 +17,35 @@ ThemeBootstrapAsset::register($this);
 PropertiesAsset::register($this);
 JuiAsset::register($this);
 
+/**
+ * @var \yii\web\View $this
+ * @var \grozzzny\catalog\models\Category $model
+ * @var \grozzzny\catalog\models\Category|null $currentCategory
+ * @var string $title
+ */
 
 
-$this->title = Yii::t('gr', 'Properties');
+$this->title = Yii::t('gr', 'Catalog');
 ?>
 
-<?= $this->render('../a/_menu', ['current_model' => $current_model]) ?>
-<?= $this->render('../a/_submenu', ['current_model' => $current_model]) ?>
+<?= $this->render('../a/_breadcrumbs', ['currentCategory' => $currentCategory, 'title' => $title]) ?>
 
-<?=Html::beginForm('', 'post', ['class' => 'properties-all-categories']) ?>
+<div class="box box-warning">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= $title ?></h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <?=Html::beginForm('', 'post', ['class' => 'properties-all-categories']) ?>
 
-<? foreach ($current_model->parentsCategories as $category):  ?>
+        <? foreach ($model->parentsCategories as $category):  ?>
 
-    <?=Html::beginTag('table', [
-        'class' => 'table table-hover properties-category',
-        'data-category' => $category->id
-    ])?>
+            <?=Html::beginTag('table', [
+                'class' => 'table table-hover properties-category',
+                'data-category' => $category->id
+            ])?>
 
-        <thead>
+            <thead>
             <caption><?=Yii::t('gr', 'Properties category: «{category}»', ['category' => $category->title])?></caption>
             <tr>
                 <th><?=Yii::t('gr','Title')?></th>
@@ -43,36 +54,39 @@ $this->title = Yii::t('gr', 'Properties');
                 <th width="120"><?=Yii::t('gr','Params')?></th>
                 <th width="150"></th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
 
-        <? foreach ($category->properties as $property):?>
-            <?=$this->render('_field', ['property' => $property]);?>
+            <? foreach ($category->properties as $property):?>
+                <?=$this->render('_field', ['property' => $property]);?>
+            <? endforeach;?>
+
+            <? if(empty($category->properties)):?>
+                <?=$this->render('_field', ['property' => null]);?>
+            <? endif;?>
+
+            </tbody>
+
+            <?=Html::endTag('table')?>
+
         <? endforeach;?>
 
-        <? if(empty($category->properties)):?>
-            <?=$this->render('_field', ['property' => null]);?>
-        <? endif;?>
+        <?= Html::tag('div','', ['class' => 'alert response-server', 'style' => 'display:none;']) ?>
 
-        </tbody>
+        <?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('gr', 'Save'), [
+            'class' => 'btn btn-primary',
+            'onclick' => 'properties.save(this);'
+        ]) ?>
 
-    <?=Html::endTag('table')?>
+        <?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('gr', 'Add property'), [
+            'class' => 'btn btn-default',
+            'onclick' => 'properties.clone(this);'
+        ]) ?>
 
-<? endforeach;?>
+        <?=Html::endForm() ?>
+    </div>
+</div>
 
-<?= Html::tag('div','', ['class' => 'alert response-server', 'style' => 'display:none;']) ?>
-
-<?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('gr', 'Save'), [
-    'class' => 'btn btn-primary',
-    'onclick' => 'properties.save(this);'
-]) ?>
-
-<?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('gr', 'Add property'), [
-    'class' => 'btn btn-default',
-    'onclick' => 'properties.clone(this);'
-]) ?>
-
-<?=Html::endForm() ?>
 
 <?
 $i18n = json_encode([
