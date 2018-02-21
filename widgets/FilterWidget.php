@@ -76,15 +76,36 @@ class FilterWidget extends InputWidget
 
             case Properties::TYPE_CHECKBOX:
 
+//                $html = '<ul class="list-group">
+//                            <li class="list-group-item">
+//                                '.$label.'
+//                                <div class="material-switch pull-right">
+//                                    &nbsp;
+//                                    '.
+//                                    Html::checkbox($this->attribute, $value, ['uncheck' => 0, 'label' => false, 'id' => 'checkbox_'.$this->attribute]).
+//                                    Html::label('', 'checkbox_'.$this->attribute, ['class' => 'label-success'])
+//                                    .'
+//                                </div>
+//                            </li>
+//                       </ul>';
+
                 $html = '<ul class="list-group">
-                            <li class="list-group-item">
+                            <li class="list-group-item" style="padding: 7px 15px;">
                                 '.$label.'
-                                <div class="material-switch pull-right">
-                                    &nbsp;
-                                    '.
-                                    Html::checkbox($this->attribute, $value, ['uncheck' => 0, 'label' => false, 'id' => 'checkbox_'.$this->attribute]).
-                                    Html::label('', 'checkbox_'.$this->attribute, ['class' => 'label-success'])
-                                    .'
+                                <div class="pull-right" style="width: 170px; margin-top: -8px; margin-right: -12px;">
+                                    <div class="input-group-btn">
+                                        <label class="btn btn-default" style="width: 70px">
+                                            '.Html::radio($this->attribute, $value === '1', ['value' => '1']).'
+                                            '.Yii::t('gr', 'Yes').'
+                                        </label>
+                                        <label class="btn btn-default">
+                                            '.Html::radio($this->attribute, $value !== '1' && $value !== '0', ['value' => '']).'
+                                        </label>
+                                        <label class="btn btn-default" style="width: 70px">
+                                            '.Html::radio($this->attribute, $value === '0', ['value' => '0']).'
+                                            '.Yii::t('gr', 'No').'
+                                        </label>
+                                    </div>
                                 </div>
                             </li>
                        </ul>';

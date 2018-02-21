@@ -75,6 +75,8 @@ return [
     'Edit Subcategory in Category <b>«{0}»</b>' => 'Редактировать подкатегорию в категории <b>«{0}»</b>',
     'Edit properties Category <b>«{0}»</b>' => 'Редактировать свойства категории <b>«{0}»</b>',
     'Edit Item in Category <b>«{0}»</b>' => 'Редактировать элемент в категории <b>«{0}»</b>',
+    'Yes' => 'Да',
+    'No' => 'Нет',
 
     /**
      * Properties
