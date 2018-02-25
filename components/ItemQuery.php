@@ -1,6 +1,7 @@
 <?php
 namespace grozzzny\catalog\components;
 
+use grozzzny\catalog\models\Base;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Data;
 use grozzzny\catalog\models\Properties;
@@ -25,6 +26,12 @@ class ItemQuery extends ActiveQuery
         $this->andFilterWhere(['gr_catalog_categories.id' => $this->_category->id]);
 
         return $this;
+    }
+
+
+    public function statusOn()
+    {
+        return $this->andWhere(['gr_catalog_items.status' => Base::STATUS_ON]);
     }
 
     /**

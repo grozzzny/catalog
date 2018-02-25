@@ -63,6 +63,8 @@ class Category extends Base
     const SUBMENU_FILES = false;
     const ORDER_NUM = true;
 
+    public $parents = [];
+
     public static function tableName()
     {
         return 'gr_catalog_categories';
