@@ -158,6 +158,11 @@ var properties = {
         elem.find('[name="type"]').val(data.type);
     },
 
+
+    get controllerUrl() {
+        return window.location.pathname.replace(/[^\/]*$/i,'');
+    },
+
     initAutoComplete: function (ob) {
         $(ob).autocomplete({
             source: function(request, response) {
@@ -166,7 +171,7 @@ var properties = {
                     var slug = $(this).val();
                     if(slug != '') properties.push(slug);
                 });
-                $.getJSON("/admin/newcatalog/properties/get-data-properties",
+                $.getJSON(properties.controllerUrl + "get-data-properties",
                     {
                         term: request.term,
                         properties: properties
@@ -193,7 +198,7 @@ var properties = {
 
         if(property_id != '') {
             var response = $.ajax({
-                url: "/admin/newcatalog/properties/remove-property",
+                url: properties.controllerUrl + "remove-property",
                 data: ({
                     id: property_id,
                     category_id: category_id
@@ -261,7 +266,7 @@ var properties = {
         //Формируем ajax запрос
         $.ajax({
             type: "POST",
-            url: "/admin/newcatalog/properties/save",
+            url: properties.controllerUrl + "save",
             data: {data: JSON.stringify(data)},
             success: function (data) {
                 var res = JSON.parse(data);
@@ -325,7 +330,7 @@ var properties = {
             if (data.category_id != undefined) {
                 //Получаем имя категории. Запрос синхронный
                 var category_title = $.ajax({
-                    url: "/admin/newcatalog/properties/get-title-categories",
+                    url: properties.controllerUrl + "get-title-categories",
                     data: ({id: data.category_id}),
                     async: false
                 }).responseText;
@@ -341,7 +346,7 @@ var properties = {
                 theme: 'bootstrap',
                 placeholder: properties.i18n.select_category,
                 ajax: {
-                    url: '/admin/newcatalog/properties/get-list-categories',
+                    url: properties.controllerUrl + 'get-list-categories',
                     processResults: function (data) {
                         return {
                             results: JSON.parse(data).results
@@ -991,7 +996,7 @@ var properties = {
                     if (params.compareAttribute) {
                         //Получаем имя свойства. Запрос синхронный
                         var property_title = $.ajax({
-                            url: "/admin/newcatalog/properties/get-title-property",
+                            url: properties.controllerUrl + "get-title-property",
                             data: ({slug: params.compareAttribute}),
                             async: false
                         }).responseText;
@@ -1036,7 +1041,7 @@ var properties = {
                         allowClear: true,
                         placeholder: properties.i18n.select_property,
                         ajax: {
-                            url: '/admin/newcatalog/properties/get-list-properties',
+                            url: properties.controllerUrl + 'get-list-properties',
                             processResults: function (data) {
                                 return {
                                     results: JSON.parse(data)
