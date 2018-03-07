@@ -166,15 +166,15 @@ var properties = {
     initAutoComplete: function (ob) {
         $(ob).autocomplete({
             source: function(request, response) {
-                var properties = [];
+                var allProperties = [];
                 $.each($('.property [name="slug"]'), function () {
                     var slug = $(this).val();
-                    if(slug != '') properties.push(slug);
+                    if(slug != '') allProperties.push(slug);
                 });
                 $.getJSON(properties.controllerUrl + "get-data-properties",
                     {
                         term: request.term,
-                        properties: properties
+                        properties: allProperties
                     },
                     response
                 );
