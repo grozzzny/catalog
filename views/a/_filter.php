@@ -1,5 +1,6 @@
 <?php
 
+use grozzzny\catalog\CatalogModule;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Item;
 use kartik\select2\Select2;
@@ -37,7 +38,7 @@ use yii\web\JsExpression;
                 'allowClear' => true,
                 //'width' => 400,
                 'ajax' => [
-                    'url' => '/admin/newcatalog/properties/get-list-categories',
+                    'url' => '/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-categories',
                     'dataType' => 'json',
                     'data' => new JsExpression('function(params) { 
                        return {

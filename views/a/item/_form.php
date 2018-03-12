@@ -1,5 +1,6 @@
 <?php
 
+use grozzzny\catalog\CatalogModule;
 use grozzzny\catalog\models\Item;
 use yii\easyii2\widgets\SeoForm;
 use yii\helpers\Html;
@@ -40,7 +41,7 @@ use yii\web\JsExpression;
         'allowClear' => true,
         'multiple' => true,
         'ajax' => [
-            'url' => '/admin/newcatalog/properties/get-list-categories',
+            'url' => '/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-categories',
             'dataType' => 'json',
             'data' => new JsExpression('function(params) { 
                return {

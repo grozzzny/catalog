@@ -1,6 +1,7 @@
 <?php
 namespace grozzzny\catalog\widgets;
 
+use grozzzny\catalog\CatalogModule;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
@@ -124,13 +125,13 @@ class FilterWidget extends InputWidget
 
                 switch ($type){
                     case Properties::TYPE_ITEMSCATEGORY:
-                        $url = '/admin/newcatalog/properties/get-list-items-category';
+                        $url = '/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-items-category';
                         break;
                     case Properties::TYPE_MULTICATEGORY:
-                        $url = '/admin/newcatalog/properties/get-list-multicategories';
+                        $url = '/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-multicategories';
                         break;
                     case Properties::TYPE_CATEGORY:
-                        $url = '/admin/newcatalog/properties/get-list-categories';
+                        $url = '/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-categories';
                         break;
                 }
 
