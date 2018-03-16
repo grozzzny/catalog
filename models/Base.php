@@ -1,6 +1,7 @@
 <?php
 namespace grozzzny\catalog\models;
 
+use grozzzny\catalog\CatalogModule;
 use yii\easyii2\behaviors\CacheFlush;
 use Yii;
 use yii\easyii2\behaviors\SeoBehavior;
@@ -26,7 +27,7 @@ class Base extends \yii\easyii2\components\ActiveRecord
     {
         $models = [];
 
-        $settings = Yii::$app->getModule('admin')->activeModules[Yii::$app->controller->module->id]->settings;
+        $settings = CatalogModule::getInstance()->settings;
 
         foreach (glob(__DIR__ . "/*.php") as $file){
             $file_name = basename($file, '.php');

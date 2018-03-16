@@ -95,7 +95,7 @@ class AController extends Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('gr', 'Post created'));
-                    return $this->redirect([Url::previous()]);
+                    return $this->redirect(Url::previous());
                 }
                 else{
                     $this->flash('error', Yii::t('gr', 'Error'));
@@ -150,7 +150,7 @@ class AController extends Controller
                 else{
                     $this->flash('error', Yii::t('easyii2', 'Update error. {0}', $model->formatErrors()));
                 }
-                return $this->redirect([Url::previous()]);
+                return $this->redirect(Url::previous());
             }
         }
         else {
