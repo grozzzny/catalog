@@ -5,11 +5,21 @@ use grozzzny\catalog\CatalogModule;
 use yii\easyii2\behaviors\CacheFlush;
 use Yii;
 use yii\easyii2\behaviors\SeoBehavior;
+use yii\easyii2\models\Photo;
+use yii\easyii2\modules\gallery\api\PhotoObject;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class Base
+ * @package grozzzny\catalog\models
+ *
+ * @property-read PhotoObject[] $photos
+ */
 class Base extends \yii\easyii2\components\ActiveRecord
 {
     use TraitModel;
+
+    private $_photos;
 
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
@@ -103,4 +113,27 @@ class Base extends \yii\easyii2\components\ActiveRecord
         return !empty($this->seo->{$attribute}) ? $this->seo->{$attribute} : $default;
     }
 
+
+    public function enablePhotoManager()
+    {
+        return false;
+    }
+
+    public function getPhotos()
+    {
+        if(empty($this->_photos) && $this->enablePhotoManager()){
+            $photos = Photo::find()
+                ->where([
+                    'class' => self::className(),
+                    'item_id' => $this->id
+                ])
+                ->sort()
+                ->all();
+
+            foreach($photos as $model){
+                $this->_photos[] = new PhotoObject($model);
+            }
+        }
+        return $this->_photos;
+    }
 }

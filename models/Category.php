@@ -48,6 +48,7 @@ use yii\helpers\Url;
  * @property string  $linkEdit
  * @property string  $linkProperties
  * @property string  $linkDelete
+ * @property Item[]  $activeItems
  *
  */
 class Category extends Base
@@ -352,6 +353,12 @@ class Category extends Base
     public function getImage($width = null, $height = null, $crop = true){
         $image = empty($this->image_file)? \Yii::$app->params['nophoto'] : $this->image_file;
         return Image::thumb($image, $width, $height, $crop);
+    }
+
+
+    public function getActiveItems()
+    {
+        return Item::find()->statusOn()->category($this)->all();
     }
 
 
