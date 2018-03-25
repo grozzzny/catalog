@@ -2,6 +2,7 @@
 namespace grozzzny\catalog\models;
 
 
+use grozzzny\catalog\CatalogModule;
 use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
@@ -213,10 +214,17 @@ class Properties extends Base
         ];
     }
 
+
+    public function getRelationsCategoriesProperties()
+    {
+        $model = CatalogModule::modelRelationsCategoriesProperties();
+        return $this->hasMany($model::className(), ['property_id' => 'id']);
+    }
+
     public function getCategories()
     {
         return $this->hasMany(Category::className(), ['id' => 'category_id'])
-            ->viaTable('gr_catalog_relations_categories_properties', ['property_id' => 'id']);
+            ->via('relationsCategoriesProperties');
     }
 
     /**

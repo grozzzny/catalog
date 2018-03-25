@@ -157,7 +157,12 @@ class PropertiesController extends Controller
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
 
-            $query = Category::find();
+            /**
+             * @var Category $model_category
+             */
+            $model_category = Base::getModel('category');
+
+            $query = $model_category::find();
 
             $query->filterWhere(['LIKE', 'title', Yii::$app->request->get('q')]);
 
@@ -183,8 +188,12 @@ class PropertiesController extends Controller
     {
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
+            /**
+             * @var Category $model_category
+             */
+            $model_category = Base::getModel('category');
 
-            $query = Category::find();
+            $query = $model_category::find();
 
             $query->filterWhere(['LIKE', 'title', Yii::$app->request->get('q')]);
 
@@ -198,7 +207,7 @@ class PropertiesController extends Controller
 
             if(!empty(Yii::$app->request->get('category_slug'))){
                 $identifier = 'slug';
-                $query->andWhere(['!=', 'FIND_IN_SET(\''.Category::findOne(['slug' => Yii::$app->request->get('category_slug')])->id.'\', parents)', '0']);
+                $query->andWhere(['!=', 'FIND_IN_SET(\''.$model_category::findOne(['slug' => Yii::$app->request->get('category_slug')])->id.'\', parents)', '0']);
             }
 
             $data = [];
@@ -222,13 +231,20 @@ class PropertiesController extends Controller
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
 
-            $query = Item::find();
+            /**
+             * @var Category $model_category
+             * @var Item $model_item
+             */
+            $model_item = Base::getModel('item');
+            $model_category = Base::getModel('category');
+
+            $query = $model_item::find();
 
             $query->joinWith('categories');
 
             $query->filterWhere(['LIKE', 'title', Yii::$app->request->get('q')]);
 
-            $query->andFilterWhere(['gr_catalog_categories.id' => Yii::$app->request->get('category_id')]);
+            $query->andFilterWhere([$model_category::tableName().'.id' => Yii::$app->request->get('category_id')]);
 
             $data = [];
             foreach($query->limit(10)->all() AS $item){
@@ -250,7 +266,13 @@ class PropertiesController extends Controller
     {
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
-            $category = Category::findOne(Yii::$app->request->get('id'));
+
+            /**
+             * @var Category $model_category
+             */
+            $model_category = Base::getModel('category');
+
+            $category = $model_category::findOne(Yii::$app->request->get('id'));
             return $category->fullTitle;
         }
     }

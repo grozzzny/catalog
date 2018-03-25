@@ -1,6 +1,7 @@
 <?php
 
 use grozzzny\catalog\CatalogModule;
+use grozzzny\catalog\models\Base;
 use grozzzny\catalog\models\Item;
 use yii\easyii2\widgets\SeoForm;
 use yii\helpers\Html;
@@ -18,6 +19,11 @@ use yii\web\JsExpression;
  * @var \yii\web\View $this
  * @var Item $model
  */
+
+/**
+ * @var Category $model_category
+ */
+$model_category = Base::getModel('category');
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -35,13 +41,13 @@ use yii\web\JsExpression;
 <?= $form->field($model, 'slug') ?>
 
 <?=$form->field($model, 'categories')->widget(Select2::className(),[
-    'data' => ArrayHelper::map(Category::findAll(['id' => $model->categories]), 'id', 'fullTitle'),
+    'data' => ArrayHelper::map($model_category::findAll(['id' => $model->categories]), 'id', 'fullTitle'),
     'pluginOptions' => [
         'placeholder' => Yii::t('gr', 'Select category..'),
         'allowClear' => true,
         'multiple' => true,
         'ajax' => [
-            'url' => '/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-categories',
+            'url' => Url::to(['/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-categories']),
             'dataType' => 'json',
             'data' => new JsExpression('function(params) { 
                return {

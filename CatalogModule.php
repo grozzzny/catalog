@@ -1,15 +1,21 @@
 <?php
 namespace grozzzny\catalog;
 
+use grozzzny\catalog\models\RelationsCategoriesItems;
+use grozzzny\catalog\models\RelationsCategoriesProperties;
 use Yii;
+use yii\easyii2\AdminModule;
 use yii\easyii2\models\ModuleEasyii2Interface;
+use yii\helpers\ArrayHelper;
 
 class CatalogModule extends \yii\easyii2\components\Module implements ModuleEasyii2Interface
 {
     public $settings = [
         'modelItem' => '',
         'modelCategory' => '',
-        'modelData' => ''
+        'modelData' => '',
+        'modelRelationsCategoriesItems' => '\grozzzny\catalog\models\RelationsCategoriesItems',
+        'modelRelationsCategoriesProperties' => '\grozzzny\catalog\models\RelationsCategoriesProperties',
     ];
 
     public function init()
@@ -43,5 +49,32 @@ class CatalogModule extends \yii\easyii2\components\Module implements ModuleEasy
     {
         // TODO: Implement getIcon() method.
         return 'globe';
+    }
+
+    public static function getNameModule()
+    {
+        return 'catalog';
+    }
+
+    /**
+     * @return RelationsCategoriesItems
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function modelRelationsCategoriesItems()
+    {
+        $settings = AdminModule::getInstance()->getModule(self::getNameModule())->settings;
+        $class_name = ArrayHelper::getValue($settings, 'modelRelationsCategoriesItems', null);
+        return \Yii::createObject($class_name);
+    }
+
+    /**
+     * @return RelationsCategoriesProperties
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function modelRelationsCategoriesProperties()
+    {
+        $settings = AdminModule::getInstance()->getModule(self::getNameModule())->settings;
+        $class_name = ArrayHelper::getValue($settings, 'modelRelationsCategoriesProperties', null);
+        return \Yii::createObject($class_name);
     }
 }
