@@ -146,12 +146,7 @@ class Category extends Base
 
     public function getParentCategory()
     {
-        /**
-         * @var Category $model_category
-         */
-        $model_category = Base::getModel('category');
-
-        return $this->hasOne($model_category::className(), ['id' => 'parent_id']);
+        return $this->hasOne(self::className(), ['id' => 'parent_id']);
     }
 
     /**
@@ -262,24 +257,14 @@ class Category extends Base
 
     public function getAllChildren($condition = null)
     {
-        /**
-         * @var Category $model_category
-         */
-        $model_category = Base::getModel('category');
-
-        $query = $model_category::find()->where(['!=', 'FIND_IN_SET(\''.$this->id.'\', parents)', '0']);
+        $query = self::find()->where(['!=', 'FIND_IN_SET(\''.$this->id.'\', parents)', '0']);
         if(!empty($condition)) $query->andWhere($condition);
         return $query->all();
     }
 
     public function getChildren()
     {
-        /**
-         * @var Category $model_category
-         */
-        $model_category = Base::getModel('category');
-
-        $query = $this->hasMany($model_category::className(), ['parent_id' => 'id']);
+        $query = $this->hasMany(self::className(), ['parent_id' => 'id']);
 
         if(!$this->hasAdminPanel()) $query->where(['status' => self::STATUS_ON]);
 

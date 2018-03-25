@@ -78,7 +78,9 @@ class AController extends Controller
          * @var Item|Category $model
          */
         $model = Base::getModel($slug);
-        $currentCategory = empty($category_id) ? null : Category::findOne(['id' => $category_id]);
+        $modelCategory = Base::getModel('category');
+
+        $currentCategory = empty($category_id) ? null : $modelCategory::findOne(['id' => $category_id]);
 
         if(!empty($currentCategory) && $slug == Item::SLUG) $model->categories = [$category_id];
         if(!empty($currentCategory) && $slug == Category::SLUG) $model->parent_id = $currentCategory->id;
@@ -127,7 +129,8 @@ class AController extends Controller
     public function actionEdit($slug, $category_id = null, $id)
     {
         $model = Base::getModel($slug);
-        $currentCategory = empty($category_id) ? null : Category::findOne(['id' => $category_id]);
+        $modelCategory = Base::getModel('category');
+        $currentCategory = empty($category_id) ? null : $modelCategory::findOne(['id' => $category_id]);
         $model = $model::findOne($id);
 
         if($model === null){

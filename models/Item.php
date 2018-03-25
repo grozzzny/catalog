@@ -245,9 +245,10 @@ class Item extends Base
     {
         if (!empty($value)) {
             //Найдем все id родительских категорий
+
             $arr_id = [];
             foreach ($value as $category_id) {
-                $arr_id = ArrayHelper::merge($arr_id, Category::findOne($category_id)->allParentId);
+                $arr_id = ArrayHelper::merge($arr_id, $this->getCategoryById($category_id)->allParentId);
             }
             $value = array_unique($arr_id);
         } else {
@@ -256,6 +257,12 @@ class Item extends Base
 
         $this->_categories = $value;
         return $this->categories = $value;
+    }
+
+
+    public function getCategoryById($category_id)
+    {
+        return Category::findOne($category_id);
     }
 
 

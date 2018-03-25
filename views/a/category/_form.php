@@ -1,4 +1,6 @@
 <?php
+
+use grozzzny\catalog\models\Base;
 use yii\easyii2\widgets\SeoForm;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -15,6 +17,10 @@ use yii\web\JsExpression;
  * @var \yii\web\View $this
  * @var Category $model
  */
+/**
+ * @var Category $model_category
+ */
+$model_category = Base::getModel('category');
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -33,7 +39,7 @@ use yii\web\JsExpression;
 <?= $form->field($model, 'slug') ?>
 
 <?=$form->field($model, 'parent_id')->widget(Select2::className(),[
-    'data' => ArrayHelper::map(Category::findAll(['id' => $model->parent_id]), 'id', 'fullTitle'),
+    'data' => ArrayHelper::map($model_category::findAll(['id' => $model->parent_id]), 'id', 'fullTitle'),
     'pluginOptions' => [
         'placeholder' => Yii::t('gr', 'Select category..'),
         'allowClear' => true,

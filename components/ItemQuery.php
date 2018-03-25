@@ -23,7 +23,7 @@ class ItemQuery extends ActiveQuery
         $this->_category = $category;
 
         $this->joinWith('categories');
-        $this->andFilterWhere(['gr_catalog_categories.id' => $this->_category->id]);
+        $this->andFilterWhere([$category::tableName().'.id' => $this->_category->id]);
 
         return $this;
     }
@@ -31,7 +31,8 @@ class ItemQuery extends ActiveQuery
 
     public function statusOn()
     {
-        return $this->andWhere(['gr_catalog_items.status' => Base::STATUS_ON]);
+        $modelClass = $this->modelClass;
+        return $this->andWhere([$modelClass::tableName().'.status' => Base::STATUS_ON]);
     }
 
     /**

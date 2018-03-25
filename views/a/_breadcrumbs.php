@@ -31,7 +31,7 @@ echo  Breadcrumbs::widget([
     'links' => $breadcrumbs_arr,
     'homeLink' => [
         'label' => Yii::t('gr', 'Categories'),
-        'url' => '/admin/' . Yii::$app->controller->module->id
+        'url' => ['/admin/' . Yii::$app->controller->module->id]
     ],
     'encodeLabels' => false,
     'tag' => 'ol'
