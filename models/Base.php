@@ -5,6 +5,7 @@ use grozzzny\catalog\CatalogModule;
 use yii\easyii2\behaviors\CacheFlush;
 use Yii;
 use yii\easyii2\behaviors\SeoBehavior;
+use yii\easyii2\components\ActiveRecord;
 use yii\easyii2\models\Photo;
 use yii\easyii2\modules\gallery\api\PhotoObject;
 use yii\helpers\ArrayHelper;
