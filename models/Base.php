@@ -122,7 +122,8 @@ class Base extends \yii\easyii2\components\ActiveRecord
     public function getPhotos()
     {
         if(empty($this->_photos) && $this->enablePhotoManager()){
-            $photos = Photo::find()
+            $modelPhoto = ActiveRecord::getModelByName('Photo', 'admin');
+            $photos = $modelPhoto::find()
                 ->where([
                     'class' => self::className(),
                     'item_id' => $this->id
