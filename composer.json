@@ -18,7 +18,7 @@
         "yiisoft/yii2": "*",
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-widget-fileinput": "@dev",
-        "black-lamp/yii2-text-editor": "@dev",
+        "black-lamp/yii2-text-editor": "1.0.0",
         "yiisoft/yii2-jui": "~2.0.0"
     },
     "autoload": {
