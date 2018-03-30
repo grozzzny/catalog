@@ -107,6 +107,7 @@ class ItemQuery extends ActiveQuery
 
                     $subQuery->orFilterWhere(['and', ['property_slug' => $property->slug], $additionalCondition]);
 
+                    $filtersApplied++;
                 } else {
                     $value = ArrayHelper::getValue($condition, $property->slug, '');
 
@@ -138,8 +139,9 @@ class ItemQuery extends ActiveQuery
                                 ['value' => $value]
                             ]);
                     }
+                    $filtersApplied += is_array($value) ? count($value) : 1;
                 }
-                $filtersApplied++;
+
             }
         }else{
             $properties_slug = ArrayHelper::getColumn(Properties::find()->select(['slug'])->asArray()->all(), 'slug');
@@ -153,7 +155,7 @@ class ItemQuery extends ActiveQuery
                     ['property_slug' => $attribute],
                     ['value' => $value]
                 ]);
-                $filtersApplied++;
+                $filtersApplied += is_array($value) ? count($value) : 1;
             }
         }
 
