@@ -192,11 +192,11 @@ class PropertiesController extends Controller
 
             $fullTitle = Yii::$app->request->get('fullTitle', 'on');
 
-            if(!empty(Yii::$app->request->get('category_id'))){
+            if(!empty($_GET['category_id'])){
                 $query->andWhere(['!=', 'FIND_IN_SET(\''.Yii::$app->request->get('category_id').'\', parents)', '0']);
             }
 
-            if(!empty(Yii::$app->request->get('category_slug'))){
+            if(!empty($_GET['category_slug'])){
                 $identifier = 'slug';
                 $query->andWhere(['!=', 'FIND_IN_SET(\''.Category::findOne(['slug' => Yii::$app->request->get('category_slug')])->id.'\', parents)', '0']);
             }
