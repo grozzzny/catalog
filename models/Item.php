@@ -207,8 +207,7 @@ class Item extends Base
 
         //Сохранение связи в релативную таблицу
         if(!empty($this->_categories)){
-            $model = CatalogModule::modelRelationsCategoriesItems();
-            $this->saveDataRelationsTable( $model::tableName(), ['item_id' => $this->id], ['category_id' => $this->categories]);
+            $this->saveDataRelationsTable( RelationsCategoriesItems::tableName(), ['item_id' => $this->id], ['category_id' => $this->categories]);
         }
 
         //Сохранение значений в таблицу "Data"
@@ -231,8 +230,7 @@ class Item extends Base
 
     public function getRelationsCategoriesItems()
     {
-        $model = CatalogModule::modelRelationsCategoriesItems();
-        return $this->hasMany($model::className(), ['item_id' => 'id']);
+        return $this->hasMany(RelationsCategoriesItems::className(), ['item_id' => 'id']);
     }
 
     public function getCategories()

@@ -13,9 +13,7 @@ class CatalogModule extends \yii\easyii2\components\Module implements ModuleEasy
     public $settings = [
         'modelItem' => '',
         'modelCategory' => '',
-        'modelData' => '',
-        'modelRelationsCategoriesItems' => '\grozzzny\catalog\models\RelationsCategoriesItems',
-        'modelRelationsCategoriesProperties' => '\grozzzny\catalog\models\RelationsCategoriesProperties',
+        'modelData' => ''
     ];
 
     public function init()
@@ -54,27 +52,5 @@ class CatalogModule extends \yii\easyii2\components\Module implements ModuleEasy
     public static function getNameModule()
     {
         return 'catalog';
-    }
-
-    /**
-     * @return RelationsCategoriesItems
-     * @throws \yii\base\InvalidConfigException
-     */
-    public static function modelRelationsCategoriesItems()
-    {
-        $settings = AdminModule::getInstance()->getModule(self::getNameModule())->settings;
-        $class_name = ArrayHelper::getValue($settings, 'modelRelationsCategoriesItems', null);
-        return \Yii::createObject($class_name);
-    }
-
-    /**
-     * @return RelationsCategoriesProperties
-     * @throws \yii\base\InvalidConfigException
-     */
-    public static function modelRelationsCategoriesProperties()
-    {
-        $settings = AdminModule::getInstance()->getModule(self::getNameModule())->settings;
-        $class_name = ArrayHelper::getValue($settings, 'modelRelationsCategoriesProperties', null);
-        return \Yii::createObject($class_name);
     }
 }

@@ -222,8 +222,7 @@ class Category extends Base
 
     public function getRelationsCategoriesProperties()
     {
-        $model = CatalogModule::modelRelationsCategoriesProperties();
-        return $this->hasMany($model::className(), ['category_id' => 'id']);
+        return $this->hasMany(RelationsCategoriesProperties::className(), ['category_id' => 'id']);
     }
 
     public function getProperties()
@@ -245,8 +244,7 @@ class Category extends Base
 
     public function getRelationsCategoriesItems()
     {
-        $model = CatalogModule::modelRelationsCategoriesItems();
-        return $this->hasMany($model::className(), ['category_id' => 'id']);
+        return $this->hasMany(RelationsCategoriesItems::className(), ['category_id' => 'id']);
     }
 
     public function getItems()
