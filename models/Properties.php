@@ -217,8 +217,7 @@ class Properties extends Base
 
     public function getRelationsCategoriesProperties()
     {
-        $model = CatalogModule::modelRelationsCategoriesProperties();
-        return $this->hasMany($model::className(), ['property_id' => 'id']);
+        return $this->hasMany(RelationsCategoriesProperties::className(), ['property_id' => 'id']);
     }
 
     public function getCategories()
