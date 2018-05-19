@@ -33,7 +33,7 @@ use yii\web\JsExpression;
         <?=Html::input('text', 'slug', $property->slug, [
             'class' => 'form-control',
            // 'required' => true,
-            'pattern' => "^[a-z_]{1}[a-z0-9\-_]*",
+            'pattern' => "^[a-z_]{1}[a-z0-9_]*",
             'size' => 100,
         ]) ?>
     </td>
