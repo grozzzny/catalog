@@ -2,6 +2,7 @@
 namespace grozzzny\catalog\widgets;
 
 use bl\ace\AceWidget;
+use grozzzny\catalog\CatalogModule;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
@@ -26,6 +27,8 @@ class PropertyWidget extends InputWidget
         $type = $this->model->getType($this->attribute);
         $settings = $this->model->getSettings($this->attribute);
         $options = $this->model->getOptions($this->attribute);
+
+        $name_module = CatalogModule::getInstance()->id;
 
         switch ($type){
             case Properties::TYPE_STRING:
@@ -105,13 +108,13 @@ class PropertyWidget extends InputWidget
 
                 switch ($type){
                     case Properties::TYPE_ITEMSCATEGORY:
-                        $url = '/admin/newcatalog/properties/get-list-items-category';
+                        $url = '/admin/'.$name_module.'/properties/get-list-items-category';
                         break;
                     case Properties::TYPE_MULTICATEGORY:
-                        $url = '/admin/newcatalog/properties/get-list-multicategories';
+                        $url = '/admin/'.$name_module.'/properties/get-list-multicategories';
                         break;
                     case Properties::TYPE_CATEGORY:
-                        $url = '/admin/newcatalog/properties/get-list-categories';
+                        $url = '/admin/'.$name_module.'/properties/get-list-categories';
                         break;
                 }
 
