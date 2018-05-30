@@ -33,12 +33,12 @@ class FileInputWidget extends InputWidget
 
     protected function getUploadUrl()
     {
-        return '/admin/'.CatalogModule::getInstance()->id.'/properties/file-upload';
+        return '/admin/'.CatalogModule::getNameModule().'/properties/file-upload';
     }
 
     protected function getDeleteUrl()
     {
-        return '/admin/'.CatalogModule::getInstance()->id.'/properties/file-delete';
+        return '/admin/'.CatalogModule::getNameModule().'/properties/file-delete';
     }
 
     private function jsFnUploaded()
