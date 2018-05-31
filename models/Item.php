@@ -365,6 +365,6 @@ class Item extends Base
 
     public function getCategoriesToString()
     {
-        return implode(', ',ArrayHelper::getColumn($this->categories, 'title'));
+        return implode(', ',ArrayHelper::getColumn($this->getCategories()->all(), 'title'));
     }
 }
