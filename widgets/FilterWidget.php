@@ -112,7 +112,7 @@ class FilterWidget extends InputWidget
         ]);
     }
 
-    public function renderCheckbox () {
+    public function renderRadio () {
         return '<ul class="list-group">
                     <li class="list-group-item" style="padding: 7px 15px;">
                         '.$this->_label.'
@@ -189,6 +189,22 @@ class FilterWidget extends InputWidget
         ]);
     }
 
+    public function renderCheckbox()
+    {
+        return '<ul class="list-group">
+            <li class="list-group-item">
+                '.$this->_label.'
+                <div class="pull-right">
+                    &nbsp;
+                    '.
+                    Html::checkbox($this->attribute, $this->_value, ['label' => false, 'id' => 'checkbox_'.$this->attribute]).
+                    Html::label('', 'checkbox_'.$this->attribute)
+                    .'
+                </div>
+            </li>
+       </ul>';
+    }
+
     public function run()
     {
         switch ($this->_type){
@@ -220,7 +236,7 @@ class FilterWidget extends InputWidget
                 }
             case Properties::TYPE_IMAGE:
             case Properties::TYPE_FILE:
-                return $this->renderCheckbox();
+                return $this->renderRadio();
             default:
                 return $this->renderString();
         }
