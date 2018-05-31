@@ -1,10 +1,12 @@
 <?php
 namespace grozzzny\catalog\components;
 
+use app\models\Item;
 use grozzzny\catalog\models\Base;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Data;
 use grozzzny\catalog\models\Properties;
+use Yii;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
@@ -119,9 +121,7 @@ class ItemQuery extends ActiveQuery
                 } else {
                     $value = ArrayHelper::getValue($condition, $property->slug, '');
 
-                    if (empty($value)) {
-                        continue;
-                    }
+                    if ($value == '') continue;
 
                     switch ($property->type) {
                         case Properties::TYPE_DATETIME:
@@ -132,14 +132,37 @@ class ItemQuery extends ActiveQuery
                             ]);
                             break;
                         case Properties::TYPE_CHECKBOX:
-                        case Properties::TYPE_FILE:
-                        case Properties::TYPE_IMAGE:
                             $subQuery->orFilterWhere([
                                 'and',
                                 ['property_slug' => $property->slug],
                                 ['not', ['value' => null]]
                             ]);
                             break;
+                        case Properties::TYPE_FILE:
+                        case Properties::TYPE_IMAGE:
+
+                            $filtersApplied += -1;
+
+                            $newQuery = clone $this;
+                            $items = $newQuery->select('gr_catalog_items.id')
+                                ->join('LEFT JOIN', ['n' =>
+                                    Data::find()
+                                        ->select('item_id')
+                                        ->groupBy('item_id')
+                                        ->where(['property_slug' => $property->slug])
+                                ], 'n.item_id = gr_catalog_items.id')
+                                ->where('n.item_id = gr_catalog_items.id')
+                                ->all();
+
+                            $ids = ArrayHelper::getColumn($items, 'id');
+
+                            if($value == '0') {
+                                $this->andWhere(['NOT IN', 'gr_catalog_items.id', $ids]);
+                            } else {
+                                $this->andWhere(['gr_catalog_items.id' => $ids]);
+                            }
+
+                            continue;
                         default:
                             $subQuery->orFilterWhere([
                                 'and',

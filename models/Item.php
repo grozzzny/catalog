@@ -44,7 +44,8 @@ use yii\helpers\FileHelper;
  * @property-read PhotoObject[]  $photos
  * @property-read ActiveRecord   $updatedBy
  * @property-read ActiveRecord   $createdBy
- * @property-read string   $categoriesToString
+ * @property-read string         $categoriesToString
+ * @property-read Category       $mainCategory
  *
  */
 class Item extends Base
@@ -366,5 +367,10 @@ class Item extends Base
     public function getCategoriesToString()
     {
         return implode(', ',ArrayHelper::getColumn($this->getCategories()->all(), 'title'));
+    }
+
+    public function getMainCategory ()
+    {
+        return $this->getCategories()->limit(1)->one();
     }
 }
