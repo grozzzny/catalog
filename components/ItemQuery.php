@@ -143,23 +143,16 @@ class ItemQuery extends ActiveQuery
 
                             $filtersApplied += -1;
 
-                            $newQuery = clone $this;
-                            $items = $newQuery->select('gr_catalog_items.id')
-                                ->join('LEFT JOIN', ['n' =>
-                                    Data::find()
+                            $newQuery = Data::find()
                                         ->select('item_id')
                                         ->groupBy('item_id')
                                         ->where(['property_slug' => $property->slug])
-                                ], 'n.item_id = gr_catalog_items.id')
-                                ->where('n.item_id = gr_catalog_items.id')
-                                ->all();
-
-                            $ids = ArrayHelper::getColumn($items, 'id');
+                                        ->andWhere('`item_id` = `gr_catalog_items`.`id`');
 
                             if($value == '0') {
-                                $this->andWhere(['NOT IN', 'gr_catalog_items.id', $ids]);
+                                $this->andWhere(['NOT IN', 'gr_catalog_items.id', $newQuery]);
                             } else {
-                                $this->andWhere(['gr_catalog_items.id' => $ids]);
+                                $this->andWhere(['IN', 'gr_catalog_items.id', $newQuery]);
                             }
 
                             continue;

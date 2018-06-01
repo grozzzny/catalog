@@ -69,6 +69,8 @@ class Category extends Base
     const SUBMENU_FILES = false;
     const ORDER_NUM = true;
 
+    private $_parentsCategories;
+
     public static function tableName()
     {
         return 'gr_catalog_categories';
@@ -135,6 +137,8 @@ class Category extends Base
 
     public function getParentsCategories()
     {
+        if(!empty($this->_parentsCategories)) return $this->_parentsCategories;
+
         $categories_arr = [$this];
         $parent = $this->parentCategory;
 
@@ -143,7 +147,7 @@ class Category extends Base
             $parent = $parent->parentCategory;
         };
 
-        return array_reverse($categories_arr, true);
+        return $this->_parentsCategories = array_reverse($categories_arr, true);
     }
 
     public function getParentCategory()
@@ -419,6 +423,17 @@ class Category extends Base
     public function getLinkDelete()
     {
         return Url::to(['/admin/'.Yii::$app->controller->module->id.'/a/delete', 'id' => $this->primaryKey, 'slug' => self::SLUG]);
+    }
+
+    /**
+     * @param $id
+     * @return Category|null
+     */
+    public static function getMainCategoryById($id)
+    {
+        if(empty($id)) return null;
+
+        return current(Category::findOne($id)->parentsCategories);
     }
 
 }
