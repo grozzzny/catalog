@@ -69,9 +69,16 @@ class FileInputWidget extends InputWidget
     {
         $initialPreviewConfig = [];
         foreach ($this->preview() as $value){
+
+            $file = Yii::getAlias('@webroot').$value;
+
+            if(!file_exists ($file)) continue;
+
+            $filetype = mime_content_type($file);
+
             $initialPreviewConfig[] =  [
                 'type' => $this->type == Properties::TYPE_IMAGE ? 'image' : 'object',
-                'filetype' => mime_content_type(Yii::getAlias('@webroot').$value),
+                'filetype' => $filetype,
                 'caption' => basename($value),
                 'size' => filesize(Yii::getAlias('@webroot').$value),
                 'width' => '120px',
