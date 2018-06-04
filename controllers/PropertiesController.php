@@ -425,13 +425,9 @@ class PropertiesController extends Controller
 
     protected function orientation(&$file, $image_type)
     {
-        if($image_type == IMAGETYPE_JPEG ) {
-            $resource = imagecreatefromjpeg($file->tempName);
-        } elseif($image_type == IMAGETYPE_GIF ) {
-            $resource = imagecreatefromgif($file->tempName);
-        } elseif($image_type == IMAGETYPE_PNG ) {
-            $resource = imagecreatefrompng($file->tempName);
-        }
+        if($image_type != IMAGETYPE_JPEG ) return;
+
+        $resource = imagecreatefromjpeg($file->tempName);
 
         $exif = exif_read_data($file->tempName, 0, true);
 
@@ -449,13 +445,7 @@ class PropertiesController extends Controller
             }
         }
 
-        if( $image_type == IMAGETYPE_JPEG ) {
-            imagejpeg($resource,$file->tempName);
-        } elseif( $image_type == IMAGETYPE_GIF ) {
-            imagegif($resource,$file->tempName);
-        } elseif( $image_type == IMAGETYPE_PNG ) {
-            imagepng($resource,$file->tempName);
-        }
+        imagejpeg($resource,$file->tempName);
     }
 
 
