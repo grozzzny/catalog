@@ -432,7 +432,7 @@ class PropertiesController extends Controller
 
         try {
             $exif = exif_read_data($file->tempName, 0, true);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             return;
         }
 
