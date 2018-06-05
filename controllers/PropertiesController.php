@@ -12,6 +12,7 @@ use kartik\select2\Select2Asset;
 use Yii;
 use yii\base\ActionEvent;
 use yii\base\DynamicModel;
+use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\easyii2\behaviors\SortableController;
@@ -429,7 +430,11 @@ class PropertiesController extends Controller
 
         $resource = imagecreatefromjpeg($file->tempName);
 
-        $exif = exif_read_data($file->tempName, 0, true);
+        try {
+            $exif = exif_read_data($file->tempName, 0, true);
+        } catch (Exception $ex) {
+            return;
+        }
 
         if( false === empty($exif['IFD0']['Orientation'] ) ) {
             switch( $exif['IFD0']['Orientation'] ) {
