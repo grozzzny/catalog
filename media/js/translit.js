@@ -35,7 +35,8 @@ var translitCatalog = function (text){
         'v' : 'v',
         'b' : 'b',
         'n' : 'n',
-        'm' : 'm'
+        'm' : 'm',
+        ' ': space,
     };
 
     var result = '';
