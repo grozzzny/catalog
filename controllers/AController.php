@@ -48,7 +48,12 @@ class AController extends Controller
         $queryItem = $item->find();
         if(!empty($currentCategory)) $queryItem->category($currentCategory);
 
-        $dataCategory = new ActiveDataProvider(['query' => $queryCategory, 'pagination' => ['defaultPageSize' => 5]]);
+        $dataCategory = new ActiveDataProvider([
+            'query' => $queryCategory,
+            'pagination' => [
+                'defaultPageSize' => $category_id == null ? 30 : 5
+            ]
+        ]);
         $dataItem = new ActiveDataProvider(['query' => $queryItem]);
 
         $category->querySort($dataCategory);

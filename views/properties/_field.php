@@ -24,7 +24,7 @@ use yii\web\JsExpression;
           //  'required' => true,
             'size' => 100,
             'onfocus' => "properties.initAutoComplete(this)",
-            'onkeyup' => "properties.translit(this)",
+            'onblur' => "properties.translit(this)",
             //'onblur' => "properties.translit(this)",
         ]) ?>
     </td>

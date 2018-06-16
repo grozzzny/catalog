@@ -482,7 +482,7 @@ var properties = {
          * @param ob
          */
         translit: function (ob) {
-            $(ob).parents('.item').find('[name="key"]').val(translit(ob.value))
+            $(ob).parents('.item').find('[name="key"]').val(translitCatalog(ob.value))
         }
     },
 
@@ -1202,7 +1202,10 @@ var properties = {
      * @param ob
      */
     translit: function (ob) {
-        properties.find(ob, '[name="slug"]').val(translit(ob.value))
+        var $slug = properties.find(ob, '[name="slug"]'),
+            value = $slug.val();
+
+        if (value === '') $slug.val(translitCatalog(ob.value))
     },
 
     moveUp:function (ob) {

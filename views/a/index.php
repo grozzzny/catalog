@@ -50,7 +50,7 @@ $this->title = Yii::t('gr', 'Catalog');
 
 </div>
 
-
+<? if ($currentCategory != null):?>
 <div class="box box-success">
     <div class="box-header with-border">
         <h3 class="box-title"><?= empty($currentCategory) ? Yii::t('gr', 'List all items') : Yii::t('gr', 'List of items of the category <b>«{0}»</b>', [$currentCategory->title]) ?></h3>
@@ -73,3 +73,4 @@ $this->title = Yii::t('gr', 'Catalog');
         <? endif; ?>
     </div>
 </div>
+<? endif;?>

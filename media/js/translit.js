@@ -1,4 +1,4 @@
-var translit = function (text){
+var translitCatalog = function (text){
     // Символ, на который будут заменяться все спецсимволы
     var space = '_';
     // Берем значение из нужного поля и переводим в нижний регистр
@@ -9,13 +9,33 @@ var translit = function (text){
         'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
         'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
         'о': 'o', 'п': 'p', 'р': 'r','с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
-        'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh','ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
-        ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
-        '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
-        '(': space, ')': space,'-': space, '\=': space, '+': space, '[': space,
-        ']': space, '\\': space, '|': space, '/': space,'.': space, ',': space,
-        '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-        '?': space, '<': space, '>': space, '№':space
+        'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ы': 'y', 'э': 'e', 'ю': 'yu', 'я': 'ya',
+        'q' : 'q',
+        'w' : 'w',
+        'e' : 'e',
+        'r' : 'r',
+        't' : 't',
+        'y' : 'y',
+        'u' : 'u',
+        'i' : 'i',
+        'o' : 'o',
+        'p' : 'p',
+        'a' : 'a',
+        's' : 's',
+        'd' : 'd',
+        'f' : 'f',
+        'g' : 'g',
+        'h' : 'h',
+        'j' : 'j',
+        'k' : 'k',
+        'l' : 'l',
+        'z' : 'z',
+        'x' : 'x',
+        'c' : 'c',
+        'v' : 'v',
+        'b' : 'b',
+        'n' : 'n',
+        'm' : 'm'
     };
 
     var result = '';
