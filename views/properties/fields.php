@@ -143,6 +143,7 @@ $i18n = json_encode([
     'description' => Yii::t('gr','Description'),
     'example_1' => Yii::t('gr','Example #1'),
     'example_2' => Yii::t('gr','Example #2'),
+    'search_id' => Yii::t('gr','ID input Search'),
 ], JSON_UNESCAPED_UNICODE);
 
 $script = <<< JS

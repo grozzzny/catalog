@@ -128,4 +128,9 @@ return [
     'Description' => 'Описание',
     'Example #1' => 'Пример №1',
     'Example #2' => 'Пример №2',
+    'Map. Placemark' => 'Карта. Метка',
+    'Map. Polygon' => 'Карта. Полигон',
+    'Map. Polyline' => 'Карта. Ломанная',
+    'Map. Route' => 'Карта. Маршрутка',
+    'ID input Search' => 'ID поля поиска',
 ];

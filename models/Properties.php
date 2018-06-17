@@ -57,6 +57,11 @@ class Properties extends Base
     const TYPE_FILE = 'file';
     const TYPE_CODE = 'code';
 
+    const TYPE_MAP_PLACEMARK = 'map_placemark';
+    const TYPE_MAP_POLYGON = 'map_polygon';
+    const TYPE_MAP_POLYLINE = 'map_polyline';
+    const TYPE_MAP_ROUTE = 'map_route';
+
     public $category_id = null;
 
     public static function tableName()
@@ -211,9 +216,12 @@ class Properties extends Base
             self::TYPE_IMAGE => Yii::t('gr','Image'),
             self::TYPE_FILE => Yii::t('gr','File'),
             self::TYPE_CODE => Yii::t('gr','Code'),
+            self::TYPE_MAP_PLACEMARK => Yii::t('gr','Map. Placemark'),
+            self::TYPE_MAP_POLYGON => Yii::t('gr','Map. Polygon'),
+            self::TYPE_MAP_POLYLINE => Yii::t('gr','Map. Polyline'),
+            self::TYPE_MAP_ROUTE => Yii::t('gr','Map. Route'),
         ];
     }
-
 
     public function getRelationsCategoriesProperties()
     {

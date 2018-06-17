@@ -57,7 +57,8 @@ var properties = {
         scenarios: 'Scenarios',
         description: 'Description',
         example_1: 'Example #1',
-        example_2: 'Example #2'
+        example_2: 'Example #2',
+        search_id: 'ID input Search',
     },
 
     init:function () {
@@ -542,6 +543,14 @@ var properties = {
                     'datetime'
                 ]) != -1) modal.append(properties.settings.checkbox('filter_range', data.filter_range, properties.i18n.filter_range));
 
+            //Параметр для карты
+            if (jQuery.inArray(type, [
+                    'map_placemark',
+                    'map_polygon',
+                    'map_polyline',
+                    'map_route'
+                ]) != -1) modal.append(properties.settings.input('search_id', data.search_id, properties.i18n.search_id));
+
         },
 
         /**
@@ -676,7 +685,11 @@ var properties = {
             itemscategory: [['safe']],
             datetime: [['integer']],
             image: [['safe']],
-            file: [['safe']]
+            file: [['safe']],
+            map_placemark: [['safe']],
+            map_polygon: [['safe']],
+            map_polyline: [['safe']],
+            map_route: [['safe']]
         },
 
         /**

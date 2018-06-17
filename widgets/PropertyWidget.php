@@ -7,6 +7,7 @@ use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
 use grozzzny\catalog\widgets\fileinput\FileInputWidget;
+use grozzzny\widgets\map\MapConstructorWidget;
 use grozzzny\widgets\switch_checkbox\SwitchCheckbox;
 use kartik\select2\Select2;
 use yii\easyii2\widgets\DateTimePicker;
@@ -94,6 +95,18 @@ class PropertyWidget extends InputWidget
                     'attribute' => $this->attribute,
                     'language' => 'html',
                     'attributes' => ['style' => 'width: 100%;min-height: 200px;']
+                ]);
+
+            case Properties::TYPE_MAP_PLACEMARK:
+            case Properties::TYPE_MAP_POLYGON:
+            case Properties::TYPE_MAP_POLYLINE:
+            case Properties::TYPE_MAP_ROUTE:
+
+                return MapConstructorWidget::widget([
+                    'model' => $this->model,
+                    'attribute' => $this->attribute,
+                    'search_id' => $settings->search_id,
+                    'type' => preg_replace('/map_/', '', $type)
                 ]);
 
             case Properties::TYPE_ITEMSCATEGORY:

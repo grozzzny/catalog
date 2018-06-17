@@ -223,6 +223,10 @@ class FilterWidget extends InputWidget
             case Properties::TYPE_SELECT:
                 return $this->renderSelect();
             case Properties::TYPE_CHECKBOX:
+            case Properties::TYPE_MAP_PLACEMARK:
+            case Properties::TYPE_MAP_POLYGON:
+            case Properties::TYPE_MAP_POLYLINE:
+            case Properties::TYPE_MAP_ROUTE:
                 return $this->renderCheckbox();
             case Properties::TYPE_ITEMSCATEGORY:
             case Properties::TYPE_MULTICATEGORY:
