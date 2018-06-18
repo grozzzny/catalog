@@ -125,12 +125,11 @@ return [
     'Show in filter in Admin panel' => 'Показывать в фильтре в админ панеле',
     'Characteristic' => 'Характеристика',
     'Scenarios' => 'Сценарии',
-    'Description' => 'Описание',
     'Example #1' => 'Пример №1',
     'Example #2' => 'Пример №2',
     'Map. Placemark' => 'Карта. Метка',
     'Map. Polygon' => 'Карта. Полигон',
     'Map. Polyline' => 'Карта. Ломанная',
-    'Map. Route' => 'Карта. Маршрутка',
+    'Map. Route' => 'Карта. Маршрут',
     'ID input Search' => 'ID поля поиска',
 ];
