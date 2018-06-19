@@ -20,27 +20,39 @@ class AController extends Controller
 
     use TraitController;
 
-    public function behaviors()
+//    public function behaviors()
+//    {
+//        return [
+//            [
+//                'class' => SortableController::className(),
+//                'model' => Base::getModel(Yii::$app->request->get('slug'))
+//            ],
+//        ];
+//    }
+
+
+    /**
+     * @return Item
+     */
+    protected function getItemModel($category_id = null)
     {
-        return [
-            [
-                'class' => SortableController::className(),
-                'model' => Base::getModel(Yii::$app->request->get('slug'))
-            ],
-        ];
+        //if(!empty($category_id)) $mainCategorySlug = Category::getMainCategoryById($category_id)->slug;
+        return Base::getModel(Item::SLUG);
     }
 
+    /**
+     * @return Category
+     */
+    protected function getCategoryModel()
+    {
+        return Base::getModel(Category::SLUG);
+    }
 
     public function actionIndex($category_id = null)
     {
-        /**
-         * @var Category $category
-         */
-        $category = Base::getModel(Category::SLUG);
-        /**
-         * @var Item $item
-         */
-        $item = Base::getModel(Item::SLUG);
+
+        $category = $this->getCategoryModel();
+        $item = $this->getItemModel();
 
         $currentCategory = empty($category_id) ? null : $category::findOne(['id' => $category_id]);
 
@@ -79,11 +91,13 @@ class AController extends Controller
      */
     public function actionCreate($slug, $category_id = null)
     {
-        /**
-         * @var Item|Category $model
-         */
-        $model = Base::getModel($slug);
-        $modelCategory = Base::getModel('category');
+        if($slug == Category::SLUG) {
+            $model = $this->getCategoryModel();
+        } else {
+            $model = $this->getItemModel($category_id);
+        }
+
+        $modelCategory = $this->getCategoryModel();
 
         $currentCategory = empty($category_id) ? null : $modelCategory::findOne(['id' => $category_id]);
 
@@ -133,8 +147,14 @@ class AController extends Controller
      */
     public function actionEdit($slug, $category_id = null, $id)
     {
-        $model = Base::getModel($slug);
-        $modelCategory = Base::getModel('category');
+        if($slug == Category::SLUG) {
+            $model = $this->getCategoryModel();
+        } else {
+            $model = $this->getItemModel($category_id);
+        }
+
+        $modelCategory = $this->getCategoryModel();
+
         $currentCategory = empty($category_id) ? null : $modelCategory::findOne(['id' => $category_id]);
         $model = $model::findOne($id);
 
