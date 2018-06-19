@@ -72,7 +72,16 @@ class FileInputWidget extends InputWidget
 
             $file = Yii::getAlias('@webroot').$value;
 
-            if(!file_exists ($file)) continue;
+            if(!file_exists ($file)) {
+                $initialPreviewConfig[] =  [
+                    'type' => 'object',
+                    'caption' => basename($value),
+                    'width' => '120px',
+                    'url' => $this->deleteUrl,
+                    'key' => $value
+                ];
+                continue;
+            }
 
             $filetype = mime_content_type($file);
 
@@ -85,6 +94,8 @@ class FileInputWidget extends InputWidget
                 'url' => $this->deleteUrl,
                 'key' => $value
             ];
+
+
         }
         return $initialPreviewConfig;
     }
