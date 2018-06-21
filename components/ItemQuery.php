@@ -1,7 +1,7 @@
 <?php
 namespace grozzzny\catalog\components;
 
-use app\models\Item;
+use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Base;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Data;
@@ -14,6 +14,11 @@ class ItemQuery extends ActiveQuery
 {
 
     public $_category;
+
+    protected static function getTableNameItem()
+    {
+        return Item::tableName();
+    }
 
     /**
      * Установит категорию. И осуществит поиск элементов определенной категории
@@ -47,9 +52,9 @@ class ItemQuery extends ActiveQuery
         if(!empty($search)){
             $this->andFilterWhere([
                 'OR',
-                ['LIKE', 'gr_catalog_items.title', $search],
-                ['gr_catalog_items.id' => $search],
-                ['LIKE', 'gr_catalog_items.description', $search],
+                ['LIKE', static::getTableNameItem() . '.title', $search],
+                [static::getTableNameItem() . '.id' => $search],
+                ['LIKE', static::getTableNameItem() . '.description', $search],
             ]);
         }
         return $this;
@@ -86,7 +91,7 @@ class ItemQuery extends ActiveQuery
      */
     public function whereProperties($condition)
     {
-        $this->distinct('gr_catalog_items.id');
+        $this->distinct(static::getTableNameItem() . '.id');
 
         $properties = (isset($this->_category)) ? $this->_category->allProperties : [];
 
@@ -147,12 +152,12 @@ class ItemQuery extends ActiveQuery
                                         ->select('item_id')
                                         ->groupBy('item_id')
                                         ->where(['property_slug' => $property->slug])
-                                        ->andWhere('`item_id` = `gr_catalog_items`.`id`');
+                                        ->andWhere('`item_id` = `'.static::getTableNameItem().'`.`id`');
 
                             if($value == '0') {
-                                $this->andWhere(['NOT IN', 'gr_catalog_items.id', $newQuery]);
+                                $this->andWhere(['NOT IN', static::getTableNameItem() . '.id', $newQuery]);
                             } else {
-                                $this->andWhere(['IN', 'gr_catalog_items.id', $newQuery]);
+                                $this->andWhere(['IN', static::getTableNameItem() . '.id', $newQuery]);
                             }
 
                             continue;
@@ -184,7 +189,7 @@ class ItemQuery extends ActiveQuery
         }
 
         if($filtersApplied) {
-            $this->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = gr_catalog_items.id');
+            $this->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '. static::getTableNameItem() .'.id');
             $this->andFilterWhere(['f.filter_matched' => $filtersApplied]);
         }
         return $this;

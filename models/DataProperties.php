@@ -119,11 +119,13 @@ class DataProperties extends DynamicModel
                 return $this->$slug == true ? Yii::t('app', 'yes') : Yii::t('app', 'no');
 
             case Properties::TYPE_ITEMSCATEGORY:
-                return ArrayHelper::getColumn(Item::findAll(['id' => $this->$slug]), 'title');
+                $classItem = static::getClassItem();
+                return ArrayHelper::getColumn($classItem::findAll(['id' => $this->$slug]), 'title');
 
             case Properties::TYPE_MULTICATEGORY:
             case Properties::TYPE_CATEGORY:
-                return ArrayHelper::getColumn(Category::findAll(['id' => $this->$slug]), 'fullTitle');
+                $classCategory = static::getClassCategory();
+                return ArrayHelper::getColumn($classCategory::findAll(['id' => $this->$slug]), 'fullTitle');
 
             case Properties::TYPE_DATETIME:
                 return date('d.m.Y', $this->$slug);
@@ -170,8 +172,9 @@ class DataProperties extends DynamicModel
     {
         $values = (is_array($value)) ? $value : [$value];
         $categories_arr = [];
+        $classCategory = static::getClassCategory();
         foreach ($values as $val) {
-            $categories_arr = ArrayHelper::merge($categories_arr, [$val] + Category::getOnlyParentId($val));
+            $categories_arr = ArrayHelper::merge($categories_arr, [$val] + $classCategory::getOnlyParentId($val));
         }
         return $categories_arr;
     }
@@ -187,7 +190,8 @@ class DataProperties extends DynamicModel
                 if($this->hasSetValueMulticategory($slug)){
                     $new_attributes[$slug] = $values;
                 } else {
-                    $values = ArrayHelper::getColumn(Data::findAll(['item_id' => $item_id, 'property_slug' => $slug]), 'value');
+                    $classData = static::getClassData();
+                    $values = ArrayHelper::getColumn($classData::findAll(['item_id' => $item_id, 'property_slug' => $slug]), 'value');
                     $new_attributes[$slug] = $values;
                 }
             }else {
@@ -212,22 +216,49 @@ class DataProperties extends DynamicModel
         $attributes = $item->dataProperties->getAttributesForSave($item->id);
         if(empty($attributes)) return false;
 
+        $classData = static::getClassData();
+
         foreach ($attributes as $slug => $values)
         {
-            Data::deleteAll(['item_id' => $item->id, 'property_slug' => $slug]);
+
+            $classData::deleteAll(['item_id' => $item->id, 'property_slug' => $slug]);
             $values = (is_array($values)) ? $values : [$values];
 
             foreach ($values as $value){
 
                 $value = (is_array($value)) ? array_values($value)[0] : $value;
 
-                $data = new Data();
+                $data = new $classData;
                 $data->value = $value;
                 $data->property_slug = $slug;
                 $data->item_id = $item->id;
                 if(!empty($value)) $data->save();
             }
         }
+    }
+
+    /**
+     * @return Data | string
+     */
+    protected static function getClassData()
+    {
+        return Data::className();
+    }
+
+    /**
+     * @return Category | string
+     */
+    protected static function getClassCategory()
+    {
+        return Category::className();
+    }
+
+    /**
+     * @return Item | string
+     */
+    protected static function getClassItem()
+    {
+        return Item::className();
     }
 
 //    public static function reParseValueMulticategory($values)
