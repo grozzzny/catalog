@@ -13,7 +13,8 @@ class CatalogModule extends \yii\easyii2\components\Module implements ModuleEasy
     public $settings = [
         'modelItem' => '',
         'modelCategory' => '',
-        'modelData' => ''
+        'modelData' => '',
+        'modelProperties' => '',
     ];
 
     public function init()

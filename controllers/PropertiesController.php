@@ -101,10 +101,12 @@ class PropertiesController extends Controller
 
             $data = json_decode(Yii::$app->request->post('data'), true);
 
+            $propertiesModel = Base::getModelProperties();
+
             foreach ($data as $item){
 
-                $property = Properties::findOne($item['id']);
-                if(!$property) $property = Yii::createObject(Properties::className());
+                $property = $propertiesModel::findOne($item['id']);
+                if(!$property) $property = Yii::createObject($propertiesModel::className());
 
                 $property->setAttributes($item);
                 $property->validate();
@@ -128,10 +130,15 @@ class PropertiesController extends Controller
 
             $get = Yii::$app->request->get();
 
-            $property = Properties::find()
+            /* @var Category $categoryModel */
+            $categoryModel = Base::getModel(Category::SLUG);
+
+            $propertiesModel = Base::getModelProperties();
+
+            $property = $propertiesModel::find()
                 ->joinWith('categories')
                 ->where([
-                    'gr_catalog_properties.id' => $get['id'],
+                    $propertiesModel::tableName() . '.id' => $get['id'],
                     'category_id' => $get['category_id']
                 ])
             ->one();
@@ -140,9 +147,9 @@ class PropertiesController extends Controller
                 throw new NotFoundHttpException();
             }
 
-            Category::findOne($get['category_id'])->unlink('properties', $property, true);
+            $categoryModel::findOne($get['category_id'])->unlink('properties', $property, true);
 
-            if(empty(Properties::findOne($get['id'])->categories)) $property->delete();
+            if(empty($propertiesModel::findOne($get['id'])->categories)) $property->delete();
 
             return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('gr', 'Property remove')]), JSON_UNESCAPED_UNICODE);
 
@@ -288,9 +295,13 @@ class PropertiesController extends Controller
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
 
-            $query = Properties::find();
+            $propertiesModel = Base::getModelProperties();
 
-            if(!empty(Yii::$app->request->get('q'))) $query->where(['LIKE','title',Yii::$app->request->get('q')]);
+            $query = $propertiesModel::find();
+
+            $q = Yii::$app->request->get('q');
+
+            if(!empty($q)) $query->where(['LIKE','title',Yii::$app->request->get('q')]);
 
             $data = [];
             foreach($query->limit(10)->all() AS $property){
@@ -343,12 +354,16 @@ class PropertiesController extends Controller
     {
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
+            $get_properties = Yii::$app->request->get('properties');
+            $get_term = Yii::$app->request->get('term');
 
-            $properties = empty(Yii::$app->request->get('properties')) ? [] : Yii::$app->request->get('properties');
+            $properties = empty($get_properties) ? [] : Yii::$app->request->get('properties');
 
-            $query = Properties::find();
+            $propertiesModel = Base::getModelProperties();
 
-            if(!empty(Yii::$app->request->get('term'))) {
+            $query = $propertiesModel::find();
+
+            if(!empty($get_term)) {
                 $query->andWhere([
                     'AND',
                     ['NOT IN', 'slug', $properties],
@@ -382,7 +397,10 @@ class PropertiesController extends Controller
     {
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
-            $property = Properties::findOne(['slug' => Yii::$app->request->get('slug')]);
+
+            $propertiesModel = Base::getModelProperties();
+
+            $property = $propertiesModel::findOne(['slug' => Yii::$app->request->get('slug')]);
             return $property->title;
         }
     }
