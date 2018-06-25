@@ -67,6 +67,18 @@ class Base extends \yii\easyii2\components\ActiveRecord
         return empty($slug) ? current($models) : $models[$slug];
     }
 
+    /**
+     * @return string | Properties
+     */
+    public static function getModelProperties()
+    {
+        $settings = CatalogModule::getInstance()->settings;
+
+        $alternative_class_name = ArrayHelper::getValue($settings, 'modelProperties', '');
+
+        return !empty($alternative_class_name) ? $alternative_class_name : __NAMESPACE__ . '\\Properties';
+    }
+
 
     /**
      * Используется при отчистке ранее загруженных файлов
