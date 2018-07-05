@@ -250,7 +250,7 @@ class PropertiesController extends Controller
 
             $query->joinWith('categories');
 
-            $query->filterWhere(['LIKE', 'title', Yii::$app->request->get('q')]);
+            $query->filterWhere(['LIKE', $model_item::tableName().'.title', Yii::$app->request->get('q')]);
 
             $query->andFilterWhere([$model_category::tableName().'.id' => Yii::$app->request->get('category_id')]);
 
