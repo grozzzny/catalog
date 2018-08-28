@@ -209,6 +209,10 @@ class PropertiesController extends Controller
 
             $fullTitle = Yii::$app->request->get('fullTitle', 'on');
 
+            if(!empty($_GET['on'])){
+                $query->andWhere(['status' => Category::STATUS_ON]);
+            }
+
             if(!empty($_GET['category_id'])){
                 $query->andWhere(['!=', 'FIND_IN_SET(\''.$_GET['category_id'].'\', parents)', '0']);
             }
