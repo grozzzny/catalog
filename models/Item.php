@@ -86,24 +86,24 @@ class Item extends Base
     public function rules()
     {
         return [
-            ['id', 'number', 'integerOnly' => true],
-            ['slug', 'match', 'pattern' => '/^[\w\-]+$/'],
-            ['slug', 'unique'],
-            [[
+            'id' => ['id', 'number', 'integerOnly' => true],
+            'slug_pattern' => ['slug', 'match', 'pattern' => '/^[\w\-]+$/'],
+            'slug_unique' => ['slug', 'unique'],
+            'string' => [[
                 'title',
                 'short',
             ], 'string'],
-            [[
+            'integer' => [[
                 'price',
                 'discount',
                 'user_id',
+                'order_num',
             ], 'integer'],
-            ['image_file', 'image'],
-            [['description', 'categories'], 'safe'],
-            [['views', 'order_num'],'default', 'value' => 0],
-            ['status', 'default', 'value' => self::STATUS_ON],
-            [['order_num'], 'integer'],
-            [['title', 'slug'], 'required'],
+            'image_file' => ['image_file', 'image'],
+            'safe' => [['description', 'categories'], 'safe'],
+            'default' => [['views', 'order_num'],'default', 'value' => 0],
+            'default_status' => ['status', 'default', 'value' => self::STATUS_ON],
+            'required' => [['title', 'slug'], 'required'],
         ];
     }
 
