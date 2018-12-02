@@ -34,7 +34,7 @@ $model_category = Base::getModel('category');
 
 
 <?= $form->field($model, 'title')->input('text', [
-    'onkeyup' => "if($('#category-slug').val() ==='') $('#category-slug').val(translit(this.value))",
+    //'onkeyup' => "if($('#category-slug').val() ==='') $('#category-slug').val(translit(this.value))",
     'onblur' => "if($('#category-slug').val() ==='') $('#category-slug').val(translit(this.value))",
 ]) ?>
 <?= $form->field($model, 'slug') ?>

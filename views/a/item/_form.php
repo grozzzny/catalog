@@ -35,7 +35,7 @@ $model_category = Base::getModel('category');
 <?= $form->field($model, 'image_file')->fileInput() ?>
 
 <?= $form->field($model, 'title')->input('text', [
-    'onkeyup' => "if($('#item-slug').val() ==='') $('#item-slug').val(translit(this.value))",
+    //'onkeyup' => "if($('#item-slug').val() ==='') $('#item-slug').val(translit(this.value))",
     'onblur' => "if($('#item-slug').val() ==='') $('#item-slug').val(translit(this.value))",
 ]) ?>
 <?= $form->field($model, 'slug') ?>
