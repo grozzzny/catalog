@@ -25,7 +25,7 @@ $this->title = Yii::t('gr', 'Catalog');
     </div>
     <!-- /.box-header -->
     <div class="box-body">
-        <?= $this->render($model::SLUG.'/_form', ['model' => $model]) ?>
+        <?= $this->render($model::SLUG.'/_form', ['model' => $model, 'currentCategory' => $currentCategory]) ?>
     </div>
 </div>
 

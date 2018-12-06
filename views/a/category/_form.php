@@ -17,6 +17,7 @@ use yii\web\JsExpression;
 /**
  * @var \yii\web\View $this
  * @var Category $model
+ * @var Category $currentCategory
  */
 /**
  * @var Category $model_category
