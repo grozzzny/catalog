@@ -17,7 +17,13 @@ use yii\web\JsExpression;
 
 <?=Html::beginForm(Url::toRoute(['a/']), 'get');?>
 
-    <div class="col-sm-3 pull-right">
+    <div class="col-sm-1 pull-right">
+        <?=Html::submitButton('Ok', [
+            'class'=> 'form-control',
+        ])?>
+    </div>
+
+    <div class="col-sm-2 pull-right">
         <?=Html::input('string', 'search_text', Yii::$app->request->get('search_text'),[
             'placeholder'=> Yii::t('gr', 'Search..'),
             'class'=> 'form-control',
