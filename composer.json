@@ -22,10 +22,10 @@
         "yiisoft/yii2-jui": "~2.0.0"
     },
     "scripts": {
-        "post-update-cmd": [
+        "post-package-install": [
             "php yii migrate --migrationPath=@vendor/grozzzny/catalog/migrations"
         ],
-        "post-install-cmd": [
+        "post-package-update": [
             "php yii migrate --migrationPath=@vendor/grozzzny/catalog/migrations"
         ]
     },
