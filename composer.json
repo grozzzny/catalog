@@ -21,14 +21,6 @@
         "black-lamp/yii2-text-editor": "@dev",
         "yiisoft/yii2-jui": "~2.0.0"
     },
-    "scripts": {
-        "post-package-install": [
-            "php yii migrate --migrationPath=@vendor/grozzzny/catalog/migrations"
-        ],
-        "post-package-update": [
-            "php yii migrate --migrationPath=@vendor/grozzzny/catalog/migrations"
-        ]
-    },
     "autoload": {
         "psr-4": {
             "grozzzny\\catalog\\": ""
