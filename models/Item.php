@@ -22,7 +22,7 @@ use yii\helpers\FileHelper;
  * @property integer $id
  * @property string  $slug
  * @property string  $image_file
- * @property string  $category_slug
+ * @property string  $parent_category_slug
  * @property integer $title
  * @property string  $short
  * @property string  $description
@@ -92,7 +92,7 @@ class Item extends Base
             'string' => [[
                 'title',
                 'short',
-                'category_slug',
+                'parent_category_slug',
             ], 'string'],
             'integer' => [[
                 'price',
@@ -126,7 +126,7 @@ class Item extends Base
             'updated_time' => Yii::t('gr', 'Date updated'),
             'user_id' => Yii::t('gr', 'User'),
             'categories' => Yii::t('gr', 'Categories'),
-            'category_slug' => Yii::t('gr', 'Category'),
+            'parent_category_slug' => Yii::t('gr', 'Category'),
         ];
     }
 
@@ -178,7 +178,6 @@ class Item extends Base
             $_data = $data[$scope];
             if(!empty($_data)) $this->dataProperties->setAttributes($_data);
         }
-
         return $ret;
     }
 

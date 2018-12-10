@@ -103,7 +103,7 @@ class AController extends Controller
 
         if(!empty($currentCategory) && $slug == Item::SLUG) {
             $model->categories = [$category_id];
-            $model->category_slug = Category::findOne($category_id)->slug;
+            $model->parent_category_slug = Category::findOne($category_id)->slug;
         }
         if(!empty($currentCategory) && $slug == Category::SLUG) $model->parent_id = $currentCategory->id;
 
@@ -116,7 +116,6 @@ class AController extends Controller
                 if(isset($_FILES)){
                     $this->saveFiles($model);
                 }
-
                 if($model->save()){
                     $this->flash('success', Yii::t('gr', 'Post created'));
                     return $this->redirect(Url::previous());
