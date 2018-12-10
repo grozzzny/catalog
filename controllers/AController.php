@@ -101,7 +101,10 @@ class AController extends Controller
 
         $currentCategory = empty($category_id) ? null : $modelCategory::findOne(['id' => $category_id]);
 
-        if(!empty($currentCategory) && $slug == Item::SLUG) $model->categories = [$category_id];
+        if(!empty($currentCategory) && $slug == Item::SLUG) {
+            $model->categories = [$category_id];
+            $model->category_slug = Category::findOne($category_id)->slug;
+        }
         if(!empty($currentCategory) && $slug == Category::SLUG) $model->parent_id = $currentCategory->id;
 
         if ($model->load(Yii::$app->request->post())) {

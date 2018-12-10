@@ -22,6 +22,7 @@ use yii\helpers\FileHelper;
  * @property integer $id
  * @property string  $slug
  * @property string  $image_file
+ * @property string  $category_slug
  * @property integer $title
  * @property string  $short
  * @property string  $description
@@ -77,7 +78,6 @@ class Item extends Base
         return $behaviors;
     }
 
-
     public static function tableName()
     {
         return 'gr_catalog_items';
@@ -92,6 +92,7 @@ class Item extends Base
             'string' => [[
                 'title',
                 'short',
+                'category_slug',
             ], 'string'],
             'integer' => [[
                 'price',
@@ -125,9 +126,9 @@ class Item extends Base
             'updated_time' => Yii::t('gr', 'Date updated'),
             'user_id' => Yii::t('gr', 'User'),
             'categories' => Yii::t('gr', 'Categories'),
+            'category_slug' => Yii::t('gr', 'Category'),
         ];
     }
-
 
     /**
      * ДИНАМИЧЕСКАЯ МОДЕЛЬ С ДАННЫМИ
@@ -244,7 +245,6 @@ class Item extends Base
     {
         if (!empty($value)) {
             //Найдем все id родительских категорий
-
             $arr_id = [];
             foreach ($value as $category_id) {
                 $arr_id = ArrayHelper::merge($arr_id, $this->getCategoryById($category_id)->allParentId);
