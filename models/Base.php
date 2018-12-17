@@ -38,7 +38,7 @@ class Base extends \yii\easyii2\components\ActiveRecord
     {
         $models = [];
 
-        $settings = CatalogModule::getInstance()->settings;
+        $settings = Yii::$app->getModule('admin')->getModule(CatalogModule::getNameModule())->settings;
 
         foreach (glob(__DIR__ . "/*.php") as $file){
             $file_name = basename($file, '.php');
