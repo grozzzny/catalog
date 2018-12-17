@@ -69,7 +69,7 @@ $sort = $data->getSort();
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
 
-                <a href="<?= $item->linkProperties ?>" class="btn btn-default" title="<?= Yii::t('easyii2', 'Properties') ?>">
+                <a href="<?= $item->linkProperties ?>" class="btn btn-default" title="<?= Yii::t('gr', 'Properties') ?>">
                     <span class="glyphicon glyphicon-inbox"></span>
                 </a>
 
