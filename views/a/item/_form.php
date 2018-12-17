@@ -48,7 +48,7 @@ $model_category = Base::getModel('category');
         'allowClear' => true,
         'multiple' => true,
         'ajax' => [
-            'url' => Url::to(['/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-categories']),
+            'url' => Url::to(['/admin/'.CatalogModule::getNameModule().'/properties/get-list-categories']),
             'dataType' => 'json',
             'data' => new JsExpression('function(params) { 
                return {

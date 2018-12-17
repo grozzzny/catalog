@@ -46,7 +46,7 @@ $model_category = Base::getModel('category');
         'placeholder' => Yii::t('gr', 'Select category..'),
         'allowClear' => true,
         'ajax' => [
-            'url' => '/admin/'.CatalogModule::getInstance()->id.'/properties/get-list-categories',
+            'url' => '/admin/'.CatalogModule::getNameModule().'/properties/get-list-categories',
             'dataType' => 'json',
             'data' => new JsExpression('function(params) { 
                return {

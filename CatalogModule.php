@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 
 class CatalogModule extends \yii\easyii2\components\Module implements ModuleEasyii2Interface
 {
+    const NAME_MODULE = 'catalog';
+
     public $settings = [
         'modelItem' => '',
         'modelCategory' => '',
@@ -52,6 +54,6 @@ class CatalogModule extends \yii\easyii2\components\Module implements ModuleEasy
 
     public static function getNameModule()
     {
-        return 'catalog';
+        return static::NAME_MODULE;
     }
 }

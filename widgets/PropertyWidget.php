@@ -29,7 +29,7 @@ class PropertyWidget extends InputWidget
         $settings = $this->model->getSettings($this->attribute);
         $options = $this->model->getOptions($this->attribute);
 
-        $name_module = CatalogModule::getInstance()->id;
+        $name_module = CatalogModule::getNameModule();
 
         switch ($type){
             case Properties::TYPE_STRING:

@@ -255,7 +255,7 @@ class FilterWidget extends InputWidget
     }
 
     protected function getUrlCategory(){
-        $nameModule = CatalogModule::getInstance()->id;
+        $nameModule = CatalogModule::getNameModule();
 
         switch ($this->_type){
             case Properties::TYPE_ITEMSCATEGORY:
