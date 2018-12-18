@@ -7,6 +7,7 @@ use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
 use Yii;
+use yii\base\Event;
 use yii\data\ActiveDataProvider;
 use yii\easyii2\behaviors\SortableController;
 use yii\helpers\Url;
@@ -17,6 +18,8 @@ use yii\easyii2\components\Controller;
 
 class AController extends Controller
 {
+
+    const EVENT_AFTER_SAVE = 'after_save';
 
     use TraitController;
 
@@ -117,6 +120,8 @@ class AController extends Controller
                     $this->saveFiles($model);
                 }
                 if($model->save()){
+                    $this->trigger(self::EVENT_AFTER_SAVE, new EventController(['model' => $model]));
+
                     $this->flash('success', Yii::t('gr', 'Post created'));
                     return $this->redirect(Url::previous());
                 }
@@ -175,6 +180,8 @@ class AController extends Controller
                 }
 
                 if($model->save()){
+                    $this->trigger(self::EVENT_AFTER_SAVE, new EventController(['model' => $model]));
+
                     $this->flash('success', Yii::t('gr', 'Post updated'));
                 }
                 else{

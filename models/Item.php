@@ -47,6 +47,7 @@ use yii\helpers\FileHelper;
  * @property-read ActiveRecord   $createdBy
  * @property-read string         $categoriesToString
  * @property-read Category       $mainCategory
+ * @property-read Category       $parentCategory
  *
  */
 class Item extends Base
@@ -129,6 +130,12 @@ class Item extends Base
             'parent_category_slug' => Yii::t('gr', 'Category'),
         ];
     }
+
+    public function getParentCategory()
+    {
+        return $this->hasOne(Category::className(), ['slug' => 'parent_category_slug']);
+    }
+
 
     /**
      * ДИНАМИЧЕСКАЯ МОДЕЛЬ С ДАННЫМИ
