@@ -2,6 +2,7 @@
 namespace grozzzny\catalog\models;
 
 use grozzzny\catalog\CatalogModule;
+use grozzzny\catalog\components\CategoryParent;
 use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\BlameableBehavior;
@@ -90,7 +91,8 @@ class Category extends Base
                 'value' => function () {
                     return implode(",", self::getOnlyParentId($this->parent_id));
                 },
-            ]
+            ],
+            'categoryParent' => CategoryParent::className()
         ]);
     }
 

@@ -61,6 +61,7 @@ class AController extends Controller
 
         $queryCategory = $category->find();
         $queryItem = $item->find();
+
         if(!empty($currentCategory)) $queryItem->category($currentCategory);
 
         $dataCategory = new ActiveDataProvider([
@@ -94,21 +95,9 @@ class AController extends Controller
      */
     public function actionCreate($slug, $category_id = null)
     {
-        if($slug == Category::SLUG) {
-            $model = $this->getCategoryModel();
-        } else {
-            $model = $this->getItemModel($category_id);
-        }
-
+        $model = $slug == Category::SLUG ? $this->getCategoryModel() : $this->getItemModel($category_id);
         $modelCategory = $this->getCategoryModel();
-
         $currentCategory = empty($category_id) ? null : $modelCategory::findOne(['id' => $category_id]);
-
-        if(!empty($currentCategory) && $slug == Item::SLUG) {
-            $model->categories = [$category_id];
-            $model->parent_category_slug = Category::findOne($category_id)->slug;
-        }
-        if(!empty($currentCategory) && $slug == Category::SLUG) $model->parent_id = $currentCategory->id;
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -121,7 +110,6 @@ class AController extends Controller
                 }
                 if($model->save()){
                     $this->trigger(self::EVENT_AFTER_SAVE, new EventController(['model' => $model]));
-
                     $this->flash('success', Yii::t('gr', 'Post created'));
                     return $this->redirect(Url::previous());
                 }
@@ -154,15 +142,10 @@ class AController extends Controller
      */
     public function actionEdit($slug, $category_id = null, $id)
     {
-        if($slug == Category::SLUG) {
-            $model = $this->getCategoryModel();
-        } else {
-            $model = $this->getItemModel($category_id);
-        }
-
+        $model = $slug == Category::SLUG ? $this->getCategoryModel() : $this->getItemModel($category_id);
         $modelCategory = $this->getCategoryModel();
-
         $currentCategory = empty($category_id) ? null : $modelCategory::findOne(['id' => $category_id]);
+
         $model = $model::findOne($id);
 
         if($model === null){
