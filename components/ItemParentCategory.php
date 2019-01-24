@@ -24,7 +24,7 @@ class ItemParentCategory extends Behavior
     {
         $category_id = Yii::$app->request->get('category_id');
 
-        if(empty($category_id) && !isset(Yii::$app->controller)) return false;
+        if(empty($category_id) || !isset(Yii::$app->controller)) return false;
 
         if(Yii::$app->controller->action->id == 'create') $this->owner->parent_category_slug = Category::findOne($category_id)->slug;
     }
