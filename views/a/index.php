@@ -64,9 +64,11 @@ $this->title = Yii::t('gr', 'Catalog');
                 'currentCategory' => $currentCategory
             ]) ?>
 
+        <? if($dataItem->pagination): ?>
             <?= LinkPager::widget([
                 'pagination' => $dataItem->pagination
             ]) ?>
+        <? endif;?>
 
         <? else : ?>
             <p><?= Yii::t('gr', 'Items not found') ?></p>
