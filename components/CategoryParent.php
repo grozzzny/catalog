@@ -21,7 +21,7 @@ class CategoryParent extends Behavior
 
     public function setParentCategory()
     {
-        if (!Yii::$app->has('request')) return false;
+        if (Yii::$app instanceof \yii\console\Application) return false;
 
         $category_id = Yii::$app->request->get('category_id');
 
