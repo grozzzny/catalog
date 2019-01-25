@@ -24,6 +24,8 @@ class ItemCategoriesBehavior extends Behavior
 
     public function setCategories()
     {
+        if(!isset(Yii::$app->request)) return false;
+
         $category_id = Yii::$app->request->get('category_id');
 
         if(empty($category_id) && !isset(Yii::$app->controller)) return false;
