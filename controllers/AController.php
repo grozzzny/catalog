@@ -99,6 +99,8 @@ class AController extends Controller
         $modelCategory = $this->getCategoryModel();
         $currentCategory = empty($category_id) ? null : $modelCategory::findOne(['id' => $category_id]);
 
+        $this->scenarios($model);
+
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -148,6 +150,8 @@ class AController extends Controller
 
         $model = $model::findOne($id);
 
+        $this->scenarios($model);
+
         if($model === null){
             $this->flash('error', Yii::t('easyii2', 'Not found'));
             return $this->redirect(['/admin/'.$this->module->id]);
@@ -188,6 +192,10 @@ class AController extends Controller
         }
     }
 
+    protected function scenarios(&$model)
+    {
+
+    }
 
     public function actionPhotos($slug, $id)
     {
