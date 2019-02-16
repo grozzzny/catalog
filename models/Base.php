@@ -28,7 +28,7 @@ class Base extends \yii\easyii2\components\ActiveRecord
     public function behaviors()
     {
         return [
-            CacheFlush::className(),
+            'cacheFlushBehavior' => CacheFlush::className(),
             'seoBehavior' => SeoBehavior::className(),
             //SortableModel::className()
         ];

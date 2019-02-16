@@ -65,6 +65,9 @@ class Item extends Base
     const SUBMENU_FILES = false;
     const ORDER_NUM = false;
 
+    const EVENT_ITEM_AFTER_INSERT = 'item_after_insert';
+    const EVENT_ITEM_AFTER_UPDATE = 'item_after_update';
+
     private $_categories = [];
 
     private $_dataProperties = null;
@@ -221,6 +224,8 @@ class Item extends Base
 
         //Сохранение значений в таблицу "Data"
         $this->dataProperties->saveData($this);
+
+        $this->trigger($insert ? self::EVENT_ITEM_AFTER_INSERT : self::EVENT_ITEM_AFTER_UPDATE);
     }
     
     /**
