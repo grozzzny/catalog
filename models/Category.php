@@ -224,15 +224,36 @@ class Category extends Base
         $provider->setSort($sort);
     }
 
+    /** relation models */
+    public function modelRelationsCategoriesItems()
+    {
+        return RelationsCategoriesItems::className();
+    }
+
+    public function modelRelationsCategoriesProperties()
+    {
+        return RelationsCategoriesProperties::className();
+    }
+
+    public function modelProperties()
+    {
+        return Properties::className();
+    }
+
+    public function modelItem()
+    {
+        return Item::className();
+    }
+    /** end */
 
     public function getRelationsCategoriesProperties()
     {
-        return $this->hasMany(RelationsCategoriesProperties::className(), ['category_id' => 'id']);
+        return $this->hasMany(static::modelRelationsCategoriesProperties(), ['category_id' => 'id']);
     }
 
     public function getProperties()
     {
-        return $this->hasMany(Properties::className(), ['id' => 'property_id'])
+        return $this->hasMany(static::modelProperties(), ['id' => 'property_id'])
             ->via('relationsCategoriesProperties')
             ->orderBy(['index' => SORT_ASC]);
     }
@@ -249,25 +270,26 @@ class Category extends Base
 
     public function getRelationsCategoriesItems()
     {
-        return $this->hasMany(RelationsCategoriesItems::className(), ['category_id' => 'id']);
+        return $this->hasMany(static::modelRelationsCategoriesItems(), ['category_id' => 'id']);
     }
 
     public function getItems()
     {
-        return $this->hasMany(Item::className(), ['id' => 'item_id'])
+        $modelItem = static::modelItem();
+        return $this->hasMany($modelItem, ['id' => 'item_id'])
             ->via('relationsCategoriesItems');
     }
 
     public function getAllChildren($condition = null)
     {
-        $query = self::find()->where(['!=', 'FIND_IN_SET(\''.$this->id.'\', parents)', '0']);
+        $query = static::find()->where(['!=', 'FIND_IN_SET(\''.$this->id.'\', parents)', '0']);
         if(!empty($condition)) $query->andWhere($condition);
         return $query->all();
     }
 
     public function getChildren()
     {
-        $query = $this->hasMany(self::className(), ['parent_id' => 'id']);
+        $query = $this->hasMany(static::className(), ['parent_id' => 'id']);
 
         if(!$this->hasAdminPanel()) $query->where(['status' => self::STATUS_ON]);
 
@@ -335,7 +357,7 @@ class Category extends Base
     public static function getOnlyParentId($parent_id)
     {
         $arr_id = [];
-        $parent = Category::findOne($parent_id);
+        $parent = static::findOne($parent_id);
 
         while ($parent){
             $arr_id[] = $parent->id;
@@ -378,7 +400,8 @@ class Category extends Base
 
     public function getActiveItems()
     {
-        return Item::find()->statusOn()->category($this)->all();
+        $modelItem = static::modelItem();
+        return $modelItem::find()->statusOn()->category($this)->all();
     }
 
 
@@ -432,7 +455,7 @@ class Category extends Base
     {
         if(empty($id)) return null;
 
-        return current(Category::findOne($id)->parentsCategories);
+        return current(static::findOne($id)->parentsCategories);
     }
 
 }

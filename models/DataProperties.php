@@ -240,7 +240,7 @@ class DataProperties extends DynamicModel
     /**
      * @return Data | string
      */
-    protected static function getClassData()
+    public static function getClassData()
     {
         return Data::className();
     }
@@ -248,7 +248,7 @@ class DataProperties extends DynamicModel
     /**
      * @return Category | string
      */
-    protected static function getClassCategory()
+    public static function getClassCategory()
     {
         return Category::className();
     }
@@ -256,7 +256,7 @@ class DataProperties extends DynamicModel
     /**
      * @return Item | string
      */
-    protected static function getClassItem()
+    public static function getClassItem()
     {
         return Item::className();
     }
