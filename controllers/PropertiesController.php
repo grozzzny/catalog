@@ -438,7 +438,7 @@ class PropertiesController extends Controller
             return json_encode([
                 'initialPreview' => !empty($image_data) ? [$path] : false,
                 'initialPreviewConfig' => [
-                    ['caption' => basename($path), 'size' => filesize(Yii::getAlias('@webroot').$path), 'width' => '120px', 'url' => Url::to([$deleteUrl]), 'key' => $path],
+                    ['caption' => basename($path), 'size' => filesize(Yii::getAlias('@webroot').$path), 'width' => '120px', 'url' => $deleteUrl, 'key' => $path],
                 ],
                 'append' => $append == 'true'
             ], JSON_UNESCAPED_UNICODE);
