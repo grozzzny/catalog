@@ -483,7 +483,10 @@ class PropertiesController extends Controller
             $post = Yii::$app->request->post();
             $image = $post['key'];
 
-            $data = Data::find()->where(['value' => $image])->one();
+            /** @var Data $model_data */
+            $model_data = Base::getModelData();
+
+            $data = $model_data::find()->where(['value' => $image])->one();
             if (!empty($data)) {
                 if ($data->item->created_by != Yii::$app->user->id && !Yii::$app->user->can('admin')) {
                     throw new ForbiddenHttpException();

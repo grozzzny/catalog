@@ -79,6 +79,18 @@ class Base extends \yii\easyii2\components\ActiveRecord
         return !empty($alternative_class_name) ? $alternative_class_name : __NAMESPACE__ . '\\Properties';
     }
 
+    /**
+     * @return string | Properties
+     */
+    public static function getModelData()
+    {
+        $settings = CatalogModule::getInstance()->settings;
+
+        $alternative_class_name = ArrayHelper::getValue($settings, 'modelData', '');
+
+        return !empty($alternative_class_name) ? $alternative_class_name : __NAMESPACE__ . '\\Data';
+    }
+
 
     /**
      * Используется при отчистке ранее загруженных файлов
