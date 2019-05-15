@@ -150,7 +150,7 @@ JS;
                 'multiple' => $this->settings->multiple
             ],
             'pluginOptions' => [
-                'uploadUrl' => Url::to([$this->uploadUrl]),
+                'uploadUrl' => $this->uploadUrl,
                 'autoOrientImage' => true,
                 'uploadExtraData' => [
                     'attribute' => $this->attribute,
