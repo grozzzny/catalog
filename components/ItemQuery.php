@@ -15,9 +15,10 @@ class ItemQuery extends ActiveQuery
 
     public $_category;
 
-    protected static function getTableNameItem()
+    protected function getTableNameItem()
     {
-        return Item::tableName();
+        $modelClass = $this->modelClass;
+        return $modelClass::tableName();
     }
 
     /**
@@ -52,9 +53,9 @@ class ItemQuery extends ActiveQuery
         if(!empty($search)){
             $this->andFilterWhere([
                 'OR',
-                ['LIKE', static::getTableNameItem() . '.title', $search],
-                [static::getTableNameItem() . '.id' => $search],
-                ['LIKE', static::getTableNameItem() . '.description', $search],
+                ['LIKE', $this->getTableNameItem() . '.title', $search],
+                [$this->getTableNameItem() . '.id' => $search],
+                ['LIKE', $this->getTableNameItem() . '.description', $search],
             ]);
         }
         return $this;
@@ -91,7 +92,7 @@ class ItemQuery extends ActiveQuery
      */
     public function whereProperties($condition)
     {
-        $this->distinct(static::getTableNameItem() . '.id');
+        $this->distinct($this->getTableNameItem() . '.id');
 
         $properties = (isset($this->_category)) ? $this->_category->allProperties : [];
 
@@ -152,12 +153,12 @@ class ItemQuery extends ActiveQuery
                                         ->select('item_id')
                                         ->groupBy('item_id')
                                         ->where(['property_slug' => $property->slug])
-                                        ->andWhere('`item_id` = `'.static::getTableNameItem().'`.`id`');
+                                        ->andWhere('`item_id` = `'.$this->getTableNameItem().'`.`id`');
 
                             if($value == '0') {
-                                $this->andWhere(['NOT IN', static::getTableNameItem() . '.id', $newQuery]);
+                                $this->andWhere(['NOT IN', $this->getTableNameItem() . '.id', $newQuery]);
                             } else {
-                                $this->andWhere(['IN', static::getTableNameItem() . '.id', $newQuery]);
+                                $this->andWhere(['IN', $this->getTableNameItem() . '.id', $newQuery]);
                             }
 
                             continue;
@@ -189,7 +190,7 @@ class ItemQuery extends ActiveQuery
         }
 
         if($filtersApplied) {
-            $this->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '. static::getTableNameItem() .'.id');
+            $this->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '. $this->getTableNameItem() .'.id');
             $this->andFilterWhere(['f.filter_matched' => $filtersApplied]);
         }
         return $this;
