@@ -17,7 +17,7 @@
         "grozzzny/widgets": "dev-master",
         "yiisoft/yii2": "*",
         "kartik-v/yii2-widget-select2": "@dev",
-        "kartik-v/yii2-widget-fileinput": "v5.0.3",
+        "kartik-v/yii2-widget-fileinput": "v5.0.2",
         "black-lamp/yii2-text-editor": "@dev",
         "yiisoft/yii2-jui": "~2.0.0"
     },
