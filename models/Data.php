@@ -71,4 +71,9 @@ class Data extends Base
         return $this->hasOne(Properties::className(), ['slug' => 'property_slug']);
     }
 
+    public static function deleteAllData($id, $slug)
+    {
+        static::deleteAll(['item_id' => $id, 'property_slug' => $slug]);
+    }
+
 }

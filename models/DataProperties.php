@@ -16,8 +16,8 @@ use yii\web\UploadedFile;
  * @package grozzzny\catalog\models
  *
  * @property-read array $all = [
- *      [
- *          'value' => null,
+ *      'attribute' => [
+ *          'value' => 'null',
  *          'label' => 'string',
  *          'type' => 'string | integer | select | checkbox | html | category | multicategory | itemscategory | datetime | image | file | code',
  *          'settings' => [
@@ -35,7 +35,7 @@ use yii\web\UploadedFile;
  *          'options' => [
  *              'key' => 'value'
  *          ],
- *      ],
+ *      ]
  * ]
  */
 class DataProperties extends DynamicModel
@@ -103,7 +103,7 @@ class DataProperties extends DynamicModel
                 'value' => $val,
                 'label' => $property->title,
                 'type' => $property->type,
-                'settings' => $property->settings,
+                'settings' => (array)$property->settings,
                 'options' => $property->options,
             ];
 
@@ -267,20 +267,31 @@ class DataProperties extends DynamicModel
         foreach ($attributes as $slug => $values)
         {
 
-            $classData::deleteAll(['item_id' => $item->id, 'property_slug' => $slug]);
+            $classData::deleteAllData($item->id, $slug);
             $values = (is_array($values)) ? $values : [$values];
 
             foreach ($values as $value){
 
                 $value = (is_array($value)) ? array_values($value)[0] : $value;
 
-                $data = new $classData;
-                $data->value = $value;
-                $data->property_slug = $slug;
-                $data->item_id = $item->id;
-                if(!empty($value)) $data->save();
+                static::saveDataModel($value, $slug, $item->id);
             }
         }
+    }
+
+    public static function saveDataModel($value, $slug, $id)
+    {
+        $classData = static::getClassData();
+
+        $data = new $classData([
+            'value' => $value,
+            'property_slug' => $slug,
+            'item_id' => $id,
+        ]);
+
+        if(!empty($value)) return $data->save();
+
+        return false;
     }
 
     /**
