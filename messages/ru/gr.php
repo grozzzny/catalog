@@ -132,4 +132,5 @@ return [
     'Map. Polyline' => 'Карта. Ломанная',
     'Map. Route' => 'Карта. Маршрут',
     'ID input Search' => 'ID поля поиска',
+    'Variations' => 'Вариация',
 ];

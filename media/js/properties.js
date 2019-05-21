@@ -54,6 +54,7 @@ var properties = {
         filter_show: 'Show in filter',
         filter_show_admin: 'Show in filter in Admin panel',
         characteristic: 'Characteristic',
+        variations: 'Variations',
         scenarios: 'Scenarios',
         description: 'Description',
         example_1: 'Example #1',
@@ -525,6 +526,7 @@ var properties = {
             modal.append(properties.settings.checkbox('filter_show_admin', data.filter_show_admin, properties.i18n.filter_show_admin));
 
             modal.append(properties.settings.checkbox('characteristic', data.characteristic, properties.i18n.characteristic));
+            modal.append(properties.settings.checkbox('variations', data.variations, properties.i18n.variations));
 
             //Параметр - множественности
             if (jQuery.inArray(type, [

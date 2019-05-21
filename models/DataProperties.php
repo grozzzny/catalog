@@ -11,9 +11,38 @@ use yii\easyii2\helpers\Upload;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 
+/**
+ * Class DataProperties
+ * @package grozzzny\catalog\models
+ *
+ * @property-read array $all = [
+ *      [
+ *          'value' => null,
+ *          'label' => 'string',
+ *          'type' => 'string | integer | select | checkbox | html | category | multicategory | itemscategory | datetime | image | file | code',
+ *          'settings' => [
+ *              'group' => 'my_group',
+ *              'scenarios' => 'user',
+ *              'description' => '',
+ *              'example_1' => '',
+ *              'example_2' => '',
+ *              'filter_show' => true,
+ *              'filter_show_admin' => true,
+ *              'characteristic' => true,
+ *              'multiple' => true,
+ *              'variations' => true,
+ *          ],
+ *          'options' => [
+ *              'key' => 'value'
+ *          ],
+ *      ],
+ * ]
+ */
 class DataProperties extends DynamicModel
 {
     const PRIMARY_MODEL = false;
+
+    private $_all = [];
 
     private $_labels = [];
     private $_types = [];
@@ -53,9 +82,11 @@ class DataProperties extends DynamicModel
         }
 
         foreach ($properties as $property){
-            $attributes[$property->slug] = $property->settings->multiple ? [] : null;
+            $val = $property->settings->multiple ? [] : null;
 
-            if (!empty(ArrayHelper::getValue($values, $property->slug, null))) $attributes[$property->slug] = $values[$property->slug];
+            if (!empty(ArrayHelper::getValue($values, $property->slug, null))) $val = $values[$property->slug];
+
+            $attributes[$property->slug] = $val;
 
             if (!empty($property->settings->scenarios)){
                 foreach(explode(' ', $property->settings->scenarios) as $scenario){
@@ -68,6 +99,14 @@ class DataProperties extends DynamicModel
             $this->_settings[$property->slug] = $property->settings;
             $this->_options[$property->slug] = $property->options;
 
+            $this->_all[$property->slug] = [
+                'value' => $val,
+                'label' => $property->title,
+                'type' => $property->type,
+                'settings' => $property->settings,
+                'options' => $property->options,
+            ];
+
             foreach ($property->validations as $validation){
                 $validator = $validation[0];
                 $params = ArrayHelper::getValue($validation, '1', []);
@@ -77,6 +116,13 @@ class DataProperties extends DynamicModel
         }
 
         parent::__construct($attributes, $config);
+    }
+
+    public function getAll()
+    {
+        if(!empty($this->_all)) return $this->_all;
+
+        return $this->_all;
     }
 
     public function getType($slug)

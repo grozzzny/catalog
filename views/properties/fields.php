@@ -139,6 +139,7 @@ $i18n = json_encode([
     'filter_show' => Yii::t('gr','Show in filter'),
     'filter_show_admin' => Yii::t('gr','Show in filter in Admin panel'),
     'characteristic' => Yii::t('gr','Characteristic'),
+    'variations' => Yii::t('gr','Variations'),
     'scenarios' => Yii::t('gr','Scenarios'),
     'description' => Yii::t('gr','Description'),
     'example_1' => Yii::t('gr','Example #1'),
