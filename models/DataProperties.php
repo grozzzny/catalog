@@ -17,6 +17,7 @@ use yii\web\UploadedFile;
  *
  * @property-read array $all = [
  *      'attribute' => [
+ *          'slug' => 'slug',
  *          'value' => 'null',
  *          'label' => 'string',
  *          'type' => 'string | integer | select | checkbox | html | category | multicategory | itemscategory | datetime | image | file | code',
@@ -100,6 +101,7 @@ class DataProperties extends DynamicModel
             $this->_options[$property->slug] = $property->options;
 
             $this->_all[$property->slug] = [
+                'slug' => $property->slug,
                 'value' => $val,
                 'label' => $property->title,
                 'type' => $property->type,
