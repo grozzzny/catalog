@@ -102,7 +102,7 @@ class DataProperties extends DynamicModel
 
             $this->_all[$property->slug] = [
                 'slug' => $property->slug,
-                'value' => $val,
+                'value' => filter_var($val, FILTER_VALIDATE_INT) ? (integer) $val : $val,
                 'label' => $property->title,
                 'type' => $property->type,
                 'settings' => (array)$property->settings,
