@@ -215,7 +215,7 @@ class Category extends Base
         ];
 
         if(self::ORDER_NUM){
-            $sort = $sort + ['defaultOrder' => ['order_num' => SORT_DESC]];
+            $sort = $sort + ['defaultOrder' => ['id' => SORT_ASC]];
             $attributes = $attributes + ['order_num'];
         }
 

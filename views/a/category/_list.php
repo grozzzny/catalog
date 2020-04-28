@@ -26,6 +26,10 @@ $sort = $data->getSort();
             <?=$sort->link('slug');?>
         </th>
 
+        <th>
+            <?=$sort->link('order_num');?>
+        </th>
+
         <th width="100">
             <?=$sort->link('status');?>
         </th>
@@ -51,6 +55,10 @@ $sort = $data->getSort();
 
         <td>
             <?= $item->slug ?>
+        </td>
+
+        <td>
+            <?= $item->order_num ?>
         </td>
 
         <td class="status vtop">
