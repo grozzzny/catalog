@@ -10,7 +10,6 @@ class ModuleAsset extends \yii\web\AssetBundle
     ];
 
     public $js = [
-        'js/admin_module.js',
         'js/translit.js',
     ];
 

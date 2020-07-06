@@ -1,7 +1,7 @@
 {
     "name": "grozzzny/catalog",
-    "description": "Catalog for EasyiiCMS",
-    "keywords": ["yii", "easyii2CMS", "CMS", "module"],
+    "description": "Catalog module for Yii2",
+    "keywords": ["yii", "Yii2", "module", "Catalog"],
     "type": "yii2-extension",
     "minimum-stability": "dev",
     "license": "MIT",
@@ -9,17 +9,17 @@
         {
             "name": "Dmitriy Groznyy",
             "email": "grozzzny@gmail.com",
-            "homepage": "http://pr-kenig.ru"
+            "homepage": "https://pr-kenig.ru"
         }
     ],
     "require": {
         "php": ">=5.3.0",
         "grozzzny/widgets": "dev-master",
-        "yiisoft/yii2": "*",
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-widget-fileinput": "v1.0.2",
         "black-lamp/yii2-text-editor": "@dev",
-        "yiisoft/yii2-jui": "~2.0.0"
+        "yiisoft/yii2-jui": "~2.0.0",
+        "grozzzny/admin": "dev-master"
     },
     "autoload": {
         "psr-4": {

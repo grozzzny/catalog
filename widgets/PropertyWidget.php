@@ -38,7 +38,7 @@ class PropertyWidget extends InputWidget
                         'model' => $this->model,
                         'attribute' => $this->attribute,
                         'options' => [
-                            'placeholder' => Yii::t('gr', 'Enter value..'),
+                            'placeholder' => Yii::t('catalog', 'Enter value..'),
                             'multiple' => true,
                         ],
                         'pluginOptions' => [
@@ -58,7 +58,7 @@ class PropertyWidget extends InputWidget
                     'attribute' => $this->attribute,
                     'data' => $options,
                     'options' => [
-                        'placeholder' => Yii::t('gr', 'Enter value..'),
+                        'placeholder' => Yii::t('catalog', 'Enter value..'),
                         'multiple' => $settings->multiple ? true : false,
                     ],
                     'pluginOptions' => [
@@ -136,7 +136,7 @@ class PropertyWidget extends InputWidget
                     'attribute' => $this->attribute,
                     'data' => $data,
                     'options' => [
-                        'placeholder' => Yii::t('gr', 'Enter value..'),
+                        'placeholder' => Yii::t('catalog', 'Enter value..'),
                         'multiple' => $settings->multiple ? true : false,
                     ],
                     'pluginOptions' => [

@@ -1,7 +1,8 @@
 <?php
 namespace grozzzny\catalog\models;
 
-use grozzzny\catalog\CatalogModule;
+use grozzzny\admin\helpers\Image;
+use grozzzny\admin\widgets\file_input\components\FileBehavior;
 use grozzzny\catalog\components\CategoryParent;
 use Yii;
 use yii\behaviors\AttributeBehavior;
@@ -9,7 +10,6 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\easyii2\helpers\Image;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
@@ -57,11 +57,10 @@ use yii\helpers\Url;
  * @property Item[]  $activeItems
  *
  */
-class Category extends Base
+class Category extends ActiveRecord
 {
+    const STATUS_ON = true;
     const PRIMARY_MODEL = true;
-
-    const CACHE_KEY = 'gr_catalog_categories';
 
     const TITLE = 'Categories';
     const SLUG = 'category';
@@ -92,7 +91,12 @@ class Category extends Base
                     return implode(",", self::getOnlyParentId($this->parent_id));
                 },
             ],
-            'categoryParent' => CategoryParent::className()
+            'categoryParent' => CategoryParent::className(),
+            'image' => [
+                'class' => FileBehavior::className(),
+                'fileAttribute' => 'image_file',
+                'uploadPath' => '/uploads/categories',
+            ],
         ]);
     }
 
@@ -121,16 +125,16 @@ class Category extends Base
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('gr', 'ID'),
-            'slug' => Yii::t('gr', 'Slug'),
-            'title' => Yii::t('gr', 'Title'),
-            'parent_id' => Yii::t('gr', 'Parent Category'),
-            'image_file' => Yii::t('gr', 'Image'),
-            'views' => Yii::t('gr', 'Count Views'),
-            'short' => Yii::t('gr', 'Short text'),
-            'description' => Yii::t('gr', 'Description'),
-            'status' => Yii::t('gr', 'Status'),
-            'order_num' => Yii::t('gr', 'Sort Index'),
+            'id' => Yii::t('catalog', 'ID'),
+            'slug' => Yii::t('catalog', 'Slug'),
+            'title' => Yii::t('catalog', 'Title'),
+            'parent_id' => Yii::t('catalog', 'Parent Category'),
+            'image_file' => Yii::t('catalog', 'Image'),
+            'views' => Yii::t('catalog', 'Count Views'),
+            'short' => Yii::t('catalog', 'Short text'),
+            'description' => Yii::t('catalog', 'Description'),
+            'status' => Yii::t('catalog', 'Status'),
+            'order_num' => Yii::t('catalog', 'Sort Index'),
         ];
     }
 
@@ -173,10 +177,8 @@ class Category extends Base
     }
 
 
-    public function getBreadcrumbs($lastLink = false)
+    public function getBreadcrumbs($lastLink = false, $adminPanel = true)
     {
-        $adminPanel = $this->hasAdminPanel();
-
         $breadcrumbs[] = [
             'label' => $this->title,
             'url' => $lastLink ? ($adminPanel ? $this->linkAdmin : $this->link) : null
@@ -434,7 +436,7 @@ class Category extends Base
 
     public function getLinkEdit()
     {
-        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/a/edit', 'id' => $this->id, 'category_id' => $this->parent_id, 'slug' => self::SLUG]);
+        return Url::to(['default/edit', 'id' => $this->id, 'category_id' => $this->parent_id, 'slug' => self::SLUG]);
     }
 
     public function getLinkProperties()
@@ -444,7 +446,7 @@ class Category extends Base
 
     public function getLinkDelete()
     {
-        return Url::to(['/admin/'.Yii::$app->controller->module->id.'/a/delete', 'id' => $this->primaryKey, 'slug' => self::SLUG]);
+        return Url::to(['default/delete', 'id' => $this->primaryKey, 'slug' => self::SLUG]);
     }
 
     /**

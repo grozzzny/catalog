@@ -1,7 +1,7 @@
 <?php
 use yii\easyii2\widgets\Photos;
 
-$this->title = Yii::t('gr', 'Add photos');
+$this->title = Yii::t('catalog', 'Add photos');
 ?>
 
 <?= $this->render('_menu', ['current_model' => $current_model]) ?>

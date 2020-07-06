@@ -15,7 +15,7 @@ use yii\web\JsExpression;
  */
 ?>
 
-<?=Html::beginForm(Url::toRoute(['a/']), 'get');?>
+<?=Html::beginForm(Url::toRoute(['default/']), 'get');?>
 
     <div class="col-sm-1 pull-right">
         <?=Html::submitButton('Ok', [
@@ -25,7 +25,7 @@ use yii\web\JsExpression;
 
     <div class="col-sm-2 pull-right">
         <?=Html::input('string', 'search_text', Yii::$app->request->get('search_text'),[
-            'placeholder'=> Yii::t('gr', 'Search..'),
+            'placeholder'=> Yii::t('catalog', 'Search..'),
             'class'=> 'form-control',
         ])?>
     </div>
@@ -40,11 +40,11 @@ use yii\web\JsExpression;
                 'onchange' => 'submit();',
             ],
             'pluginOptions' => [
-                'placeholder' => Yii::t('gr', 'Select category..'),
+                'placeholder' => Yii::t('catalog', 'Select category..'),
                 'allowClear' => true,
                 //'width' => 400,
                 'ajax' => [
-                    'url' => '/admin/'.CatalogModule::getNameModule().'/properties/get-list-categories',
+                    'url' => Url::to(['properties/get-list-categories']),
                     'dataType' => 'json',
                     'data' => new JsExpression('function(params) { 
                        return {

@@ -58,7 +58,7 @@ class m170613_212325_create_module_catalog extends \grozzzny\catalog\migrations\
             'item_id' => $this->integer(),
             'property_slug' => $this->string(),
             'key' => $this->string(),
-            'value' => 'varchar(1024)',
+            'value' => 'varchar(255)',
         ], $this->tableOptions);
 
 

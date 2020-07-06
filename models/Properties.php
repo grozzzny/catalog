@@ -30,11 +30,9 @@ use stdClass;
  * @property string  $optionsJson
  * @property string  $settingsJson
  */
-class Properties extends Base
+class Properties extends ActiveRecord
 {
     const PRIMARY_MODEL = false;
-
-    const CACHE_KEY = 'gr_catalog_properties';
 
     const TITLE = 'All properties';
     const SLUG = 'all_properties';
@@ -180,14 +178,14 @@ class Properties extends Base
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('gr', 'ID'),
-            'slug' => Yii::t('gr', 'Slug'),
-            'title' => Yii::t('gr', 'Title'),
-            'type' => Yii::t('gr', 'Type'),
-            'settings' => Yii::t('gr', 'Settings'),
-            'validations' => Yii::t('gr', 'Validation Rule'),
-            'order_num' => Yii::t('gr', 'Sort Index'),
-            'index' => Yii::t('gr', 'Index'),
+            'id' => Yii::t('catalog', 'ID'),
+            'slug' => Yii::t('catalog', 'Slug'),
+            'title' => Yii::t('catalog', 'Title'),
+            'type' => Yii::t('catalog', 'Type'),
+            'settings' => Yii::t('catalog', 'Settings'),
+            'validations' => Yii::t('catalog', 'Validation Rule'),
+            'order_num' => Yii::t('catalog', 'Sort Index'),
+            'index' => Yii::t('catalog', 'Index'),
         ];
     }
 
@@ -213,20 +211,20 @@ class Properties extends Base
     public static function getListType()
     {
         return [
-            self::TYPE_STRING => Yii::t('gr','String'),
-            self::TYPE_INTEGER => Yii::t('gr','Integer'),
-            self::TYPE_SELECT => Yii::t('gr','Select'),
-            self::TYPE_CHECKBOX => Yii::t('gr','Checkbox'),
-            self::TYPE_HTML => Yii::t('gr','HTML'),
-            self::TYPE_CATEGORY => Yii::t('gr','Category'),
-            self::TYPE_MULTICATEGORY => Yii::t('gr','Multi category'),
-            self::TYPE_ITEMSCATEGORY => Yii::t('gr','Items category'),
-            self::TYPE_DATETIME => Yii::t('gr','Datetime'),
-            self::TYPE_IMAGE => Yii::t('gr','Image'),
-            self::TYPE_FILE => Yii::t('gr','File'),
-            self::TYPE_CODE => Yii::t('gr','Code'),
-            self::TYPE_MAP_PLACEMARK => Yii::t('gr','Map. Placemark'),
-            self::TYPE_MAP_POLYGON => Yii::t('gr','Map. Polygon'),
+            self::TYPE_STRING => Yii::t('catalog','String'),
+            self::TYPE_INTEGER => Yii::t('catalog','Integer'),
+            self::TYPE_SELECT => Yii::t('catalog','Select'),
+            self::TYPE_CHECKBOX => Yii::t('catalog','Checkbox'),
+            self::TYPE_HTML => Yii::t('catalog','HTML'),
+            self::TYPE_CATEGORY => Yii::t('catalog','Category'),
+            self::TYPE_MULTICATEGORY => Yii::t('catalog','Multi category'),
+            self::TYPE_ITEMSCATEGORY => Yii::t('catalog','Items category'),
+            self::TYPE_DATETIME => Yii::t('catalog','Datetime'),
+            self::TYPE_IMAGE => Yii::t('catalog','Image'),
+            self::TYPE_FILE => Yii::t('catalog','File'),
+            self::TYPE_CODE => Yii::t('catalog','Code'),
+            self::TYPE_MAP_PLACEMARK => Yii::t('catalog','Map. Placemark'),
+            self::TYPE_MAP_POLYGON => Yii::t('catalog','Map. Polygon'),
             self::TYPE_MAP_POLYLINE => Yii::t('gr','Map. Polyline'),
             self::TYPE_MAP_ROUTE => Yii::t('gr','Map. Route'),
         ];

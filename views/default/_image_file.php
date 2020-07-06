@@ -13,6 +13,6 @@ use yii\helpers\Url;
             'id' => $model->id,
             'slug' => $model::SLUG,
             'attribute' => $attribute
-        ]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii2', 'Clear image')?>"><?= Yii::t('easyii2', 'Clear image')?></a>
+        ]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('catalog', 'Clear image')?>"><?= Yii::t('catalog', 'Clear image')?></a>
     </div>
 <? endif; ?>

@@ -21,7 +21,7 @@ $sort = $data->getSort();
         </th>
         <th><?=$sort->link('title');?></th>
         <th><?=$sort->link('slug');?></th>
-        <th><?=Yii::t('gr', 'Area of visibility')?></th>
+        <th><?=Yii::t('catalog', 'Area of visibility')?></th>
 
         <th width="100"><?=$sort->link('status');?></th>
 

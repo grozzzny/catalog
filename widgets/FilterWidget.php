@@ -120,14 +120,14 @@ class FilterWidget extends InputWidget
                             <div class="input-group-btn">
                                 <label class="btn btn-default" style="width: 70px">
                                     '.Html::radio($this->attribute, $this->_value === '1', ['value' => '1']).'
-                                    '.Yii::t('gr', 'Yes').'
+                                    '.Yii::t('catalog', 'Yes').'
                                 </label>
                                 <label class="btn btn-default">
                                     '.Html::radio($this->attribute, $this->_value !== '1' && $this->_value !== '0', ['value' => '']).'
                                 </label>
                                 <label class="btn btn-default" style="width: 70px">
                                     '.Html::radio($this->attribute, $this->_value === '0', ['value' => '0']).'
-                                    '.Yii::t('gr', 'No').'
+                                    '.Yii::t('catalog', 'No').'
                                 </label>
                             </div>
                         </div>
@@ -295,11 +295,11 @@ class FilterWidget extends InputWidget
 
     protected function getPlaceholderFrom ()
     {
-        return $this->_label . Yii::t('gr',' from');
+        return $this->_label . Yii::t('catalog',' from');
     }
 
     protected function getPlaceholderTo ()
     {
-        return $this->_label . Yii::t('gr',' to');
+        return $this->_label . Yii::t('catalog',' to');
     }
 }

@@ -3,7 +3,7 @@ namespace grozzzny\catalog\models;
 
 
 use Yii;
-use yii\easyii2\behaviors\CacheFlush;
+use yii\db\ActiveRecord;
 
 /**
  * Data ActiveRecord model.
@@ -18,19 +18,9 @@ use yii\easyii2\behaviors\CacheFlush;
  * @property-read Item         $item
  * @property-read Properties   $property
  */
-class Data extends Base
+class Data extends ActiveRecord
 {
-    const CACHE_KEY = 'gr_catalog_data';
-
     const PRIMARY_MODEL = false;
-
-    public function behaviors()
-    {
-        return [
-            CacheFlush::className(),
-            //SortableModel::className()
-        ];
-    }
 
     public static function tableName()
     {
@@ -54,10 +44,10 @@ class Data extends Base
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('gr', 'ID'),
-            'property_slug' => Yii::t('gr', 'Slug'),
-            'item_id' => Yii::t('gr', 'Element'),
-            'value' => Yii::t('gr', 'Value'),
+            'id' => Yii::t('catalog', 'ID'),
+            'property_slug' => Yii::t('catalog', 'Slug'),
+            'item_id' => Yii::t('catalog', 'Element'),
+            'value' => Yii::t('catalog', 'Value'),
         ];
     }
 

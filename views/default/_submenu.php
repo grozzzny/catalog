@@ -14,7 +14,7 @@ $module = $this->context->module->id;
 <ul class="nav nav-tabs">
     <li <?= ($action === 'edit') ? 'class="active"' : '' ?>>
         <a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $model->primaryKey, 'slug' => $model::SLUG]) ?>">
-            <?= Yii::t('easyii2', 'Edit') ?>
+            <?= Yii::t('catalog', 'Edit') ?>
         </a>
     </li>
 
@@ -23,7 +23,7 @@ $module = $this->context->module->id;
     <li <?= ($action === 'photos') ? 'class="active"' : '' ?>>
         <a href="<?= Url::to(['/admin/'.$module.'/a/photos', 'id' => $model->primaryKey, 'slug' => $model::SLUG]) ?>">
             <span class="glyphicon glyphicon-camera"></span>
-            <?= Yii::t('easyii2', 'Photos') ?>
+            <?= Yii::t('catalog', 'Photos') ?>
         </a>
     </li>
     <? endif;?>
@@ -39,7 +39,7 @@ $module = $this->context->module->id;
     <? if(Yii::$app->controller->actionParams['slug'] == Category::SLUG): ?>
         <li <?= (Yii::$app->controller->route === 'admin/'.$module.'/properties/fields') ? 'class="active"' : '' ?>>
             <a href="<?= Url::to(['/admin/'.$module.'/properties', 'id' => $model->primaryKey, 'slug' => $model::SLUG]) ?>">
-                <?=Yii::t('gr', 'Properties')?>
+                <?=Yii::t('catalog', 'Properties')?>
             </a>
         </li>
     <? endif;?>

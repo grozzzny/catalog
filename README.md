@@ -28,6 +28,29 @@ Or add following lines to your console configuration file:
 ],
 ```
 
+```php
+
+'modules' => [
+    'catalog' => [
+        'class' => 'grozzzny\catalog\CatalogModule',
+    ],
+],
+'i18n' => [
+    'translations' => [
+        'catalog' => [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en-US',
+            'basePath' => '@grozzzny/catalog/messages',
+        ],
+    ],
+],
+'container' => [
+    'singletons' => [
+        'grozzzny\catalog\models\Category' => ['class' => 'app\models\Category'],
+    ],
+],
+```
+
 ## Schema
 ![alt text](https://raw.githubusercontent.com/grozzzny/catalog/master/media/2017-07-17_08-59-16.png)
 
@@ -45,11 +68,11 @@ Or add following lines to your console configuration file:
 ```php
 <?
 $i18n = json_encode([
-    'select_category' => Yii::t('gr','Select category..'),
-    'key' => Yii::t('gr','Key'),
-    'value' => Yii::t('gr','Value'),
+    'select_category' => Yii::t('catalog','Select category..'),
+    'key' => Yii::t('catalog','Key'),
+    'value' => Yii::t('catalog','Value'),
     ...
-    'filter_show' => Yii::t('gr','Show in filter'),
+    'filter_show' => Yii::t('catalog','Show in filter'),
 ], JSON_UNESCAPED_UNICODE);
 ```
 

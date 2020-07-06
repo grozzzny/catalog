@@ -30,7 +30,7 @@ if(!empty($currentCategory)){
 echo  Breadcrumbs::widget([
     'links' => $breadcrumbs_arr,
     'homeLink' => [
-        'label' => Yii::t('gr', 'Categories'),
+        'label' => Yii::t('catalog', 'Categories'),
         'url' => ['/admin/' . Yii::$app->controller->module->id]
     ],
     'encodeLabels' => false,

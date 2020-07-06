@@ -15,7 +15,7 @@ use yii\widgets\LinkPager;
 
 BootstrapPluginAsset::register($this);
 ModuleAsset::register($this);
-$this->title = Yii::t('gr', 'Catalog');
+$this->title = Yii::t('catalog', 'Catalog');
 ?>
 
 <?= $this->render('_breadcrumbs', ['currentCategory' => $currentCategory, 'title' => null]) ?>
@@ -28,7 +28,7 @@ $this->title = Yii::t('gr', 'Catalog');
 
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= empty($currentCategory) ? Yii::t('gr', 'List of top-level categories') : Yii::t('gr', 'List of subcategories of the category <b>«{0}»</b>', [$currentCategory->title]) ?></h3>
+        <h3 class="box-title"><?= empty($currentCategory) ? Yii::t('catalog', 'List of top-level categories') : Yii::t('catalog', 'List of subcategories of the category <b>«{0}»</b>', [$currentCategory->title]) ?></h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -44,7 +44,7 @@ $this->title = Yii::t('gr', 'Catalog');
             ]) ?>
 
         <? else : ?>
-            <p><?= Yii::t('gr', 'Categories not found') ?></p>
+            <p><?= Yii::t('catalog', 'Categories not found') ?></p>
         <? endif; ?>
     </div>
 
@@ -53,7 +53,7 @@ $this->title = Yii::t('gr', 'Catalog');
 <? if ($currentCategory != null):?>
 <div class="box box-success">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= empty($currentCategory) ? Yii::t('gr', 'List all items') : Yii::t('gr', 'List of items of the category <b>«{0}»</b>', [$currentCategory->title]) ?></h3>
+        <h3 class="box-title"><?= empty($currentCategory) ? Yii::t('catalog', 'List all items') : Yii::t('catalog', 'List of items of the category <b>«{0}»</b>', [$currentCategory->title]) ?></h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -71,7 +71,7 @@ $this->title = Yii::t('gr', 'Catalog');
         <? endif;?>
 
         <? else : ?>
-            <p><?= Yii::t('gr', 'Items not found') ?></p>
+            <p><?= Yii::t('catalog', 'Items not found') ?></p>
         <? endif; ?>
     </div>
 </div>

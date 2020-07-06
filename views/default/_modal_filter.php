@@ -14,9 +14,9 @@ $dataProperties = new DataProperties($currentCategory->allProperties);
 $dataProperties->setAttributes(Yii::$app->request->get());
 
 Modal::begin([
-    'header' => '<h2>'.Yii::t('gr','Filter').'</h2>',
+    'header' => '<h2>'.Yii::t('catalog','Filter').'</h2>',
     'options' => ['class' => 'options', 'id' => 'modal_filter'],
-    'footer' => '<button onclick="$(this).parents(\'form\').submit();" type="button" class="btn btn-default" data-dismiss="modal">'.Yii::t('gr','Apply').'</button>'
+    'footer' => '<button onclick="$(this).parents(\'form\').submit();" type="button" class="btn btn-default" data-dismiss="modal">'.Yii::t('catalog','Apply').'</button>'
 ]);
 
 $i = 0;
@@ -32,7 +32,7 @@ foreach ($dataProperties->attributes as $attribute => $value){
     echo Html::endTag('div');
 }
 
-if($i == 0) echo Html::tag('p', Yii::t('gr', 'Filters not found'));
+if($i == 0) echo Html::tag('p', Yii::t('catalog', 'Filters not found'));
 
 Modal::end();
 ?>

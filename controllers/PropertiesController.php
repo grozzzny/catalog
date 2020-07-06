@@ -1,53 +1,28 @@
 <?php
 namespace grozzzny\catalog\controllers;
 
-use grozzzny\catalog\models\Base;
+use grozzzny\admin\helpers\Image;
+use grozzzny\admin\helpers\Upload;
 use grozzzny\catalog\models\Category;
 use grozzzny\catalog\models\Data;
-use grozzzny\catalog\models\DataProperties;
 use grozzzny\catalog\models\Item;
 use grozzzny\catalog\models\Properties;
-use kartik\select2\Select2;
-use kartik\select2\Select2Asset;
 use Yii;
 use yii\base\ActionEvent;
-use yii\base\DynamicModel;
-use yii\base\Exception;
-use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
-use yii\easyii2\behaviors\SortableController;
-use yii\easyii2\helpers\Image;
-use yii\easyii2\helpers\Upload;
-use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
 use yii\web\UploadedFile;
-use yii\widgets\ActiveForm;
-
-use yii\easyii2\components\Controller;
 
 
-class PropertiesController extends Controller
+
+class PropertiesController extends BaseController
 {
-
     public $defaultAction = 'fields';
 
     const RESPONSE_SUCCESS = 'success';
     const RESPONSE_ERROR = 'error';
-
-    use TraitController;
-
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => SortableController::className(),
-                'model' => Base::getModel(Yii::$app->request->get('slug'))
-            ],
-        ];
-    }
 
     /**
      * @inheritdoc
@@ -76,7 +51,7 @@ class PropertiesController extends Controller
         /**
          * @var Category $model
          */
-        $model = Base::getModel($slug);
+        $model = Yii::createObject(['class' => Category::class]);
         $model = $model::findOne($id);
 
         $currentCategory = empty($category_id) ? null : Category::findOne(['id' => $category_id]);
@@ -85,7 +60,7 @@ class PropertiesController extends Controller
             return $this->redirect(['/admin/'.$this->module->id]);
         }
 
-        $title = Yii::t('gr', 'Edit properties Category <b>«{0}»</b>', [$model->title]);
+        $title = Yii::t('catalog', 'Edit properties Category <b>«{0}»</b>', [$model->title]);
 
         return $this->render('fields', [
             'model' => $model,
@@ -101,7 +76,7 @@ class PropertiesController extends Controller
 
             $data = json_decode(Yii::$app->request->post('data'), true);
 
-            $propertiesModel = Base::getModelProperties();
+            $propertiesModel = Yii::createObject(['class' => Properties::class]);
 
             foreach ($data as $item){
 
@@ -118,7 +93,7 @@ class PropertiesController extends Controller
                 $property->save();
             }
 
-            return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('gr', 'Properties save')]), JSON_UNESCAPED_UNICODE);
+            return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('catalog', 'Properties save')]), JSON_UNESCAPED_UNICODE);
 
         }
     }
@@ -131,9 +106,9 @@ class PropertiesController extends Controller
             $get = Yii::$app->request->get();
 
             /* @var Category $categoryModel */
-            $categoryModel = Base::getModel(Category::SLUG);
+            $categoryModel = Yii::createObject(['class' => Category::class]);
 
-            $propertiesModel = Base::getModelProperties();
+            $propertiesModel = Yii::createObject(['class' => Properties::class]);
 
             $property = $propertiesModel::find()
                 ->joinWith('categories')
@@ -151,7 +126,7 @@ class PropertiesController extends Controller
 
             if(empty($propertiesModel::findOne($get['id'])->categories)) $property->delete();
 
-            return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('gr', 'Property remove')]), JSON_UNESCAPED_UNICODE);
+            return json_encode(self::response(self::RESPONSE_SUCCESS, ['message' => Yii::t('catalog', 'Property remove')]), JSON_UNESCAPED_UNICODE);
 
         }
     }
@@ -168,7 +143,7 @@ class PropertiesController extends Controller
             /**
              * @var Category $model_category
              */
-            $model_category = Base::getModel('category');
+            $model_category = Yii::createObject(['class' => Category::class]);
 
             $query = $model_category::find();
 
@@ -199,7 +174,7 @@ class PropertiesController extends Controller
             /**
              * @var Category $model_category
              */
-            $model_category = Base::getModel('category');
+            $model_category = Yii::createObject(['class' => Category::class]);
 
             $query = $model_category::find();
 
@@ -247,8 +222,8 @@ class PropertiesController extends Controller
              * @var Category $model_category
              * @var Item $model_item
              */
-            $model_item = Base::getModel('item');
-            $model_category = Base::getModel('category');
+            $model_item = Yii::createObject(['class' => Item::class]);
+            $model_category = Yii::createObject(['class' => Category::class]);
 
             $query = $model_item::find();
 
@@ -282,7 +257,7 @@ class PropertiesController extends Controller
             /**
              * @var Category $model_category
              */
-            $model_category = Base::getModel('category');
+            $model_category = Yii::createObject(['class' => Category::class]);
 
             $category = $model_category::findOne(Yii::$app->request->get('id'));
             return $category->fullTitle;
@@ -299,7 +274,7 @@ class PropertiesController extends Controller
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
 
-            $propertiesModel = Base::getModelProperties();
+            $propertiesModel = Yii::createObject(['class' => Properties::class]);
 
             $query = $propertiesModel::find();
 
@@ -363,7 +338,7 @@ class PropertiesController extends Controller
 
             $properties = empty($get_properties) ? [] : Yii::$app->request->get('properties');
 
-            $propertiesModel = Base::getModelProperties();
+            $propertiesModel = Yii::createObject(['class' => Properties::class]);
 
             $query = $propertiesModel::find();
 
@@ -402,7 +377,7 @@ class PropertiesController extends Controller
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
 
-            $propertiesModel = Base::getModelProperties();
+            $propertiesModel = Yii::createObject(['class' => Properties::class]);
 
             $property = $propertiesModel::findOne(['slug' => Yii::$app->request->get('slug')]);
             return $property->title;
@@ -484,7 +459,7 @@ class PropertiesController extends Controller
             $image = $post['key'];
 
             /** @var Data $model_data */
-            $model_data = Base::getModelData();
+            $model_data = Yii::createObject(['class' => Data::class]);
 
             $data = $model_data::find()->where(['value' => $image])->one();
             if (!empty($data)) {

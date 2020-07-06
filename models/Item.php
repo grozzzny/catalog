@@ -2,7 +2,8 @@
 namespace grozzzny\catalog\models;
 
 
-use grozzzny\catalog\CatalogModule;
+use grozzzny\admin\helpers\Image;
+use grozzzny\admin\widgets\file_input\components\FileBehavior;
 use grozzzny\catalog\components\ItemCategoriesBehavior;
 use grozzzny\catalog\components\ItemParentCategory;
 use grozzzny\catalog\components\ItemQuery;
@@ -10,11 +11,7 @@ use yii\behaviors\BlameableBehavior;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\easyii2\helpers\Image;
-use yii\easyii2\models\Photo;
-use yii\easyii2\modules\gallery\api\PhotoObject;
 use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
 
 
 /**
@@ -44,7 +41,6 @@ use yii\helpers\FileHelper;
  * @property-read Properties[]   $properties
  * @property Category[]          $categories
  * @property-read Data[]         $data
- * @property-read PhotoObject[]  $photos
  * @property-read ActiveRecord   $updatedBy
  * @property-read ActiveRecord   $createdBy
  * @property-read string         $categoriesToString
@@ -52,18 +48,15 @@ use yii\helpers\FileHelper;
  * @property-read Category       $parentCategory
  *
  */
-class Item extends Base
+class Item extends ActiveRecord
 {
-    const PRIMARY_MODEL = true;
+    const STATUS_ON = true;
+    use TraitModel;
 
-    const CACHE_KEY = 'gr_catalog_items';
+    const PRIMARY_MODEL = true;
 
     const TITLE = 'Elements';
     const SLUG = 'item';
-
-    const SUBMENU_PHOTOS = true;
-    const SUBMENU_FILES = false;
-    const ORDER_NUM = false;
 
     const EVENT_ITEM_AFTER_INSERT = 'item_after_insert';
     const EVENT_ITEM_AFTER_UPDATE = 'item_after_update';
@@ -81,6 +74,11 @@ class Item extends Base
             'timestamp' => TimestampBehavior::className(),
             'itemCategories' => ItemCategoriesBehavior::className(),
             'itemParentCategory' => ItemParentCategory::className(),
+            'image' => [
+                'class' => FileBehavior::className(),
+                'fileAttribute' => 'image_file',
+                'uploadPath' => '/uploads/categories',
+            ],
         ]);
     }
 
@@ -117,22 +115,22 @@ class Item extends Base
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('gr', 'ID'),
-            'slug' => Yii::t('gr', 'Slug'),
-            'title' => Yii::t('gr', 'Title'),
-            'image_file' => Yii::t('gr', 'Image'),
-            'views' => Yii::t('gr', 'Count Views'),
-            'short' => Yii::t('gr', 'Short text'),
-            'description' => Yii::t('gr', 'Description'),
-            'status' => Yii::t('gr', 'Status'),
-            'order_num' => Yii::t('gr', 'Sort Index'),
-            'price' => Yii::t('gr', 'Price'),
-            'discount' => Yii::t('gr', 'Discount'),
-            'created_time' => Yii::t('gr', 'Date created'),
-            'updated_time' => Yii::t('gr', 'Date updated'),
-            'user_id' => Yii::t('gr', 'User'),
-            'categories' => Yii::t('gr', 'Categories'),
-            'parent_category_slug' => Yii::t('gr', 'Category'),
+            'id' => Yii::t('catalog', 'ID'),
+            'slug' => Yii::t('catalog', 'Slug'),
+            'title' => Yii::t('catalog', 'Title'),
+            'image_file' => Yii::t('catalog', 'Image'),
+            'views' => Yii::t('catalog', 'Count Views'),
+            'short' => Yii::t('catalog', 'Short text'),
+            'description' => Yii::t('catalog', 'Description'),
+            'status' => Yii::t('catalog', 'Status'),
+            'order_num' => Yii::t('catalog', 'Sort Index'),
+            'price' => Yii::t('catalog', 'Price'),
+            'discount' => Yii::t('catalog', 'Discount'),
+            'created_time' => Yii::t('catalog', 'Date created'),
+            'updated_time' => Yii::t('catalog', 'Date updated'),
+            'user_id' => Yii::t('catalog', 'User'),
+            'categories' => Yii::t('catalog', 'Categories'),
+            'parent_category_slug' => Yii::t('catalog', 'Category'),
         ];
     }
 
@@ -231,7 +229,7 @@ class Item extends Base
 
         $this->trigger($insert ? self::EVENT_ITEM_AFTER_INSERT : self::EVENT_ITEM_AFTER_UPDATE);
     }
-    
+
     /**
      * КОНЕЦ СОХРАНЕНИЯ ДАННЫХ
      */
@@ -241,32 +239,38 @@ class Item extends Base
     /** relation models */
     public function modelRelationsCategoriesItems()
     {
-        return RelationsCategoriesItems::className();
+        $model = Yii::createObject(['class' => RelationsCategoriesItems::class]);
+        return $model::className();
     }
 
     public function modelRelationsCategoriesProperties()
     {
-        return RelationsCategoriesProperties::className();
+        $model = Yii::createObject(['class' => RelationsCategoriesProperties::class]);
+        return $model::className();
     }
 
     public function modelProperties()
     {
-        return Properties::className();
+        $model = Yii::createObject(['class' => Properties::class]);
+        return $model::className();
     }
 
     public function modelCategory()
     {
-        return Category::className();
+        $model = Yii::createObject(['class' => Category::class]);
+        return $model::className();
     }
 
     public function modelDataProperties()
     {
-        return DataProperties::className();
+        $model = Yii::createObject(['class' => DataProperties::class]);
+        return $model::className();
     }
 
     public function modelData()
     {
-        return Data::className();
+        $model = Yii::createObject(['class' => Data::class]);
+        return $model::className();
     }
     /** end */
 
@@ -280,12 +284,12 @@ class Item extends Base
 
     public function getRelationsCategoriesItems()
     {
-        return $this->hasMany(static::modelRelationsCategoriesItems(), ['item_id' => 'id']);
+        return $this->hasMany($this->modelRelationsCategoriesItems(), ['item_id' => 'id']);
     }
 
     public function getCategories()
     {
-        return $this->hasMany(static::modelCategory(), ['id' => 'category_id'])
+        return $this->hasMany($this->modelCategory(), ['id' => 'category_id'])
             ->via('relationsCategoriesItems');
     }
 
@@ -309,14 +313,14 @@ class Item extends Base
 
     public function getCategoryById($category_id)
     {
-        $modelCategory = static::modelCategory();
+        $modelCategory = $this->modelCategory();
         return $modelCategory::findOne($category_id);
     }
 
 
     public function getData()
     {
-        $modelData = static::modelData();
+        $modelData = $this->modelData();
         return $this->hasMany($modelData, ['item_id' => 'id']);
     }
 
@@ -373,11 +377,6 @@ class Item extends Base
             'slug',
         ];
 
-        if(self::ORDER_NUM){
-            $sort = $sort + ['defaultOrder' => ['order_num' => SORT_DESC]];
-            $attributes = $attributes + ['order_num'];
-        }
-
         $sort = $sort + ['attributes' => $attributes];
 
         $provider->setSort($sort);
@@ -401,22 +400,9 @@ class Item extends Base
         self::updateAll(['views' => $this->views + 1], ['id' => $this->id]);
     }
 
-
-    public function getPhotos()
-    {
-        if(!$this->_photos){
-            $this->_photos = [];
-
-            foreach(Photo::find()->where(['class' => Item::className(), 'item_id' => $this->id])->sort()->all() as $model){
-                $this->_photos[] = new PhotoObject($model);
-            }
-        }
-        return $this->_photos;
-    }
-
     public function getCategoriesToString()
     {
-        return implode(', ',ArrayHelper::getColumn($this->getCategories()->all(), 'title'));
+        return implode(', ', ArrayHelper::getColumn($this->getCategories()->all(), 'title'));
     }
 
     public function getMainCategory ()

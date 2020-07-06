@@ -1,7 +1,6 @@
 <?
 use yii\helpers\Url;
 use yii\helpers\Html;
-use grozzzny\catalog\models\Base;
 
 /**
  * @var \yii\web\View $this
@@ -62,7 +61,7 @@ $sort = $data->getSort();
         </td>
 
         <td class="status vtop">
-            <?= Html::checkbox('', $item->status == Base::STATUS_ON, [
+            <?= Html::checkbox('', $item->status == true, [
                 'class' => 'my-switch',
                 'data-slug' => $item::SLUG,
                 'data-id' => $item->id,
@@ -73,15 +72,15 @@ $sort = $data->getSort();
         <td>
             <div class="btn-group btn-group-sm" role="group">
 
-                <a href="<?= $item->linkEdit ?>" class="btn btn-default" title="<?= Yii::t('easyii2', 'Edit') ?>">
+                <a href="<?= $item->linkEdit ?>" class="btn btn-default" title="<?= Yii::t('catalog', 'Edit') ?>">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
 
-                <a href="<?= $item->linkProperties ?>" class="btn btn-default" title="<?= Yii::t('gr', 'Properties') ?>">
+                <a href="<?= $item->linkProperties ?>" class="btn btn-default" title="<?= Yii::t('catalog', 'Properties') ?>">
                     <span class="glyphicon glyphicon-inbox"></span>
                 </a>
 
-                <a href="<?= $item->linkDelete ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii2', 'Delete item') ?>">
+                <a href="<?= $item->linkDelete ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('catalog', 'Delete item') ?>">
                     <span class="glyphicon glyphicon-remove"></span>
                 </a>
 
