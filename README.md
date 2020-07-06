@@ -1,20 +1,31 @@
-Catalog for easyii2CMS 
+Catalog module for Yii2
 ==============================
 
-This module allows to [Easy yii2 cms](http://github.com/noumo/easyii2) 
-
-Demo: [salesmarket.org](https://salesmarket.org/) 
+This module allows to [yii2](https://www.yiiframework.com/) 
 
 ## Installation guide
 
 ```bash
-$ php composer.phar require grozzzny/catalog "dev-master"
+$ php composer.phar require grozzzny/catalog "v3"
 ```
 
 
 Run migrations
 ```bash
 php yii migrate --migrationPath=@vendor/grozzzny/catalog/migrations
+```
+
+Or add following lines to your console configuration file:
+
+```php
+'controllerMap' => [
+    'migrate' => [
+        'class' => 'yii\console\controllers\MigrateController',
+        'migrationPath' => [
+            '@grozzzny/catalog/migrations',
+        ],
+    ],
+],
 ```
 
 ## Schema
