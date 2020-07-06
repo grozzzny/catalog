@@ -99,5 +99,7 @@ $model_category = Yii::createObject(['class' => Category::class]);
     ]
 ])?>
 
+<br>
+
 <?= Html::submitButton(Yii::t('catalog', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>

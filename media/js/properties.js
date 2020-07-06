@@ -162,7 +162,8 @@ var properties = {
 
 
     get controllerUrl() {
-        return window.location.pathname.replace(/[^\/]*$/i,'');
+        return '/admin/catalog/properties/';
+        //return window.location.pathname.replace(/[^\/]*$/i,'');
     },
 
     initAutoComplete: function (ob) {

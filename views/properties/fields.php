@@ -25,10 +25,10 @@ JuiAsset::register($this);
  */
 
 
-$this->title = Yii::t('gr', 'Catalog');
+$this->title = Yii::t('catalog', 'Catalog');
 ?>
 
-<?= $this->render('../a/_breadcrumbs', ['currentCategory' => $currentCategory, 'title' => $title]) ?>
+<?= $this->render('../default/_breadcrumbs', ['currentCategory' => $currentCategory, 'title' => $title]) ?>
 
 <div class="box box-warning">
     <div class="box-header with-border">
@@ -46,12 +46,12 @@ $this->title = Yii::t('gr', 'Catalog');
             ])?>
 
             <thead>
-            <caption><?=Yii::t('gr', 'Properties category: «{category}»', ['category' => $category->title])?></caption>
+            <caption><?=Yii::t('catalog', 'Properties category: «{category}»', ['category' => $category->title])?></caption>
             <tr>
-                <th><?=Yii::t('gr','Title')?></th>
-                <th><?=Yii::t('gr','Slug')?></th>
-                <th><?=Yii::t('gr','Type')?></th>
-                <th width="120"><?=Yii::t('gr','Params')?></th>
+                <th><?=Yii::t('catalog','Title')?></th>
+                <th><?=Yii::t('catalog','Slug')?></th>
+                <th><?=Yii::t('catalog','Type')?></th>
+                <th width="120"><?=Yii::t('catalog','Params')?></th>
                 <th width="150"></th>
             </tr>
             </thead>
@@ -73,12 +73,12 @@ $this->title = Yii::t('gr', 'Catalog');
 
         <?= Html::tag('div','', ['class' => 'alert response-server', 'style' => 'display:none;']) ?>
 
-        <?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('gr', 'Save'), [
+        <?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('catalog', 'Save'), [
             'class' => 'btn btn-primary',
             'onclick' => 'properties.save(this);'
         ]) ?>
 
-        <?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('gr', 'Add property'), [
+        <?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('catalog', 'Add property'), [
             'class' => 'btn btn-default',
             'onclick' => 'properties.clone(this);'
         ]) ?>
@@ -90,61 +90,61 @@ $this->title = Yii::t('gr', 'Catalog');
 
 <?
 $i18n = json_encode([
-    'select_category' => Yii::t('gr','Select category..'),
-    'key' => Yii::t('gr','Key'),
-    'value' => Yii::t('gr','Value'),
-    'add_option' => Yii::t('gr','Add option'),
-    'remove_option' => Yii::t('gr','Remove option'),
-    'settings_type_not_apply' => Yii::t('gr','Settings to this type do not apply'),
-    'options_type_not_apply' => Yii::t('gr','Options to this type do not apply'),
-    'multiple' => Yii::t('gr','Multiple'),
-    'filter_range' => Yii::t('gr','Filter range'),
-    'group' => Yii::t('gr','Group'),
-    'name' => Yii::t('gr','Name'),
-    'params' => Yii::t('gr','Params'),
-    'add_validation_rule' => Yii::t('gr','Add validation rule:'),
-    'remove_rule' => Yii::t('gr','Remove rule'),
-    'integer_number' => Yii::t('gr','Integer number'),
-    'minimum_value' => Yii::t('gr','Minimum value'),
-    'maximum_value' => Yii::t('gr','Maximum value'),
-    'floating_point_number' => Yii::t('gr','Floating point number'),
-    'boolean_true_false' => Yii::t('gr','Boolean (true or false)'),
-    'number' => Yii::t('gr','Number'),
-    'string' => Yii::t('gr','String'),
-    'date' => Yii::t('gr','Date'),
-    'format_date' => Yii::t('gr','Format. Example: dd-mm-yy'),
-    'required' => Yii::t('gr','Required'),
-    'email' => Yii::t('gr','Email'),
-    'url' => Yii::t('gr','Url'),
-    'image' => Yii::t('gr','Image'),
-    'extensions_image' => Yii::t('gr','Extensions. Example: png, jpg, gif'),
-    'extensions_file' => Yii::t('gr','Extensions. Example: pdf, doc'),
-    'file' => Yii::t('gr','File'),
-    'unique' => Yii::t('gr','Unique'),
-    'filter' => Yii::t('gr','Filter'),
-    'filter_trim' => Yii::t('gr','Trim the lines on both sides'),
-    'filter_register' => Yii::t('gr','Transform the register'),
-    'compare_validator' => Yii::t('gr','Comparison Validator for value OR atribute'),
-    'operator_equally' => Yii::t('gr','Equally'),
-    'operator_not_equal' => Yii::t('gr','Not equal'),
-    'operator_more' => Yii::t('gr','More'),
-    'operator_more_or_equal' => Yii::t('gr','More or equal'),
-    'operator_less' => Yii::t('gr','Less'),
-    'operator_less_or_equal' => Yii::t('gr','Less or equal'),
-    'select_property' => Yii::t('gr','Select property..'),
-    'regular_expression_validator' => Yii::t('gr','Regular Expression Validator'),
-    'pattern' => Yii::t('gr','Pattern. Example: /^[a-z]\\w*$/i'),
-    'validator_default' => Yii::t('gr','Validator assigning a default value'),
-    'validator_safe' => Yii::t('gr','Validator safe'),
-    'filter_show' => Yii::t('gr','Show in filter'),
-    'filter_show_admin' => Yii::t('gr','Show in filter in Admin panel'),
-    'characteristic' => Yii::t('gr','Characteristic'),
-    'variations' => Yii::t('gr','Variations'),
-    'scenarios' => Yii::t('gr','Scenarios'),
-    'description' => Yii::t('gr','Description'),
-    'example_1' => Yii::t('gr','Example #1'),
-    'example_2' => Yii::t('gr','Example #2'),
-    'search_id' => Yii::t('gr','ID input Search'),
+    'select_category' => Yii::t('catalog','Select category..'),
+    'key' => Yii::t('catalog','Key'),
+    'value' => Yii::t('catalog','Value'),
+    'add_option' => Yii::t('catalog','Add option'),
+    'remove_option' => Yii::t('catalog','Remove option'),
+    'settings_type_not_apply' => Yii::t('catalog','Settings to this type do not apply'),
+    'options_type_not_apply' => Yii::t('catalog','Options to this type do not apply'),
+    'multiple' => Yii::t('catalog','Multiple'),
+    'filter_range' => Yii::t('catalog','Filter range'),
+    'group' => Yii::t('catalog','Group'),
+    'name' => Yii::t('catalog','Name'),
+    'params' => Yii::t('catalog','Params'),
+    'add_validation_rule' => Yii::t('catalog','Add validation rule:'),
+    'remove_rule' => Yii::t('catalog','Remove rule'),
+    'integer_number' => Yii::t('catalog','Integer number'),
+    'minimum_value' => Yii::t('catalog','Minimum value'),
+    'maximum_value' => Yii::t('catalog','Maximum value'),
+    'floating_point_number' => Yii::t('catalog','Floating point number'),
+    'boolean_true_false' => Yii::t('catalog','Boolean (true or false)'),
+    'number' => Yii::t('catalog','Number'),
+    'string' => Yii::t('catalog','String'),
+    'date' => Yii::t('catalog','Date'),
+    'format_date' => Yii::t('catalog','Format. Example: dd-mm-yy'),
+    'required' => Yii::t('catalog','Required'),
+    'email' => Yii::t('catalog','Email'),
+    'url' => Yii::t('catalog','Url'),
+    'image' => Yii::t('catalog','Image'),
+    'extensions_image' => Yii::t('catalog','Extensions. Example: png, jpg, gif'),
+    'extensions_file' => Yii::t('catalog','Extensions. Example: pdf, doc'),
+    'file' => Yii::t('catalog','File'),
+    'unique' => Yii::t('catalog','Unique'),
+    'filter' => Yii::t('catalog','Filter'),
+    'filter_trim' => Yii::t('catalog','Trim the lines on both sides'),
+    'filter_register' => Yii::t('catalog','Transform the register'),
+    'compare_validator' => Yii::t('catalog','Comparison Validator for value OR atribute'),
+    'operator_equally' => Yii::t('catalog','Equally'),
+    'operator_not_equal' => Yii::t('catalog','Not equal'),
+    'operator_more' => Yii::t('catalog','More'),
+    'operator_more_or_equal' => Yii::t('catalog','More or equal'),
+    'operator_less' => Yii::t('catalog','Less'),
+    'operator_less_or_equal' => Yii::t('catalog','Less or equal'),
+    'select_property' => Yii::t('catalog','Select property..'),
+    'regular_expression_validator' => Yii::t('catalog','Regular Expression Validator'),
+    'pattern' => Yii::t('catalog','Pattern. Example: /^[a-z]\\w*$/i'),
+    'validator_default' => Yii::t('catalog','Validator assigning a default value'),
+    'validator_safe' => Yii::t('catalog','Validator safe'),
+    'filter_show' => Yii::t('catalog','Show in filter'),
+    'filter_show_admin' => Yii::t('catalog','Show in filter in Admin panel'),
+    'characteristic' => Yii::t('catalog','Characteristic'),
+    'variations' => Yii::t('catalog','Variations'),
+    'scenarios' => Yii::t('catalog','Scenarios'),
+    'description' => Yii::t('catalog','Description'),
+    'example_1' => Yii::t('catalog','Example #1'),
+    'example_2' => Yii::t('catalog','Example #2'),
+    'search_id' => Yii::t('catalog','ID input Search'),
 ], JSON_UNESCAPED_UNICODE);
 
 $script = <<< JS

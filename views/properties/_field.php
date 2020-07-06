@@ -48,15 +48,15 @@ use yii\web\JsExpression;
         <?= $this->render('_modal_validation'); ?>
 
         <div class="btn-group btn-group-sm" role="group">
-            <a onclick="properties.modal.open.options(this);" class="btn btn-default" title="<?=Yii::t('gr','Options')?>">
+            <a onclick="properties.modal.open.options(this);" class="btn btn-default" title="<?=Yii::t('catalog','Options')?>">
                 <span class="glyphicon glyphicon-list-alt"></span>
             </a>
 
-            <a onclick="properties.modal.open.settings(this);" class="btn btn-default" title="<?=Yii::t('gr','Settings')?>">
+            <a onclick="properties.modal.open.settings(this);" class="btn btn-default" title="<?=Yii::t('catalog','Settings')?>">
                 <span class="glyphicon glyphicon-cog"></span>
             </a>
 
-            <a onclick="properties.modal.open.validations(this);" class="btn btn-default" title="<?=Yii::t('gr','Validation rule')?>">
+            <a onclick="properties.modal.open.validations(this);" class="btn btn-default" title="<?=Yii::t('catalog','Validation rule')?>">
                 <span class="glyphicon glyphicon-bullhorn"></span>
             </a>
         </div>
@@ -64,19 +64,19 @@ use yii\web\JsExpression;
 
     <td class="text-right">
         <div class="btn-group btn-group-sm" role="group" style="text-align: left;">
-            <a onclick="properties.moveUp(this);" class="btn btn-default" title="<?=Yii::t('gr','Move up')?>">
+            <a onclick="properties.moveUp(this);" class="btn btn-default" title="<?=Yii::t('catalog','Move up')?>">
                 <span class="glyphicon glyphicon-arrow-up"></span>
             </a>
 
-            <a onclick="properties.moveDown(this);" class="btn btn-default" title="<?=Yii::t('gr','Move down')?>">
+            <a onclick="properties.moveDown(this);" class="btn btn-default" title="<?=Yii::t('catalog','Move down')?>">
                 <span class="glyphicon glyphicon-arrow-down"></span>
             </a>
 
-            <a onclick="properties.clone(this);" class="btn btn-default" style="color: green;" title="<?=Yii::t('gr','Add property')?>">
+            <a onclick="properties.clone(this);" class="btn btn-default" style="color: green;" title="<?=Yii::t('catalog','Add property')?>">
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
 
-            <a onclick="properties.remove(this);" class="btn btn-default color-red delete-field" title="<?=Yii::t('gr','Remove property')?>">
+            <a onclick="properties.remove(this);" class="btn btn-default color-red delete-field" title="<?=Yii::t('catalog','Remove property')?>">
                 <span class="glyphicon glyphicon-remove"></span>
             </a>
 

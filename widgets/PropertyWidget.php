@@ -10,8 +10,8 @@ use grozzzny\catalog\widgets\fileinput\FileInputWidget;
 use grozzzny\widgets\map\MapConstructorWidget;
 use grozzzny\widgets\switch_checkbox\SwitchCheckbox;
 use kartik\select2\Select2;
-use yii\easyii2\widgets\DateTimePicker;
-use yii\easyii2\widgets\Redactor;
+use grozzzny\catalog\widgets\date_time_picker\DateTimePicker;
+use yii\redactor\widgets\Redactor;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -29,7 +29,7 @@ class PropertyWidget extends InputWidget
         $settings = $this->model->getSettings($this->attribute);
         $options = $this->model->getOptions($this->attribute);
 
-        $name_module = CatalogModule::getNameModule();
+        $name_module = 'catalog';
 
         switch ($type){
             case Properties::TYPE_STRING:

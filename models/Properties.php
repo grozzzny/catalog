@@ -225,8 +225,8 @@ class Properties extends ActiveRecord
             self::TYPE_CODE => Yii::t('catalog','Code'),
             self::TYPE_MAP_PLACEMARK => Yii::t('catalog','Map. Placemark'),
             self::TYPE_MAP_POLYGON => Yii::t('catalog','Map. Polygon'),
-            self::TYPE_MAP_POLYLINE => Yii::t('gr','Map. Polyline'),
-            self::TYPE_MAP_ROUTE => Yii::t('gr','Map. Route'),
+            self::TYPE_MAP_POLYLINE => Yii::t('catalog','Map. Polyline'),
+            self::TYPE_MAP_ROUTE => Yii::t('catalog','Map. Route'),
         ];
     }
 

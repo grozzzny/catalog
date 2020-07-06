@@ -1,8 +1,8 @@
 <?
+
+use grozzzny\catalog\models\Category;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use grozzzny\catalog\models\Base;
-use yii\helpers\ArrayHelper;
 
 /**
  * @var \yii\data\ActiveDataProvider $data
@@ -34,7 +34,7 @@ $sort = $data->getSort();
     <tr>
         <td><?= $item->primaryKey ?></td>
         <td>
-            <a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->id, 'slug' => $item::SLUG, 'category_id' => $currentCategory->id]) ?>">
+            <a href="<?= Url::to(['default/edit', 'id' => $item->id, 'slug' => $item::SLUG, 'category_id' => $currentCategory->id]) ?>">
                 <?= $item->title ?>
             </a>
         </td>
@@ -46,22 +46,16 @@ $sort = $data->getSort();
         </td>
 
         <td class="status vtop">
-            <?= Html::checkbox('', $item->status == Base::STATUS_ON, [
+            <?= Html::checkbox('', $item->status == true, [
                 'class' => 'my-switch',
                 'data-slug' => $item::SLUG,
                 'data-id' => $item->id,
-                'data-link' => Url::to(['/admin/'.$module.'/a/']),
+                'data-link' => Url::to(['default/']),
             ]) ?>
         </td>
         <td>
             <div class="btn-group btn-group-sm" role="group">
-
-                <? if($item::ORDER_NUM):?>
-                    <a href="<?= Url::to(['/admin/'.$module.'/a/up', 'id' => $item->primaryKey, 'slug' => $item::SLUG]) ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii2', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
-                    <a href="<?= Url::to(['/admin/'.$module.'/a/down', 'id' => $item->primaryKey, 'slug' => $item::SLUG]) ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii2', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
-                <? endif;?>
-
-                <a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey, 'slug' => $item::SLUG]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii2', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
+                <a href="<?= Url::to(['default/delete', 'id' => $item->primaryKey, 'slug' => $item::SLUG]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('catalog', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
             </div>
         </td>
     <tr>
