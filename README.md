@@ -6,7 +6,7 @@ This module allows to [yii2](https://www.yiiframework.com/)
 ## Installation guide
 
 ```bash
-$ php composer.phar require grozzzny/catalog "v3"
+$ php composer.phar require grozzzny/catalog "v3.x-dev"
 ```
 
 
