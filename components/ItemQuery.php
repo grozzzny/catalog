@@ -40,7 +40,7 @@ class ItemQuery extends ActiveQuery
     public function statusOn()
     {
         $modelClass = $this->modelClass;
-        return $this->andWhere([$modelClass::tableName().'.status' => Base::STATUS_ON]);
+        return $this->andWhere([$modelClass::tableName().'.status' => true]);
     }
 
     /**
