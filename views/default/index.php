@@ -22,7 +22,7 @@ $this->title = Yii::t('catalog', 'Catalog');
 
 <div class="row">
     <?= $this->render('_menu', ['currentCategory' => $currentCategory]) ?>
-    <?= $this->render('_filter', ['currentCategory' => $currentCategory]) ?>
+    <?//= $this->render('_filter', ['currentCategory' => $currentCategory]) ?>
 </div>
 <br/>
 
