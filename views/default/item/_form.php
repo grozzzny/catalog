@@ -64,6 +64,8 @@ $model_category = Yii::createObject(['class' => Category::class]);
 <?= $form->field($model, 'discount') ?>
 <?= $form->field($model, 'views')->input('text',['disabled' => true]) ?>
 
+<?= $form->field($model, 'order_num') ?>
+
 <?= $form->field($model, 'short')->textarea() ?>
 
 <?= $form->field($model, 'description')->widget(Redactor::className(), [
