@@ -1,5 +1,6 @@
 <?php
 
+use dosamigos\tinymce\TinyMce;
 use grozzzny\admin\widgets\file_input\ImageInputWidget;
 use grozzzny\catalog\models\Item;
 use yii\helpers\Html;
@@ -68,31 +69,18 @@ $model_category = Yii::createObject(['class' => Category::class]);
 
 <?= $form->field($model, 'short')->textarea() ?>
 
-<?= $form->field($model, 'description')->widget(Redactor::className(), [
+<?= $form->field($model, 'description')->widget(TinyMce::className(), [
+    'options' => ['rows' => 50],
+    'language' => 'ru',
     'clientOptions' => [
-        'minHeight' => '400px',
-        'imageManagerJson' => ['/redactor/upload/image-json'],
-        'imageUpload' => ['/redactor/upload/image'],
-        'fileUpload' => ['/redactor/upload/file'],
-        'lang' => 'ru',
         'plugins' => [
-            'clips',
-            'counter',
-            'definedlinks',
-            'filemanager',
-            'fontcolor',
-            'fontfamily',
-            'fontsize',
-            'fullscreen',
-            'imagemanager',
-            'limiter',
-            'table',
-            'textdirection',
-            'textexpander',
-            'video',
-        ]
+            "advlist autolink lists link charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
     ]
-])?>
+]);?>
 
 <?=SwitchCheckbox::widget([
     'model' => $model,
